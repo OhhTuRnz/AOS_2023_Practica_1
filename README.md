@@ -1,4 +1,6 @@
 # AOS_2023_Practica_1
+## Rúbrica
+![image](https://user-images.githubusercontent.com/72455516/225698324-2b407d28-63b3-4732-b0f6-d438037fe033.png)
 ## Objetivo:
 El principal objetivo de esta tarea consiste en consolidar los conceptos relacionados con el diseño y la especificación de un servicio. Para ello se definirá y publicará la definición de un servicio empleando el estándar OpenAPI 3. Adicionalmente se simulará el comportamiento del servicio (se propone el empleo de Swagger-UI, Stoplight Prism, Postman, ...)
 
