@@ -1,0 +1,45 @@
+# SWAGGER-UI
+docker run -d -p 8000:8080 --rm --name aos2023_ui `
+    -e SWAGGER_JSON=/aos/openapi.yaml `
+    -v C:\xampp\htdocs\AOS\AOS_2023\openapi:/aos `
+    swaggerapi/swagger-ui
+
+# SPECTRAL
+docker run --rm `
+    -v C:\Xampp\htdocs\AOS\AOS_2023\openapi:/aos `
+    stoplight/spectral lint --verbose `
+    --ruleset "/aos/.spectral.json" `
+    "/aos/openapi.yaml"
+
+# REDOCLY REDOC
+docker run -d --rm -p 8080:80 --name aos2023_redoc `
+   -v C:\Xampp\htdocs\AOS\AOS_2023\openapi\openapi.yaml:/usr/share/nginx/html/openapi.yaml `
+   -e SPEC_URL=openapi.yaml `
+   redocly/redoc
+
+# REDOCLY CLI
+# redocly/cli HELP
+docker run --rm `
+   redocly/cli --help
+
+# redocly/cli STATS
+docker run --rm `
+   -v C:\Xampp\htdocs\AOS\AOS_2023\openapi\openapi.yaml:/aos/openapi.yaml `
+   redocly/cli stats /aos/openapi.yaml
+
+# redocly/cli LINT
+docker run --rm `
+    -v C:\Xampp\htdocs\AOS\AOS_2023\openapi\openapi.yaml:/aos/openapi.yaml `
+    redocly/cli lint /aos/openapi.yaml
+
+# redocly/cli SPLIT
+docker run -it --rm `
+    -v C:\Xampp\htdocs\AOS\AOS_2023\openapi:/aos `
+    redocly/cli split /aos/openapi.yaml --outDir /aos/multiFile
+
+# STOPLIGHT-PRISM
+=============================================================================
+# url: https://meta.stoplight.io/docs/prism/README.md
+docker run --init --rm -it -p 80:4010 --name aos2023_mock `
+    -v C:\xampp\htdocs\AOS\AOS_2023\openapi:/aos `
+    stoplight/prism:4 mock --cors -h 0.0.0.0 "/aos/openapi.yaml"
