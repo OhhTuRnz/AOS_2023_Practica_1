@@ -20,7 +20,7 @@ Este subsistema se encargará de las operaciones relacionadas con la gestión in
 Cada vehículo estará identificado de forma única por su VIN.
 ### Subsistema_3: Gestión de la planificación diaria de los trabajos del taller, es decir, una colección de trabajos de mantenimiento que se deben realizar sobre determinados vehículos.
 Una vez creado un trabajo, los posibles estados serán (al menos): creado, planificado, iniciado y terminado.
-### Subsistema_4: Envío de notificaciones relacionadas con el funcionamiento del taller.
+### <sub>Subsistema_4: Envío de notificaciones relacionadas con el funcionamiento del taller.</sub>
 Este subsistema es el encargado de notificar a los clientes las modificaciones de cambio de estado de los diferentes trabajos.
 ### Subsistema_5: Gestión y emisión de facturas a los clientes por los trabajos realizados.
 Una vez terminados todos los trabajos solicitados por un cliente, este subsistema creará la factura correspondiente.
