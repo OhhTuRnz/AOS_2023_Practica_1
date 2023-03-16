@@ -1,8 +1,8 @@
 # AOS_2023_Practica_1
-##Objetivo:
+## Objetivo:
 El principal objetivo de esta tarea consiste en consolidar los conceptos relacionados con el diseño y la especificación de un servicio. Para ello se definirá y publicará la definición de un servicio empleando el estándar OpenAPI 3. Adicionalmente se simulará el comportamiento del servicio (se propone el empleo de Swagger-UI, Stoplight Prism, Postman, ...)
 
-##Enunciado:
+## Enunciado:
 
 Para conseguir este objetivo se van a definir un conjunto de servicios que, posteriormente, se emplearán para desarrollar una aplicación de gestión de talleres de mecánica rápida. En primer lugar se formarán equipos de como máximo cinco alumnos, y cada equipo deberá realizar la especificación de uno de los servicios propuestos.
 
