@@ -1,0 +1,181 @@
+openapi: 3.0.3
+
+info:
+  version: 0.0.0
+  title: 🛬[AOS 2023] Plataformas y Aeronaves 🛫
+  description: >
+    ## **[AOS 2023]** ✈️ API REST para la gestión de Plataformas y Aeronaves.
+  license:
+    name: MIT
+    url: 'https://opensource.org/licenses/MIT'
+  contact:
+    name: Máster Universitario en Ingeniería Web
+    url: 'https://miw.etsisi.upm.es/'
+    email: miw.etsisi@upm.es
+
+servers:
+  - url: http://127.0.0.1:80/api/v1
+
+tags:
+  - name: '🛬 Plataforma'
+    description: Plataforma
+  - name: '🛩️ Aeronave'
+    description: Aeronave
+  - name: '📋 Reserva'
+    description: Reserva
+
+paths:
+  /example{example_param}:
+
+components:
+  schemas:
+
+  headers:
+    ETag:
+      description: "Entity Tag (identificador único proporcionado para validación de caché)"
+      schema:
+        type: string
+        pattern: "[0-9a-f]*"
+        example:
+          33a64df551425fcc
+    Allow:
+      description: Lista de métodos HTTP soportados
+      schema:
+        type: string
+      example: GET, DELETE, PUT, OPTIONS
+    Location:
+      description: '`URI` del nuevo recurso'
+      schema:
+        type: string
+        format: uri
+        x-faker: internet.url
+        example:
+          https://example.com/api/v1/plataformas/P01-001-A
+
+  requestBodies:
+
+  responses:
+  # Añadir sólo las responses que vayamos a utilizar.
+    Response_400:
+      description: '`BAD REQUEST` El identificador único ya existe.'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-400:
+              $ref: '#/components/examples/response-http-400'
+    Response_404:
+      description: '`NOT FOUND`: recurso no disponible'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-404:
+              $ref: '#/components/examples/response-http-404'
+    Response_409:
+      description: '`CONFLICT`: el recurso no reúne las condiciones adecuadas'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-404:
+              $ref: '#/components/examples/response-http-409'
+    Response_412:
+      description: '`PRECONDITION FAILED`: El ETag proporcionado no está actualizado'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-412:
+              $ref: '#/components/examples/response-http-412'
+    Response_422:
+      description: '`UNPROCESSABLE ENTITY` Falta alguno de los atributos obligatorios o son incorrectos.'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-422:
+              $ref: '#/components/examples/response-http-422'
+
+  parameters:
+    ifMatchParam:
+      name: If-Match
+      in: header
+      description: ETag actual del recurso que se desea modificar
+      required: true
+      schema:
+        type: string
+        pattern: "[0-9a-f]*"
+    orderParam:
+      name: order
+      in: query
+      description: 'Criterio de ordenación: `id` | `tipo_envergadura`'
+      required: false
+      allowEmptyValue: false
+      schema:
+        type: string
+        enum:
+          - id
+          - tipo_envergadura
+    orderingParam:
+      name: ordering
+      in: query
+      description: 'Ordenación: `ASC` | `DESC`'
+      required: false
+      allowEmptyValue: false
+      schema:
+        type: string
+        enum:
+          - ASC
+          - DESC
+    pageParam:
+      name: page
+      in: query
+      description: 'Número de página'
+      required: false
+      allowEmptyValue: false
+      schema:
+        type: integer
+        minimum: 1
+
+  examples:
+    response-http-400:
+      value:
+        type: https://httpstatuses.com/400
+        title: UNPROCESSABLE ENTITY
+        status: 400
+        detail: El identificador único ya existe
+        instance: about:blank
+    response-http-404:
+      value:
+        type: https://httpstatuses.com/404
+        title: NOT FOUND
+        status: 404
+        detail: El recurso solicitado no está disponible.
+        instance: about:blank
+    response-http-409:
+      value:
+        type: https://httpstatuses.com/409
+        title: NOT FOUND
+        status: 409
+        detail: El recurso no reúne las condiciones requeridas para la operación.
+        instance: about:blank
+    response-http-412:
+      value:
+        type: https://httpstatuses.com/412
+        title: PRECONDITION FAILED
+        status: 412
+        detail: El ETag proporcionado no está actualizado
+        instance: about:blank
+    response-http-422:
+      value:
+        type: https://httpstatuses.com/422
+        title: UNPROCESSABLE ENTITY
+        status: 422
+        detail: Falta alguno de los atributos obligatorios o contiene un valor no admitido
+        instance: about:blank
