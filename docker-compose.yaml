@@ -1,9 +1,9 @@
-version: "3"
+version: "3.9"
 
 services:
     mock_backend:
         image: stoplight/prism:4
-        container_name: aos2023_mock
+        container_name: aos2023_notificaciones_mock
         command: mock --cors -h 0.0.0.0 "/aos/openapi.yaml"
         ports:
           - "4010:4010"
@@ -12,7 +12,7 @@ services:
 
     frontend:
         image: swaggerapi/swagger-ui:latest
-        container_name: aos2023_ui
+        container_name: aos2023_notificaciones_ui
         ports:
             - "8000:8080"
         environment:
@@ -21,8 +21,8 @@ services:
             - ./openapi:/aos:ro
 
     proxy:
-        image: caddy:latest
-        container_name: aos2023_proxy
+        image: caddy:2.6.4-alpine
+        container_name: aos2023_notificaciones_proxy
         volumes:
             - ./Caddyfile:/etc/caddy/Caddyfile
             - ./caddy_data:/data
