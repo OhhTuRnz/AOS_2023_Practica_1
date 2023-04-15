@@ -1,34 +1,214 @@
-openapi: 3.0.3
+oopenapi: 3.0.3
 
 info:
-  version: 0.0.0
-  title: 🛬[AOS 2023] Plataformas y Aeronaves 🛫
+  version: 0.0.1
+  title: 🔧 [AOS 2023] Envío de notificaciones relacionadas con el funcionamiento del taller 🔧
   description: >
-    ## **[AOS 2023]** ✈️ API REST para la gestión de Plataformas y Aeronaves.
+    ## **[AOS 2023]** 🔧 API REST para la gestión de Notificaciones.
   license:
     name: MIT
     url: 'https://opensource.org/licenses/MIT'
   contact:
-    name: Máster Universitario en Ingeniería Web
-    url: 'https://miw.etsisi.upm.es/'
+    name: Equipo 5 - Arquitectura Orientada a Servicios
+    url: 'https://moodle.upm.es/titulaciones/oficiales/course/view.php?id=528'
     email: miw.etsisi@upm.es
 
 servers:
-  - url: http://127.0.0.1:80/api/v1
+- url: http://127.0.0.1:80/api/v1
 
 tags:
-  - name: '🛬 Plataforma'
-    description: Plataforma
-  - name: '🛩️ Aeronave'
-    description: Aeronave
-  - name: '📋 Reserva'
-    description: Reserva
+  - name: '🔔 Notificación'
 
 paths:
-  /example{example_param}:
+  /notificaciones:
+    get:
+      summary: Obtiene todas las notificaciones
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code | Descripción | Motivo                             |
+        | ------------| ------------| -----------------------------------|
+        | **200**     | OK          | Listado de notificaciones          |
+        | **404**     | NOT FOUND   | No hay ninguna notificación        |
+      operationId: plataforma_cget
+      tags: [ '🔔 Notificación' ]
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/orderParam'
+        - $ref: '#/components/parameters/orderingParam'
+      responses:
+        '200':
+          description: Lista de plataformas disponibles
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  plataformas:
+                    description: array de plataformas
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Notificacion'
+                  links:
+                    description: Enlaces de paginación
+                    readOnly: true
+                    type: object
+                    properties:
+                      prevPage:
+                        $ref: '#/components/schemas/Link'
+                      nextPage:
+                        $ref: '#/components/schemas/Link'
+              examples:
+                plataformas-example:
+                  $ref: '#/components/examples/notificaciones-example'
+        '404':
+          $ref: '#/components/responses/Response_404'
+  
+  /notificaciones/{notificacion_id}:
+    parameters:
+      - $ref: '#/components/parameters/notificacionId'
+    options:
+      summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+      description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
+      operationId: aeronave_options
+      tags: [ '🔔 Notificación' ]
+      responses:
+        '204':
+          description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+    get:
+      summary: Obtiene una aeronave identificada por `aeronaveId`
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code | Descripción | Motivo                             |
+        | ------------| ------------| -----------------------------------|
+        | **200**     | OK          | Si la aeronave existe              |
+        | **404**     | NOT FOUND   | Si no existe la aeronave           |
+      operationId: notificacion_get
+      tags: [ '🔔 Notificación' ]
+      responses:
+        '200':
+          description: Notificación
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notificacion'
+        '404':
+          $ref: '#/components/responses/Response_404'
+  #/notificaciones/{Id_Trabajo}:
+    #get:
+      
+  
 
 components:
   schemas:
+
+    Notificacion:
+      title: ' 🔔 Notificaciones sobre las modificaciones de cambio de estado de los trabajos'
+      description: >
+        Comunicación, cualquiera que sea su denominación, realizada por un Taller por la que manifiesta cualquier modificación sobre el trabajo de un vehículo en considerarse obligado por un tratado multilateral concluido por un contrato.
+      type: object
+      properties:
+        notificacion:
+          type: object
+          required: [id, vin, id_trabajo, estado]
+          properties:
+            id:
+              $ref: '#/components/schemas/Id_Notificacion'
+            id_trabajo:
+              $ref: '#/components/schemas/Id_Trabajo'
+            estado:
+              $ref: '#/components/schemas/Estados_Trabajos'
+            detalle:
+              description: Texto con información adicional de la notificación
+              type: string
+      example: { "notificacion": { "id_plataforma":"P03-567-Z", "id_aeronave":"EC-XYZ" } } 
+              
+
+
+    Id_Notificacion:
+      title: Identificador único de notificación
+      type: string
+      pattern: "^[0-9]{4}-[0-9]{4}-[0-9]{2}$"
+
+    Id_Trabajo:
+      type: string
+      pattern: "^[0-9]{4}-[0-9]{4}$"
+    
+    #VIN:
+    #  title: 'Cochecito con emoji'                                                                                    # CAMBIAR
+    #  description:
+    #  type: string
+    #  pattern: /^[A-HJ-NPR-Z\d]{8}[\dX][A-HJ-NPR-Z\d]{2}\d{6}$/i
+    
+    Estados_Trabajos:
+      description: |
+        Estado del trabajo:
+        * 'Creado':       Se ha dado de alta un trabajo para un vehículo en el taller.
+        * 'Planificado':  El trabajo ha sido presupuestado y está pendiente de iniciar.
+        * 'Iniciado':     El trabajo sigue su planificación y es iniciado.
+        * 'Terminado':    El trabajo ha sido finalizado correctamente.
+        * 'Anulado':      El trabajo ha sido anulado debido a una complicación, obligación u otras causas.
+      type: string
+      default: 'Creado'
+      enum: ["Creado", "Planificado", "Iniciado", "Terminado", "Anulado"]
+      x-faker: helpers.arrayElement([ 'Creado', 'Planificado', 'Iniciado', 'Terminado', 'Anulado' ])
+      
+    HTTP_Problem:
+      type: object
+      externalDocs:
+        url: https://tools.ietf.org/html/rfc7807
+      description: |
+        Problem Details for HTTP APIs
+        [https://tools.ietf.org/html/rfc7807](https://tools.ietf.org/html/rfc7807)
+      properties:
+        type:
+          type: string
+          format: uri
+          description: A URI reference [RFC3986] that identifies the problem type
+        title:
+          type: string
+          description: short human-readable summary of the problem type
+        status:
+          type: number
+          description: HTTP status code
+        detail:
+          type: string
+          description: Human-readable explanation specific to this occurrence of the problem
+        instance:
+          type: string
+          format: uri
+          description: >
+            A URI reference that identifies the specific occurrence of the problem.
+            It may or may not yield further information if dereferenced.
+  
+    Link:
+      description: Enlace de relación
+      title: '🔗 Link'
+      type: object
+      properties:
+        href:
+          description: URL del enlace
+          type: string
+          format: uri
+          x-faker: internet.url
+        rel:
+          description: "Relación del recurso enlazado con el actual. Contiene una lista de tipos
+                    de relaciones separados por espacio."
+          type: string
+          x-faker: lorem.words
+      example:
+        href: https://www.example.com/path/resource
+        rel: relAction1 relAction2    
 
   headers:
     ETag:
@@ -52,7 +232,7 @@ components:
         example:
           https://example.com/api/v1/plataformas/P01-001-A
 
-  requestBodies:
+  #requestBodies:
 
   responses:
   # Añadir sólo las responses que vayamos a utilizar.
@@ -142,8 +322,40 @@ components:
       schema:
         type: integer
         minimum: 1
+        
+    notificacionId:
+      name: notificacion_id
+      in: path
+      description: Identificador único de notificación
+      required: true
+      schema:
+        $ref: '#/components/schemas/Id_Notificacion'
+    trabajoId:
+      name: trabajo_id
+      in: path
+      description: Identificador único de trabajo
+      required: true
+      schema:
+        $ref: '#/components/schemas/Id_Trabajo'
 
   examples:
+    notificaciones-example:
+      value:
+        notificaciones:
+          - { "notificacion": { "id": "0000-0000-01", "id_trabajo": "0000-0000", "estado" : "Creado",
+                "links": {
+                  "parent": { "href": "https://example.com/api/v1/notificaciones", "rel": "aeronave_post aeronave_cget"},
+                  #"self": { "href": "https://example.com/api/v1/aeronaves/EC-JGR", "rel": "aeronave_get aeronave_put" }
+                }}}
+          - { "notificacion": { "id": "0000-0001-01", "id_trabajo": "0000-0001", "estado" : "Anulado",
+                "links": {
+                  "parent": { "href": "https://example.com/api/v1/notificaciones", "rel": "aeronave_post aeronave_cget"},
+                  #"self": { "href": "https://example.com/api/v1/aeronaves/EC-JGR", "rel": "aeronave_get aeronave_put" }
+                }}}
+        links: {
+          "prevPage": { "href": "https://example.com/api/v1/noitificaciones?page=6", "rel": "prevPage" },
+          "nextPage": { "href": "https://example.com/api/v1/notificaciones?page=8", "rel": "nextPage" }
+        }
     response-http-400:
       value:
         type: https://httpstatuses.com/400
