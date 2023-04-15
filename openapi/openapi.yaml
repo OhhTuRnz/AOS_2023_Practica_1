@@ -89,7 +89,8 @@ paths:
         | Status Code | Descripción | Motivo                             |
         | ------------| ------------| -----------------------------------|
         | **200**     | OK          | Si la notificación existe          |
-        | **404**     | NOT FOUND   | Si no existe la notoficación       |
+        | **404**     | NOT FOUND   | Si no existe la notificación       |
+
       operationId: notificacion_get
       tags: [ '🔔 Notificación' ]
       responses:
@@ -104,6 +105,7 @@ paths:
                 $ref: '#/components/schemas/Notificacion'
         '404':
           $ref: '#/components/responses/Response_404'
+        
   #/notificaciones/{Id_Trabajo}:
     #get:
       
@@ -245,8 +247,16 @@ components:
           examples:
             response-http-400:
               $ref: '#/components/examples/response-http-400'
+    Response_401:
+      description: '`UNAUTHORIZED` Usuario no autorizado.'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            $ref: '#/components/examples/response-http-401' 
     Response_404:
-      description: '`NOT FOUND`: recurso no disponible'
+      description: '`NOT FOUND`: Recurso no disponible'
       content:
         application/problem+json:
           schema:
@@ -255,7 +265,7 @@ components:
             response-http-404:
               $ref: '#/components/examples/response-http-404'
     Response_409:
-      description: '`CONFLICT`: el recurso no reúne las condiciones adecuadas'
+      description: '`CONFLICT`: El recurso no reúne las condiciones adecuadas'
       content:
         application/problem+json:
           schema:
@@ -280,7 +290,7 @@ components:
             $ref: '#/components/schemas/HTTP_Problem'
           examples:
             response-http-422:
-              $ref: '#/components/examples/response-http-422'
+              $ref: '#/components/examples/response-http-422'   
 
   parameters:
     ifMatchParam:
