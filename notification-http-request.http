@@ -1,0 +1,9 @@
+# POST 201
+POST http://127.0.0.1:80/api/v1/plataformas
+Content-Type: application/json
+
+{
+  "id": "P02-101-B",
+  "tipo_envergadura": "B",
+  "estado": "Inhabilitada"
+}
