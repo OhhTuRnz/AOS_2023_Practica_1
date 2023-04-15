@@ -38,7 +38,7 @@ paths:
         - $ref: '#/components/parameters/orderingParam'
       responses:
         '200':
-          description: Lista de plataformas disponibles
+          description: Lista de notificaciones disponibles
           headers:
             ETag:
               $ref: '#/components/headers/ETag'
@@ -47,8 +47,8 @@ paths:
               schema:
                 type: object
                 properties:
-                  plataformas:
-                    description: array de plataformas
+                  notificaciones:
+                    description: array de notificaciones
                     type: array
                     items:
                       $ref: '#/components/schemas/Notificacion'
@@ -62,7 +62,7 @@ paths:
                       nextPage:
                         $ref: '#/components/schemas/Link'
               examples:
-                plataformas-example:
+                notificaciones-example:
                   $ref: '#/components/examples/notificaciones-example'
         '404':
           $ref: '#/components/responses/Response_404'
