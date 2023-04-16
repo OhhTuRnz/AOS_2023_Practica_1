@@ -26,11 +26,13 @@ paths:
       description: |
         La siguiente tabla define los códigos de estado que puede devolver este endpoint
         
-        | Status Code | Descripción | Motivo                             |
-        | ------------| ------------| -----------------------------------|
-        | **200**     | OK          | Listado de notificaciones          |
-        | **404**     | NOT FOUND   | No hay ninguna notificación        |
-      operationId: plataforma_cget
+        | Status Code | Descripción   | Motivo                                 |
+        | ------------| --------------| ---------------------------------------|
+        | **200**     | OK            | Listado de notificaciones              |
+        | **401**     | UNAUTHORIZED  | El usuario no está autorizado          |  
+        | **403**     | FORBIDDEN     | El servidor ha denegado la petición    |
+        | **404**     | NOT FOUND     | No hay ninguna notificación            |
+      operationId: notificacion_cget
       tags: [ '🔔 Notificación' ]
       parameters:
         - $ref: '#/components/parameters/pageParam'
@@ -38,7 +40,7 @@ paths:
         - $ref: '#/components/parameters/orderingParam'
       responses:
         '200':
-          description: Lista de plataformas disponibles
+          description: Lista de notificaciones disponibles
           headers:
             ETag:
               $ref: '#/components/headers/ETag'
@@ -47,8 +49,8 @@ paths:
               schema:
                 type: object
                 properties:
-                  plataformas:
-                    description: array de plataformas
+                  notificaciones:
+                    description: array de notificaciones
                     type: array
                     items:
                       $ref: '#/components/schemas/Notificacion'
@@ -62,8 +64,12 @@ paths:
                       nextPage:
                         $ref: '#/components/schemas/Link'
               examples:
-                plataformas-example:
+                notificaciones-example:
                   $ref: '#/components/examples/notificaciones-example'
+        '401':
+          $ref: '#/components/responses/Response_401'
+        '403':
+          $ref: '#/components/responses/Response_403'       
         '404':
           $ref: '#/components/responses/Response_404'
   
@@ -73,7 +79,7 @@ paths:
     options:
       summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
       description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
-      operationId: aeronave_options
+      operationId: notificacion_options
       tags: [ '🔔 Notificación' ]
       responses:
         '204':
@@ -82,14 +88,16 @@ paths:
             Allow:
               $ref: '#/components/headers/Allow'
     get:
-      summary: Obtiene una aeronave identificada por `aeronaveId`
+      summary: Obtiene una notificación identificada por `notificaciónId`
       description: |
         La siguiente tabla define los códigos de estado que puede devolver este endpoint
         
-        | Status Code | Descripción | Motivo                             |
-        | ------------| ------------| -----------------------------------|
-        | **200**     | OK          | Si la aeronave existe              |
-        | **404**     | NOT FOUND   | Si no existe la aeronave           |
+        | Status Code | Descripción   | Motivo                              |
+        | ------------| --------------| ------------------------------------|
+        | **200**     | OK            | Si la notificación existe           |
+        | **401**     | UNAUTHORIZED  | El usuario no está autorizado       |  
+        | **403**     | FORBIDDEN     | El servidor ha denegado la petición |
+        | **404**     | NOT FOUND     | Si no existe la notificación        |
       operationId: notificacion_get
       tags: [ '🔔 Notificación' ]
       responses:
@@ -102,8 +110,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Notificacion'
+        '401':
+          $ref: '#/components/responses/Response_401'
+        '403':
+          $ref: '#/components/responses/Response_403' 
         '404':
           $ref: '#/components/responses/Response_404'
+        
   #/notificaciones/{Id_Trabajo}:
     #get:
       
@@ -245,8 +258,26 @@ components:
           examples:
             response-http-400:
               $ref: '#/components/examples/response-http-400'
+    Response_401:
+      description: '`UNAUTHORIZED` Usuario no autorizado.'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-401:
+              $ref: '#/components/examples/response-http-401'
+    Response_403:
+      description: '`FORBIDDEN` El servidor ha denegado la petición.'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-403:
+              $ref: '#/components/examples/response-http-403' 
     Response_404:
-      description: '`NOT FOUND`: recurso no disponible'
+      description: '`NOT FOUND`: Recurso no disponible'
       content:
         application/problem+json:
           schema:
@@ -255,13 +286,13 @@ components:
             response-http-404:
               $ref: '#/components/examples/response-http-404'
     Response_409:
-      description: '`CONFLICT`: el recurso no reúne las condiciones adecuadas'
+      description: '`CONFLICT`: El recurso no reúne las condiciones adecuadas'
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/HTTP_Problem'
           examples:
-            response-http-404:
+            response-http-409:
               $ref: '#/components/examples/response-http-409'
     Response_412:
       description: '`PRECONDITION FAILED`: El ETag proporcionado no está actualizado'
@@ -280,7 +311,7 @@ components:
             $ref: '#/components/schemas/HTTP_Problem'
           examples:
             response-http-422:
-              $ref: '#/components/examples/response-http-422'
+              $ref: '#/components/examples/response-http-422'   
 
   parameters:
     ifMatchParam:
@@ -361,8 +392,22 @@ components:
         type: https://httpstatuses.com/400
         title: UNPROCESSABLE ENTITY
         status: 400
-        detail: El identificador único ya existe
+        detail: El identificador único ya existe.
         instance: about:blank
+    response-http-401:
+      value: 
+        type: https://httpstatuses.com/401
+        title: UNAUTHORIZED
+        status: 401
+        detail: La solicitud requiere autenticación y el usuario no está autorizado para acceder al recurso.
+        instance: about:blank
+    response-http-403:
+      value: 
+        type: https://httpstatuses.com/403
+        title: FORBIDDEN
+        status: 403
+        detail: La solicitud se ha realizado correctamente, pero el servidor se niega a cumplirla. Esto puede ser debido a que el usuario no tiene los permisos necesarios para acceder al recurso.
+        instance: about:blank   
     response-http-404:
       value:
         type: https://httpstatuses.com/404
@@ -382,12 +427,12 @@ components:
         type: https://httpstatuses.com/412
         title: PRECONDITION FAILED
         status: 412
-        detail: El ETag proporcionado no está actualizado
+        detail: El ETag proporcionado no está actualizado.
         instance: about:blank
     response-http-422:
       value:
         type: https://httpstatuses.com/422
         title: UNPROCESSABLE ENTITY
         status: 422
-        detail: Falta alguno de los atributos obligatorios o contiene un valor no admitido
+        detail: Falta alguno de los atributos obligatorios o contiene un valor no admitido.
         instance: about:blank
