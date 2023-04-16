@@ -3,7 +3,7 @@ http://127.0.0.1
 #
 route /api/v1/* {
         uri strip_prefix /api/v1
-        reverse_proxy aos2023_mock:4010
+        reverse_proxy aos2023_notificaciones_mock:4010
 }
 
 # Redirección a Swagger-UI (puerto 8000) de la "página principal" desde http://127.0.0.1:80/
