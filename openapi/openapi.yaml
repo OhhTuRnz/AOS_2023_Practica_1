@@ -222,7 +222,7 @@ components:
       description: Lista de métodos HTTP soportados
       schema:
         type: string
-      example: GET, DELETE, PUT, OPTIONS
+      example: GET, OPTIONS
     Location:
       description: '`URI` del nuevo recurso'
       schema:
