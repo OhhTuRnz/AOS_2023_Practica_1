@@ -72,6 +72,38 @@ paths:
           $ref: '#/components/responses/Response_403'       
         '404':
           $ref: '#/components/responses/Response_404'
+    post:
+      summary: Añade una nueva notificación
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code | Descripción          | Motivo                                    |
+        | ------------| ---------------------| ------------------------------------------|
+        | **201**     | CREATED              | La notificación ha sido creada            |
+        | **400**     | BAD REQUEST          | El identificador único ya existe          |
+        | **422**     | UNPROCESSABLE ENTITY | Falta alguno de los atributos obligatorios|
+        |             |                      | o el valor no está permitido              |
+      tags: ['🔔 Notificación']
+      operation_id: notificacion_post
+      requestBody:
+        $ref: # Por hacer
+      
+      responses:
+        '201':
+          description: Nueva notificación creada
+          headers:
+            location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notificacion'
+        '400':
+          $ref: '#/components/responses/Response_400'
+        '422':
+          $ref: '#/components/responses/Response_422'
+        #'409' ???? CONFLICT
+
   
   /notificaciones/{notificacion_id}:
     parameters:
@@ -144,9 +176,23 @@ components:
             detalle:
               description: Texto con información adicional de la notificación
               type: string
-      example: { "notificacion": { "id_plataforma":"P03-567-Z", "id_aeronave":"EC-XYZ" } } 
+      example: { "notificacion": { 
+                      "id":"0000-0000-01",
+                      "id_trabajo": "0000-0000",
+                      "estado" : "Creado",
+                      "links": {
+                        "parent": {
+                            "href":"https://example.com/api/v1/notificaciones",
+                            "rel": "notificacion_post notificacion_cget"
+                        },
+                        "self": {
+                            "href":"https://example.com/api/v1/notificaciones/0000-0000-01",
+                            "rel": "notificacion_get" 
+                        }
+                      }
+                    }
+                }
               
-
 
     Id_Notificacion:
       title: Identificador único de notificación
@@ -243,7 +289,7 @@ components:
         format: uri
         x-faker: internet.url
         example:
-          https://example.com/api/v1/plataformas/P01-001-A
+          https://example.com/api/v1/notificaciones/0000-0000-01
 
   #requestBodies:
 
@@ -325,14 +371,14 @@ components:
     orderParam:
       name: order
       in: query
-      description: 'Criterio de ordenación: `id` | `tipo_envergadura`'
+      description: 'Criterio de ordenación: `id` | `id_trabajo`'
       required: false
       allowEmptyValue: false
       schema:
         type: string
         enum:
           - id
-          - tipo_envergadura
+          - id_trabajo
     orderingParam:
       name: ordering
       in: query
@@ -375,13 +421,8 @@ components:
         notificaciones:
           - { "notificacion": { "id": "0000-0000-01", "id_trabajo": "0000-0000", "estado" : "Creado",
                 "links": {
-                  "parent": { "href": "https://example.com/api/v1/notificaciones", "rel": "aeronave_post aeronave_cget"},
-                  #"self": { "href": "https://example.com/api/v1/aeronaves/EC-JGR", "rel": "aeronave_get aeronave_put" }
-                }}}
-          - { "notificacion": { "id": "0000-0001-01", "id_trabajo": "0000-0001", "estado" : "Anulado",
-                "links": {
-                  "parent": { "href": "https://example.com/api/v1/notificaciones", "rel": "aeronave_post aeronave_cget"},
-                  #"self": { "href": "https://example.com/api/v1/aeronaves/EC-JGR", "rel": "aeronave_get aeronave_put" }
+                  "parent": { "href": "https://example.com/api/v1/notificaciones", "rel": "notificacion_post notificacion_cget"},
+                  "self": { "href": "https://example.com/api/v1/notificaciones/0000-0000-01", "rel": "notificacion_get" }
                 }}}
         links: {
           "prevPage": { "href": "https://example.com/api/v1/noitificaciones?page=6", "rel": "prevPage" },
