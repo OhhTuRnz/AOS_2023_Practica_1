@@ -1,4 +1,4 @@
-oopenapi: 3.0.3
+openapi: 3.0.3
 
 info:
   version: 0.0.1
@@ -265,7 +265,8 @@ components:
           schema:
             $ref: '#/components/schemas/HTTP_Problem'
           examples:
-            $ref: '#/components/examples/response-http-401'
+            response-http-401:
+              $ref: '#/components/examples/response-http-401'
     Response_403:
       description: '`FORBIDDEN` El servidor ha denegado la petición.'
       content:
@@ -273,7 +274,8 @@ components:
           schema:
             $ref: '#/components/schemas/HTTP_Problem'
           examples:
-            $ref: '#/components/examples/response-http-403' 
+            response-http-403:
+              $ref: '#/components/examples/response-http-403' 
     Response_404:
       description: '`NOT FOUND`: Recurso no disponible'
       content:
@@ -290,7 +292,7 @@ components:
           schema:
             $ref: '#/components/schemas/HTTP_Problem'
           examples:
-            response-http-404:
+            response-http-409:
               $ref: '#/components/examples/response-http-409'
     Response_412:
       description: '`PRECONDITION FAILED`: El ETag proporcionado no está actualizado'
