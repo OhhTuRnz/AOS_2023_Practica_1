@@ -1,9 +1,10 @@
-# POST 201
-POST http://127.0.0.1:80/api/v1/plataformas
-Content-Type: application/json
+# CGET 200
+GET http://127.0.0.1:80/api/v1/notificaciones
+Accept: application/json
 
-{
-  "id": "P02-101-B",
-  "tipo_envergadura": "B",
-  "estado": "Inhabilitada"
-}
+# OPTIONS 422 (Mal ID)
+OPTIONS http://127.0.0.1:80/api/v1/notificaciones/1
+
+# OPTIONS 204
+OPTIONS http://127.0.0.1:80/api/v1/notificaciones/1234-1234-12
+
