@@ -38,7 +38,11 @@ paths:
         - $ref: '#/components/parameters/orderingParam'
       responses:
         '200':
+<<<<<<< HEAD
           description: Lista de notificaciones disponibles
+=======
+          description: Lista de plataformas disponibles
+>>>>>>> be6139ec2ff5786f8209169d01620b7e37981cd6
           headers:
             ETag:
               $ref: '#/components/headers/ETag'
@@ -47,8 +51,13 @@ paths:
               schema:
                 type: object
                 properties:
+<<<<<<< HEAD
                   notificaciones:
                     description: array de notificaciones
+=======
+                  plataformas:
+                    description: array de plataformas
+>>>>>>> be6139ec2ff5786f8209169d01620b7e37981cd6
                     type: array
                     items:
                       $ref: '#/components/schemas/Notificacion'
@@ -62,7 +71,11 @@ paths:
                       nextPage:
                         $ref: '#/components/schemas/Link'
               examples:
+<<<<<<< HEAD
                 notificaciones-example:
+=======
+                plataformas-example:
+>>>>>>> be6139ec2ff5786f8209169d01620b7e37981cd6
                   $ref: '#/components/examples/notificaciones-example'
         '404':
           $ref: '#/components/responses/Response_404'
@@ -82,15 +95,24 @@ paths:
             Allow:
               $ref: '#/components/headers/Allow'
     get:
+<<<<<<< HEAD
       summary: Obtiene una notificación identificada por `notificaciónId`
+=======
+      summary: Obtiene una aeronave identificada por `aeronaveId`
+>>>>>>> be6139ec2ff5786f8209169d01620b7e37981cd6
       description: |
         La siguiente tabla define los códigos de estado que puede devolver este endpoint
         
         | Status Code | Descripción | Motivo                             |
         | ------------| ------------| -----------------------------------|
+<<<<<<< HEAD
         | **200**     | OK          | Si la notificación existe          |
         | **404**     | NOT FOUND   | Si no existe la notificación       |
 
+=======
+        | **200**     | OK          | Si la aeronave existe              |
+        | **404**     | NOT FOUND   | Si no existe la aeronave           |
+>>>>>>> be6139ec2ff5786f8209169d01620b7e37981cd6
       operationId: notificacion_get
       tags: [ '🔔 Notificación' ]
       responses:
@@ -105,7 +127,10 @@ paths:
                 $ref: '#/components/schemas/Notificacion'
         '404':
           $ref: '#/components/responses/Response_404'
+<<<<<<< HEAD
         
+=======
+>>>>>>> be6139ec2ff5786f8209169d01620b7e37981cd6
   #/notificaciones/{Id_Trabajo}:
     #get:
       
