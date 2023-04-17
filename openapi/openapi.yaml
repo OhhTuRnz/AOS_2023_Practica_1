@@ -149,8 +149,49 @@ paths:
         '404':
           $ref: '#/components/responses/Response_404'
         
-  #/notificaciones/{Id_Trabajo}:
-    #get:
+  /notificaciones/{Id_Trabajo}:
+    parameters:
+        - $ref: '#/components/parameters/trabajoId'
+    options:
+        summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+        description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
+        operationId: notificacion_options
+        tags: [ '🔔 Notificación' ]
+        responses:
+          '204':
+            description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+            headers:
+              Allow:
+                $ref: '#/components/headers/Allow'
+    get:
+        summary: Obtiene una notificación identificada por `trabajoId`
+        description: |
+          La siguiente tabla define los códigos de estado que puede devolver este endpoint
+          
+          | Status Code | Descripción   | Motivo                              |
+          | ------------| --------------| ------------------------------------|
+          | **200**     | OK            | Si la notificación existe           |
+          | **401**     | UNAUTHORIZED  | El usuario no está autorizado       |  
+          | **403**     | FORBIDDEN     | El servidor ha denegado la petición |
+          | **404**     | NOT FOUND     | Si no existe la notificación        |
+        operationId: notificacion_get
+        tags: [ '🔔 Notificación' ]
+        responses:
+          '200':
+            description: Notificación
+            headers:
+              ETag:
+                $ref: '#/components/headers/ETag'
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Notificacion'
+          '401':
+            $ref: '#/components/responses/Response_401'
+          '403':
+            $ref: '#/components/responses/Response_403' 
+          '404':
+            $ref: '#/components/responses/Response_404'
       
   
 
@@ -281,7 +322,7 @@ components:
       description: Lista de métodos HTTP soportados
       schema:
         type: string
-      example: GET, OPTIONS
+      example: GET, POST, OPTIONS
     Location:
       description: '`URI` del nuevo recurso'
       schema:
