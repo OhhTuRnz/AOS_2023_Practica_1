@@ -112,7 +112,8 @@ paths:
           $ref: '#/components/responses/Response_400'
         '422':
           $ref: '#/components/responses/Response_422'
-        #'409' ???? CONFLICT
+        '409':
+          $ref: '#/components/responses/Response_409'
 
   
   /notificaciones/{notificacion_id}:
@@ -439,7 +440,7 @@ components:
             response-http-404:
               $ref: '#/components/examples/response-http-404'
     Response_409:
-      description: '`CONFLICT`: El recurso no reúne las condiciones adecuadas'
+      description: '`CONFLICT`: La petición no ha sido completada debido a un conflicto con el servidor.'
       content:
         application/problem+json:
           schema:
