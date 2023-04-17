@@ -92,8 +92,11 @@ paths:
         | ------------| ---------------------| ------------------------------------------|
         | **201**     | CREATED              | La notificación ha sido creada            |
         | **400**     | BAD REQUEST          | El identificador único ya existe          |
+        | **409**     | CONFLICT             | Se ha intentado crear una notificación    |
+        |             |                      | con un estado que no es posible           |
         | **422**     | UNPROCESSABLE ENTITY | Falta alguno de los atributos obligatorios|
         |             |                      | o el valor no está permitido              |
+        
       tags: ['🔔 Notificación']
       operationId: notificacion_post
       requestBody:
