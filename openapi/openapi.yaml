@@ -72,6 +72,17 @@ paths:
           $ref: '#/components/responses/Response_403'       
         '404':
           $ref: '#/components/responses/Response_404'
+    options:
+      summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+      description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
+      operationId: notificacion_coptions
+      tags: [ '🔔 Notificación' ]
+      responses:
+        '204':
+          description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
     post:
       summary: Añade una nueva notificación
       description: |
@@ -84,10 +95,9 @@ paths:
         | **422**     | UNPROCESSABLE ENTITY | Falta alguno de los atributos obligatorios|
         |             |                      | o el valor no está permitido              |
       tags: ['🔔 Notificación']
-      operation_id: notificacion_post
+      operationId: notificacion_post
       requestBody:
-        $ref: # Por hacer
-      
+        $ref: '#/components/requestBodies/notificacionRB'    
       responses:
         '201':
           description: Nueva notificación creada
@@ -148,14 +158,30 @@ paths:
           $ref: '#/components/responses/Response_403' 
         '404':
           $ref: '#/components/responses/Response_404'
+    delete:
+      summary: Elimina la notificación identificada por `notificaciónId`
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
         
-  /notificaciones/{Id_Trabajo}:
+        | Status Code | Descripción   | Motivo                                      |
+        | ------------| --------------| --------------------------------------------|
+        | **204**     | NO CONTENT    | La notificación existía y ha sido eliminada |
+        | **404**     | NOT FOUND     | Si la notificación no existe                |
+      operationId: notificacion_delete
+      tags: [ '🔔 Notificación' ]
+      responses:
+        '204':
+          description: Plataforma eliminada &lt:Cuerpo de la respuesta vacío&gt;
+        '404':
+          $ref: '#/components/responses/Response_404'
+        
+  /notificaciones/trabajo/{trabajo_id}:
     parameters:
         - $ref: '#/components/parameters/trabajoId'
     options:
         summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
         description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
-        operationId: notificacion_options
+        operationId: notificacion_trabajo_options
         tags: [ '🔔 Notificación' ]
         responses:
           '204':
@@ -174,7 +200,7 @@ paths:
           | **401**     | UNAUTHORIZED  | El usuario no está autorizado       |  
           | **403**     | FORBIDDEN     | El servidor ha denegado la petición |
           | **404**     | NOT FOUND     | Si no existe la notificación        |
-        operationId: notificacion_get
+        operationId: notificacion_trabajo_get
         tags: [ '🔔 Notificación' ]
         responses:
           '200':
@@ -192,8 +218,22 @@ paths:
             $ref: '#/components/responses/Response_403' 
           '404':
             $ref: '#/components/responses/Response_404'
-      
-  
+    delete:
+      summary: Elimina la notificación identificada por `notificaciónId`
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code | Descripción   | Motivo                                      |
+        | ------------| --------------| --------------------------------------------|
+        | **204**     | NO CONTENT    | La notificación existía y ha sido eliminada |
+        | **404**     | NOT FOUND     | Si la notificación no existe                |
+      operationId: notificacion_trabajo_delete
+      tags: [ '🔔 Notificación' ]
+      responses:
+        '204':
+          description: Plataforma eliminada &lt:Cuerpo de la respuesta vacío&gt;
+        '404':
+          $ref: '#/components/responses/Response_404'
 
 components:
   schemas:
@@ -206,7 +246,7 @@ components:
       properties:
         notificacion:
           type: object
-          required: [id, vin, id_trabajo, estado]
+          required: [id, id_trabajo, estado]
           properties:
             id:
               $ref: '#/components/schemas/Id_Notificacion'
@@ -332,7 +372,33 @@ components:
         example:
           https://example.com/api/v1/notificaciones/0000-0000-01
 
-  #requestBodies:
+  requestBodies:
+    notificacionRB:
+      description: Información de la nueva Notificación
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [ id, id_trabajo, estado ]
+            properties:
+              id:
+                $ref: '#/components/schemas/Id_Notificacion'
+              id_trabajo:
+                $ref: '#/components/schemas/Id_Trabajo'
+              estado:
+                $ref: '#/components/schemas/Estados_Trabajos'
+    notificacionUpdate:
+      description: Nuevos atributos de la Notificación
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              estado:
+                $ref: '#/components/schemas/Estados_Trabajos'
+
 
   responses:
   # Añadir sólo las responses que vayamos a utilizar.
