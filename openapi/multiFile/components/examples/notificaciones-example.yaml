@@ -1,0 +1,11 @@
+value:
+  notificaciones:
+    - { "notificacion": { "id": "0000-0000-01", "id_trabajo": "0000-0000", "estado" : "Creado", "detalle" : "El coche ha sido recibido en el taller.",
+          "links": {
+            "parent": { "href": "https://example.com/api/v1/notificaciones", "rel": "notificacion_post notificacion_cget"},
+            "self": { "href": "https://example.com/api/v1/notificaciones/0000-0000-01", "rel": "notificacion_get" }
+          }}}
+  links: {
+    "prevPage": { "href": "https://example.com/api/v1/noitificaciones?page=6", "rel": "prevPage" },
+    "nextPage": { "href": "https://example.com/api/v1/notificaciones?page=8", "rel": "nextPage" }
+  }

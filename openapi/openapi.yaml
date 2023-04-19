@@ -298,11 +298,11 @@ paths:
 components:
   schemas:
     Notificacion:
-      $ref: './schemas/Notificacion.yaml'
+      $ref: './multiFile/components/schemas/Notificacion.yaml'
     Id_Notificacion:
-      $ref: './schemas/Id_Notificacion.yaml'
+      $ref: './multiFile/components/schemas/Id_Notificacion.yaml'
     Id_Trabajo:
-      $ref: './schemas/Id_Trabajo.yaml'
+      $ref: './multiFile/components/schemas/Id_Trabajo.yaml'
     
     #VIN:
     #  title: 'Cochecito con emoji'                                                                                    # CAMBIAR
@@ -311,245 +311,74 @@ components:
     #  pattern: /^[A-HJ-NPR-Z\d]{8}[\dX][A-HJ-NPR-Z\d]{2}\d{6}$/i
     
     Estados_Trabajos:
-      $ref: './schemas/Estados_Trabajos.yaml'
+      $ref: './multiFile/components/schemas/Estados_Trabajos.yaml'
       
     HTTP_Problem:
-      $ref: './schemas/HTTP_Problem.yaml'
+      $ref: './multiFile/components/schemas/HTTP_Problem.yaml'
   
     Link:
-      $ref: './schemas/Link.yaml'   
-
+      $ref: './multiFile/components/schemas/Link.yaml'
   headers:
     ETag:
-      description: "Entity Tag (identificador único proporcionado para validación de caché)"
-      schema:
-        type: string
-        pattern: "[0-9a-f]*"
-        example:
-          33a64df551425fcc
+      $ref: './multiFile/components/headers/ETag.yaml'
     Allow:
-      description: Lista de métodos HTTP soportados
-      schema:
-        type: string
-      example: GET, POST, OPTIONS
+      $ref: './multiFile/components/headers/Allow.yaml'
     Location:
-      description: '`URI` del nuevo recurso'
-      schema:
-        type: string
-        format: uri
-        x-faker: internet.url
-        example:
-          https://example.com/api/v1/notificaciones/0000-0000-01
+      $ref: './multiFile/components/headers/Location.yaml'
 
   requestBodies:
     notificacionRB:
-      description: Información de la nueva Notificación
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            required: [ id, id_trabajo, estado ]
-            properties:
-              id:
-                $ref: '#/components/schemas/Id_Notificacion'
-              id_trabajo:
-                $ref: '#/components/schemas/Id_Trabajo'
-              estado:
-                $ref: '#/components/schemas/Estados_Trabajos'
+      $ref: './multiFile/components/requestBodies/notificacionRB.yaml'
     notificacionUpdate:
-      description: Nuevos atributos de la Notificación
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              estado:
-                $ref: '#/components/schemas/Estados_Trabajos'
+      $ref: './multiFile/components/requestBodies/notificacionUpdate.yaml'
 
 
   responses:
   # Añadir sólo las responses que vayamos a utilizar.
     Response_400:
-      description: '`BAD REQUEST` El identificador único ya existe.'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/HTTP_Problem'
-          examples:
-            response-http-400:
-              $ref: '#/components/examples/response-http-400'
+      $ref: './multiFile/components/responses/Response_400.yaml'
     Response_401:
-      description: '`UNAUTHORIZED` Usuario no autorizado.'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/HTTP_Problem'
-          examples:
-            response-http-401:
-              $ref: '#/components/examples/response-http-401'
+      $ref: './multiFile/components/responses/Response_401.yaml'
     Response_403:
-      description: '`FORBIDDEN` El servidor ha denegado la petición.'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/HTTP_Problem'
-          examples:
-            response-http-403:
-              $ref: '#/components/examples/response-http-403' 
+      $ref: './multiFile/components/responses/Response_403.yaml'
     Response_404:
-      description: '`NOT FOUND`: Recurso no disponible'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/HTTP_Problem'
-          examples:
-            response-http-404:
-              $ref: '#/components/examples/response-http-404'
+      $ref: './multiFile/components/responses/Response_404.yaml'
     Response_409:
-      description: '`CONFLICT`: La petición no ha sido completada debido a un conflicto con el servidor.'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/HTTP_Problem'
-          examples:
-            response-http-409:
-              $ref: '#/components/examples/response-http-409'
+      $ref: './multiFile/components/responses/Response_409.yaml'
     Response_412:
-      description: '`PRECONDITION FAILED`: El ETag proporcionado no está actualizado'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/HTTP_Problem'
-          examples:
-            response-http-412:
-              $ref: '#/components/examples/response-http-412'
+      $ref: './multiFile/components/responses/Response_412.yaml'
     Response_422:
-      description: '`UNPROCESSABLE ENTITY` Falta alguno de los atributos obligatorios o son incorrectos.'
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/HTTP_Problem'
-          examples:
-            response-http-422:
-              $ref: '#/components/examples/response-http-422'   
+      $ref: './multiFile/components/responses/Response_422.yaml' 
 
   parameters:
     ifMatchParam:
-      name: If-Match
-      in: header
-      description: ETag actual del recurso que se desea modificar
-      required: true
-      schema:
-        type: string
-        pattern: "[0-9a-f]*"
+      $ref: './multiFile/components/parameters/ifMatchParam.yaml'
     orderParam:
-      name: order
-      in: query
-      description: 'Criterio de ordenación: `id` | `id_trabajo`'
-      required: false
-      allowEmptyValue: false
-      schema:
-        type: string
-        enum:
-          - id
-          - id_trabajo
+      $ref: './multiFile/components/parameters/orderParam.yaml'
     orderingParam:
-      name: ordering
-      in: query
-      description: 'Ordenación: `ASC` | `DESC`'
-      required: false
-      allowEmptyValue: false
-      schema:
-        type: string
-        enum:
-          - ASC
-          - DESC
+      $ref: './multiFile/components/parameters/orderingParam.yaml'
     pageParam:
-      name: page
-      in: query
-      description: 'Número de página'
-      required: false
-      allowEmptyValue: false
-      schema:
-        type: integer
-        minimum: 1
+      $ref: './multiFile/components/parameters/pageParam.yaml'
         
     notificacionId:
-      name: notificacion_id
-      in: path
-      description: Identificador único de notificación
-      required: true
-      schema:
-        $ref: '#/components/schemas/Id_Notificacion'
+      $ref: './multiFile/components/parameters/notificacionId.yaml'
     trabajoId:
-      name: trabajo_id
-      in: path
-      description: Identificador único de trabajo
-      required: true
-      schema:
-        $ref: '#/components/schemas/Id_Trabajo'
+      $ref: './multiFile/components/parameters/trabajoId.yaml'
 
   examples:
     notificaciones-example:
-      value:
-        notificaciones:
-          - { "notificacion": { "id": "0000-0000-01", "id_trabajo": "0000-0000", "estado" : "Creado", "detalle" : "El coche ha sido recibido en el taller.",
-                "links": {
-                  "parent": { "href": "https://example.com/api/v1/notificaciones", "rel": "notificacion_post notificacion_cget"},
-                  "self": { "href": "https://example.com/api/v1/notificaciones/0000-0000-01", "rel": "notificacion_get" }
-                }}}
-        links: {
-          "prevPage": { "href": "https://example.com/api/v1/noitificaciones?page=6", "rel": "prevPage" },
-          "nextPage": { "href": "https://example.com/api/v1/notificaciones?page=8", "rel": "nextPage" }
-        }
+      $ref: './multiFile/components/examples/notificaciones-example.yaml'
     response-http-400:
-      value:
-        type: https://httpstatuses.com/400
-        title: UNPROCESSABLE ENTITY
-        status: 400
-        detail: El identificador único ya existe.
-        instance: about:blank
+      $ref: './multiFile/components/examples/response-http-400.yaml'
     response-http-401:
-      value: 
-        type: https://httpstatuses.com/401
-        title: UNAUTHORIZED
-        status: 401
-        detail: La solicitud requiere autenticación y el usuario no está autorizado para acceder al recurso.
-        instance: about:blank
+      $ref: './multiFile/components/examples/response-http-401.yaml'
     response-http-403:
-      value: 
-        type: https://httpstatuses.com/403
-        title: FORBIDDEN
-        status: 403
-        detail: La solicitud se ha realizado correctamente, pero el servidor se niega a cumplirla. Esto puede ser debido a que el usuario no tiene los permisos necesarios para acceder al recurso.
-        instance: about:blank   
+      $ref: './multiFile/components/examples/response-http-403.yaml'  
     response-http-404:
-      value:
-        type: https://httpstatuses.com/404
-        title: NOT FOUND
-        status: 404
-        detail: El recurso solicitado no está disponible.
-        instance: about:blank
+      $ref: './multiFile/components/examples/response-http-404.yaml'
     response-http-409:
-      value:
-        type: https://httpstatuses.com/409
-        title: NOT FOUND
-        status: 409
-        detail: El recurso no reúne las condiciones requeridas para la operación.
-        instance: about:blank
+      $ref: './multiFile/components/examples/response-http-409.yaml'
     response-http-412:
-      value:
-        type: https://httpstatuses.com/412
-        title: PRECONDITION FAILED
-        status: 412
-        detail: El ETag proporcionado no está actualizado.
-        instance: about:blank
+      $ref: './multiFile/components/examples/response-http-412.yaml'
     response-http-422:
-      value:
-        type: https://httpstatuses.com/422
-        title: UNPROCESSABLE ENTITY
-        status: 422
-        detail: Falta alguno de los atributos obligatorios o contiene un valor no admitido.
-        instance: about:blank
+      $ref: './multiFile/components/examples/response-http-422.yaml'

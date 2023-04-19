@@ -1,0 +1,9 @@
+
+# Esquema sobre el que está definido el patrón de un Id de trabajo.
+
+type: string
+<<<<<<< HEAD:openapi/schemas/Id_Trabajo.yaml
+=======
+example: '1234-1234'
+>>>>>>> Provisional:openapi/multiFile/components/schemas/Id_Trabajo.yaml
+pattern: "^[0-9]{4}-[0-9]{4}$"

@@ -1,0 +1,36 @@
+# Esquema sobre el que está definida una notificación.
+
+title: ' 🔔 Notificaciones sobre las modificaciones de cambio de estado de los trabajos'
+description: >
+  Comunicación, cualquiera que sea su denominación, realizada por un Taller por la que manifiesta cualquier modificación sobre el trabajo de un vehículo en considerarse obligado por un tratado multilateral concluido por un contrato.
+type: object
+properties:
+  notificacion:
+    type: object
+    required: [id, id_trabajo, estado]
+    properties:
+      id:
+        $ref: './Id_Notificacion.yaml'
+      id_trabajo:
+        $ref: './Id_Trabajo.yaml'
+      estado:
+        $ref: './Estados_Trabajos.yaml'
+      detalle:
+        description: Texto con información adicional de la notificación
+        type: string
+example: { "notificacion": { 
+                "id":"0000-0000-01",
+                "id_trabajo": "0000-0000",
+                "estado" : "Creado",
+                "links": {
+                  "parent": {
+                      "href":"https://example.com/api/v1/notificaciones",
+                      "rel": "notificacion_post notificacion_cget"
+                  },
+                  "self": {
+                      "href":"https://example.com/api/v1/notificaciones/0000-0000-01",
+                      "rel": "notificacion_get" 
+                  }
+                }
+              }
+          }

@@ -1,0 +1,9 @@
+description: Nuevos atributos de la Notificación
+required: true
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        estado:
+          $ref: '../schemas/Estados_Trabajos.yaml'

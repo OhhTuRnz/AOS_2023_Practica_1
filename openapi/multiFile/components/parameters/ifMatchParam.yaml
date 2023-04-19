@@ -1,0 +1,7 @@
+name: If-Match
+in: header
+description: ETag actual del recurso que se desea modificar
+required: true
+schema:
+  type: string
+  pattern: "[0-9a-f]*"
