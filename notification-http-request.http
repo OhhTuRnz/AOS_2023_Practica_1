@@ -1,13 +1,13 @@
-# CGET 200
+# CGET 200 (OK)
 GET http://127.0.0.1:80/api/v1/notificaciones
 Accept: application/json
 
 ###
-# OPTIONS 204
+# OPTIONS 204 (NO CONTENT)
 OPTIONS http://127.0.0.1:80/api/v1/notificaciones
 
 ###
-# POST 201
+# POST 201 (CREATED)
 POST http://127.0.0.1:80/api/v1/notificaciones
 Content-Type: application/json
 
@@ -20,41 +20,41 @@ Content-Type: application/json
 # Operaciones por id de notificacion
 
 ###
-# GET 200
+# GET 200 (OK)
 GET http://127.0.0.1:80/api/v1/notificaciones/1234-1234-12
 Accept: application/json
 
 ###
-# GET 422 (Mal ID)
+# GET 422 (Mal ID) (UNPROCESSABLE CONTENT)
 GET http://127.0.0.1:80/api/v1/notificaciones/1
 Accept: application/json
 
 ###
-# OPTIONS 422 (Mal ID)
+# OPTIONS 422 (Mal ID) (UNPROCESSABLE CONTENT)
 OPTIONS http://127.0.0.1:80/api/v1/notificaciones/1
 
 ###
-# OPTIONS 204
+# OPTIONS 204 (NO CONTENT)
 OPTIONS http://127.0.0.1:80/api/v1/notificaciones/1234-1234-12
 
 # Operaciones por id de trabajo
 
 ###
-# GET 200
+# GET 200 (OK)
 GET http://127.0.0.1:80/api/v1/notificaciones/trabajo/1234-1234
 Accept: application/json
 
 ###
-# GET 422 (Mal ID)
+# GET 422 (Mal ID) (UNPROCESSABLE CONTENT)
 GET http://127.0.0.1:80/api/v1/notificaciones/trabajo/1
 Accept: application/json
 
 ###
-# OPTIONS 422 (Mal ID)
+# OPTIONS 422 (Mal ID) (UNPROCESSABLE CONTENT)
 OPTIONS http://127.0.0.1:80/api/v1/notificaciones/trabajo/1
 
 ###
-# OPTIONS 204
+# OPTIONS 204 (NO CONTENT)
 OPTIONS http://127.0.0.1:80/api/v1/notificaciones/trabajo/1234-1234
 
 

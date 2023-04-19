@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-    mock_backend:
+    mock_backend:                                                       # Stoplight sobre el que se ejecutará la API, utilizaremos la versión que nos ofreció el profesor.
         image: stoplight/prism:4
         container_name: aos2023_notificaciones_mock
         command: mock --cors -h 0.0.0.0 "/aos/openapi.yaml"
@@ -11,7 +11,7 @@ services:
             - ./openapi:/aos:ro
 
     frontend:
-        image: swaggerapi/swagger-ui:v5.0.0-alpha.5
+        image: swaggerapi/swagger-ui:v5.0.0-alpha.5                     # No es recomendable utilizar la versión latest por actualizaciones así que fijamos la versión v5.0.0 actualizada hace pocos días.
         container_name: aos2023_notificaciones_ui
         ports:
             - "8000:8080"
@@ -21,7 +21,7 @@ services:
             - ./openapi:/aos:ro
 
     proxy:
-        image: caddy:2.6.4-alpine
+        image: caddy:2.6.4-alpine                                       # Por la anterior razón utilizamos caddy 2.6.4 y, además, por ligereza utilizaremos una imagen sobre alpine.
         container_name: aos2023_notificaciones_proxy
         volumes:
             - ./Caddyfile:/etc/caddy/Caddyfile
