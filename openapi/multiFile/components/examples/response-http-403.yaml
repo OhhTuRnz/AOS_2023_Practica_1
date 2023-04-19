@@ -1,0 +1,6 @@
+value: 
+  type: https://httpstatuses.com/403
+  title: FORBIDDEN
+  status: 403
+  detail: La solicitud se ha realizado correctamente, pero el servidor se niega a cumplirla. Esto puede ser debido a que el usuario no tiene los permisos necesarios para acceder al recurso.
+  instance: about:blank 

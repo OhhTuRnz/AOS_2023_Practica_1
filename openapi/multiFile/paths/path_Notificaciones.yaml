@@ -1,0 +1,96 @@
+get:
+  summary: Obtiene todas las notificaciones
+  description: |
+    La siguiente tabla define los códigos de estado que puede devolver este endpoint
+    
+    | Status Code | Descripción   | Motivo                                 |
+    | ------------| --------------| ---------------------------------------|
+    | **200**     | OK            | Listado de notificaciones              |
+    | **401**     | UNAUTHORIZED  | El usuario no está autorizado          |  
+    | **403**     | FORBIDDEN     | El servidor ha denegado la petición    |
+    | **404**     | NOT FOUND     | No hay ninguna notificación            |
+  operationId: notificacion_cget
+  tags: [ '🔔 Notificación' ]
+  parameters:
+    - $ref: '../components/parameters/pageParam.yaml'
+    - $ref: '../components/parameters/orderParam.yaml'
+    - $ref: '../components/parameters/orderingParam.yaml'
+  responses:
+    '200':
+      description: Lista de notificaciones disponibles
+      headers:
+        ETag:
+          $ref: '../components/headers/ETag.yaml'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              notificaciones:
+                description: array de notificaciones
+                type: array
+                items:
+                  $ref: '../components/schemas/Notificacion.yaml'
+              links:
+                description: Enlaces de paginación
+                readOnly: true
+                type: object
+                properties:
+                  prevPage:
+                    $ref: '../components/schemas/Link.yaml'
+                  nextPage:
+                    $ref: '../components/schemas/Link.yaml'
+          examples:
+            notificaciones-example:
+              $ref: '../components/examples/notificaciones-example.yaml'
+    '401':
+      $ref: '../components/responses/Response_401.yaml'
+    '403':
+      $ref: '../components/responses/Response_403.yaml'       
+    '404':
+      $ref: '../components/responses/Response_404.yaml'
+options:
+  summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+  description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
+  operationId: notificacion_coptions
+  tags: [ '🔔 Notificación' ]
+  responses:
+    '204':
+      description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+      headers:
+        Allow:
+          $ref: '../components/headers/Allow.yaml'
+post:
+  summary: Añade una nueva notificación
+  description: |
+    La siguiente tabla define los códigos de estado que puede devolver este endpoint
+    
+    | Status Code | Descripción          | Motivo                                    |
+    | ------------| ---------------------| ------------------------------------------|
+    | **201**     | CREATED              | La notificación ha sido creada            |
+    | **400**     | BAD REQUEST          | El identificador único ya existe          |
+    | **409**     | CONFLICT             | Se ha intentado crear una notificación    |
+    |             |                      | con un estado que no es posible           |
+    | **422**     | UNPROCESSABLE ENTITY | Falta alguno de los atributos obligatorios|
+    |             |                      | o el valor no está permitido              |
+    
+  tags: ['🔔 Notificación']
+  operationId: notificacion_post
+  requestBody:
+    $ref: '../components/requestBodies/notificacionRB.yaml'    
+  responses:
+    '201':
+      description: Nueva notificación creada
+      headers:
+        location:
+          $ref: '../components/headers/Location.yaml'
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/Notificacion.yaml'
+    '400':
+      $ref: '../components/responses/Response_400.yaml'
+    '422':
+      $ref: '../components/responses/Response_422.yaml'
+    '409':
+      $ref: '../components/responses/Response_409.yaml'

@@ -1,0 +1,6 @@
+name: notificacion_id
+in: path
+description: Identificador único de notificación
+required: true
+schema:
+  $ref: '../schemas/Id_Notificacion.yaml'
