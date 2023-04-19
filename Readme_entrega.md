@@ -5,7 +5,7 @@ Estos son los pasos para poder acceder a la especificación:
 
 - git clone git@github.com:OhhTuRnz/AOS_2023_Practica_1.git
 - cd AOS\_2023\_Practica_1/
-- docker-compose up ó docker compose up dependiendo de tu versión de docker.
+- docker-compose up o docker compose up dependiendo de tu versión de docker.
 - Observar como se han lanzado los contenedores aos2023\_notificaciones\_mock, aos2023\_notificaciones\_ui y aos2023\_notificaciones\_proxy.
 - ✨  Tenemos disponible nuestra especificación (localhost:8000 o 127.0.0.1:8000)  ✨ 
 
