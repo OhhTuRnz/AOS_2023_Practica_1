@@ -38,59 +38,347 @@ tags:
 
 paths:
   /notificaciones:
-    $ref: './multiFile/paths/path_Notificaciones.yaml'
+    get:
+      summary: Obtiene todas las notificaciones
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code | Descripción   | Motivo                                 |
+        | ------------| --------------| ---------------------------------------|
+        | **200**     | OK            | Listado de notificaciones              |
+        | **401**     | UNAUTHORIZED  | El usuario no está autorizado          |  
+        | **403**     | FORBIDDEN     | El servidor ha denegado la petición    |
+        | **404**     | NOT FOUND     | No hay ninguna notificación            |
+      operationId: notificacion_cget
+      tags: [ '🔔 Notificación' ]
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/orderParam'
+        - $ref: '#/components/parameters/orderingParam'
+      responses:
+        '200':
+          description: Lista de notificaciones disponibles
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  notificaciones:
+                    description: array de notificaciones
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Notificacion'
+                  links:
+                    description: Enlaces de paginación
+                    readOnly: true
+                    type: object
+                    properties:
+                      prevPage:
+                        $ref: '#/components/schemas/Link'
+                      nextPage:
+                        $ref: '#/components/schemas/Link'
+              examples:
+                notificaciones-example:
+                  $ref: '#/components/examples/notificaciones-example'
+        '401':
+          $ref: '#/components/responses/Response_401'
+        '403':
+          $ref: '#/components/responses/Response_403'       
+        '404':
+          $ref: '#/components/responses/Response_404'
+    options:
+      summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+      description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
+      operationId: notificacion_coptions
+      tags: [ '🔔 Notificación' ]
+      responses:
+        '204':
+          description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+    post:
+      summary: Añade una nueva notificación
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code | Descripción          | Motivo                                    |
+        | ------------| ---------------------| ------------------------------------------|
+        | **201**     | CREATED              | La notificación ha sido creada            |
+        | **400**     | BAD REQUEST          | El identificador único ya existe          |
+        | **409**     | CONFLICT             | Se ha intentado crear una notificación    |
+        |             |                      | con un estado que no es posible           |
+        | **422**     | UNPROCESSABLE ENTITY | Falta alguno de los atributos obligatorios|
+        |             |                      | o el valor no está permitido              |
+        
+      tags: ['🔔 Notificación']
+      operationId: notificacion_post
+      requestBody:
+        $ref: '#/components/requestBodies/notificacionRB'    
+      responses:
+        '201':
+          description: Nueva notificación creada
+          headers:
+            location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notificacion'
+        '400':
+          $ref: '#/components/responses/Response_400'
+        '422':
+          $ref: '#/components/responses/Response_422'
+        '409':
+          $ref: '#/components/responses/Response_409'
 
   
   /notificaciones/{notificacion_id}:
-    $ref: './multiFile/paths/path_Notificaciones_{notificacion_id}.yaml'
+    parameters:
+      - $ref: '#/components/parameters/notificacionId'
+    options:
+      summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+      description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
+      operationId: notificacion_options
+      tags: [ '🔔 Notificación' ]
+      responses:
+        '204':
+          description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+    get:
+      summary: Obtiene una notificación identificada por `notificaciónId`
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+          
+          | Status Code | Descripción   | Motivo                              |
+          | ------------| --------------| ------------------------------------|
+          | **200**     | OK            | Si la notificación existe           |
+          | **401**     | UNAUTHORIZED  | El usuario no está autorizado       |  
+          | **403**     | FORBIDDEN     | El servidor ha denegado la petición |
+          |             |               | Al usuario                          |
+          | **404**     | NOT FOUND     | Si no existe la notificación        |
+      operationId: notificacion_get
+      tags: [ '🔔 Notificación' ]
+      responses:
+        '200':
+          description: Notificación
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notificacion'
+        '401':
+          $ref: '#/components/responses/Response_401'
+        '403':
+          $ref: '#/components/responses/Response_403' 
+        '404':
+          $ref: '#/components/responses/Response_404'
         
   /notificaciones/trabajo/{trabajo_id}:
-    $ref: './multiFile/paths/path_Notificaciones_trabajo_{trabajo_id}.yaml'
-    
-  #/trabajos/{trabajo-id}/notificaciones: 
-  
-  # Se trata de otra manera de poder desarrollar este endpoint, y vendría dado para el equipo que se esté dedicando a la especificación de trabajos.
-  # Ya que vemos conveniente que la ruta venga dada por trabajo y no por notificaciones, aunque lo dejamos de la otra manera porque no podemos especificar APIs ajenas.
+    parameters:
+        - $ref: '#/components/parameters/trabajoId'
+    options:
+        summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+        description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
+        operationId: notificacion_trabajo_options
+        tags: [ '🔔 Notificación' ]
+        responses:
+          '204':
+            description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+            headers:
+              Allow:
+                $ref: '#/components/headers/Allow'
+    get:
+        summary: Obtiene una notificación identificada por `trabajoId`
+        description: |
+          La siguiente tabla define los códigos de estado que puede devolver este endpoint
+          
+          | Status Code | Descripción   | Motivo                              |
+          | ------------| --------------| ------------------------------------|
+          | **200**     | OK            | Si la notificación existe           |
+          | **401**     | UNAUTHORIZED  | El usuario no está autorizado       |  
+          | **403**     | FORBIDDEN     | El servidor ha denegado la petición |
+          |             |               | Al usuario                          |
+          | **404**     | NOT FOUND     | Si no existe la notificación        |
+        operationId: notificacion_trabajo_cget
+        tags: [ '🔔 Notificación' ]
+        parameters:
+          - $ref: '#/components/parameters/pageParam'
+          - $ref: '#/components/parameters/orderingParam'
+        responses:
+          '200':
+            description: Notificación
+            headers:
+              ETag:
+                $ref: '#/components/headers/ETag'
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    notificaciones:
+                      description: array de notificaciones
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Notificacion'
+                    links:
+                      description: Enlaces de paginación
+                      readOnly: true
+                      type: object
+                      properties:
+                        prevPage:
+                          $ref: '#/components/schemas/Link'
+                        nextPage:
+                          $ref: '#/components/schemas/Link'
+                examples:
+                  notificaciones-example:
+                    $ref: '#/components/examples/notificaciones-example'
+          '401':
+            $ref: '#/components/responses/Response_401'
+          '403':
+            $ref: '#/components/responses/Response_403' 
+          '404':
+            $ref: '#/components/responses/Response_404'
 
-  #    parameters:
-  #        - $ref: '#/components/parameters/trabajoId'
-  #    options:
-  #        summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
-  #        description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
-  #        operationId: trabajo_notificacion_options
-  #        tags: [ '🔔 Notificación' ]
-  #        responses:
-  #          '204':
-  #            description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
-  #            headers:
-  #              Allow:
-  #                $ref: '#/components/headers/Allow'
-  #    get:
-  #        summary: Obtiene una notificación identificada por `trabajoId`
-  #        description: |
-  #          La siguiente tabla define los códigos de estado que puede devolver este endpoint
-  #          
-  #          | Status Code | Descripción   | Motivo                              |
-  #          | ------------| --------------| ------------------------------------|
-  #          | **200**     | OK            | Si la notificación existe           |
-  #          | **401**     | UNAUTHORIZED  | El usuario no está autorizado       |  
-  #          | **403**     | FORBIDDEN     | El servidor ha denegado la petición |
-  #          | **404**     | NOT FOUND     | Si no existe la notificación        |
-  #        operationId: ntrabajo_notificacion_get
-  #        tags: [ '🔔 Notificación' ]
-  #        responses:
-  #          '200':
-  #            description: Notificación
-  #            headers:
-  #              ETag:
-  #                $ref: '#/components/headers/ETag'
-  #            content:
-  #              application/json:
-  #                schema:
-  #                  $ref: '#/components/schemas/Notificacion'
-  #          '401':
-  #            $ref: '#/components/responses/Response_401'
-  #          '403':
-  #            $ref: '#/components/responses/Response_403' 
-  #          '404':
-  #            $ref: '#/components/responses/Response_404'"""
+    #/trabajos/{trabajo-id}/notificaciones: 
+    
+    # Se trata de otra manera de poder desarrollar este endpoint, y vendría dado para el equipo que se esté dedicando a la especificación de trabajos.
+    # Ya que vemos conveniente que la ruta venga dada por trabajo y no por notificaciones, aunque lo dejamos de la otra manera porque no podemos especificar APIs ajenas.
+
+    #    parameters:
+    #        - $ref: '#/components/parameters/trabajoId'
+    #    options:
+    #        summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+    #        description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
+    #        operationId: trabajo_notificacion_options
+    #        tags: [ '🔔 Notificación' ]
+    #        responses:
+    #          '204':
+    #            description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+    #            headers:
+    #              Allow:
+    #                $ref: '#/components/headers/Allow'
+    #    get:
+    #        summary: Obtiene una notificación identificada por `trabajoId`
+    #        description: |
+    #          La siguiente tabla define los códigos de estado que puede devolver este endpoint
+    #          
+    #          | Status Code | Descripción   | Motivo                              |
+    #          | ------------| --------------| ------------------------------------|
+    #          | **200**     | OK            | Si la notificación existe           |
+    #          | **401**     | UNAUTHORIZED  | El usuario no está autorizado       |  
+    #          | **403**     | FORBIDDEN     | El servidor ha denegado la petición |
+    #          | **404**     | NOT FOUND     | Si no existe la notificación        |
+    #        operationId: ntrabajo_notificacion_get
+    #        tags: [ '🔔 Notificación' ]
+    #        responses:
+    #          '200':
+    #            description: Notificación
+    #            headers:
+    #              ETag:
+    #                $ref: '#/components/headers/ETag'
+    #            content:
+    #              application/json:
+    #                schema:
+    #                  $ref: '#/components/schemas/Notificacion'
+    #          '401':
+    #            $ref: '#/components/responses/Response_401'
+    #          '403':
+    #            $ref: '#/components/responses/Response_403' 
+    #          '404':
+    #            $ref: '#/components/responses/Response_404'"""
+
+components:
+  schemas:
+    Notificacion:
+      $ref: './multiFile/components/schemas/Notificacion.yaml'
+    Id_Notificacion:
+      $ref: './multiFile/components/schemas/Id_Notificacion.yaml'
+    Id_Trabajo:
+      $ref: './multiFile/components/schemas/Id_Trabajo.yaml'
+    
+    #VIN:
+    #  title: 'Cochecito con emoji'                                                                                    # CAMBIAR
+    #  description:
+    #  type: string
+    #  pattern: /^[A-HJ-NPR-Z\d]{8}[\dX][A-HJ-NPR-Z\d]{2}\d{6}$/i
+    
+    Estados_Trabajos:
+      $ref: './multiFile/components/schemas/Estados_Trabajos.yaml'
+      
+    HTTP_Problem:
+      $ref: './multiFile/components/schemas/HTTP_Problem.yaml'
+  
+    Link:
+      $ref: './multiFile/components/schemas/Link.yaml'
+  headers:
+    ETag:
+      $ref: './multiFile/components/headers/ETag.yaml'
+    Allow:
+      $ref: './multiFile/components/headers/Allow.yaml'
+    Location:
+      $ref: './multiFile/components/headers/Location.yaml'
+
+  requestBodies:
+    notificacionRB:
+      $ref: './multiFile/components/requestBodies/notificacionRB.yaml'
+    notificacionUpdate:
+      $ref: './multiFile/components/requestBodies/notificacionUpdate.yaml'
+
+
+  responses:
+  # Añadir sólo las responses que vayamos a utilizar.
+    Response_400:
+      $ref: './multiFile/components/responses/Response_400.yaml'
+    Response_401:
+      $ref: './multiFile/components/responses/Response_401.yaml'
+    Response_403:
+      $ref: './multiFile/components/responses/Response_403.yaml'
+    Response_404:
+      $ref: './multiFile/components/responses/Response_404.yaml'
+    Response_409:
+      $ref: './multiFile/components/responses/Response_409.yaml'
+    Response_412:
+      $ref: './multiFile/components/responses/Response_412.yaml'
+    Response_422:
+      $ref: './multiFile/components/responses/Response_422.yaml' 
+
+  parameters:
+    ifMatchParam:
+      $ref: './multiFile/components/parameters/ifMatchParam.yaml'
+    orderParam:
+      $ref: './multiFile/components/parameters/orderParam.yaml'
+    orderingParam:
+      $ref: './multiFile/components/parameters/orderingParam.yaml'
+    pageParam:
+      $ref: './multiFile/components/parameters/pageParam.yaml'
+        
+    notificacionId:
+      $ref: './multiFile/components/parameters/notificacionId.yaml'
+    trabajoId:
+      $ref: './multiFile/components/parameters/trabajoId.yaml'
+
+  examples:
+    notificaciones-example:
+      $ref: './multiFile/components/examples/notificaciones-example.yaml'
+    response-http-400:
+      $ref: './multiFile/components/examples/response-http-400.yaml'
+    response-http-401:
+      $ref: './multiFile/components/examples/response-http-401.yaml'
+    response-http-403:
+      $ref: './multiFile/components/examples/response-http-403.yaml'  
+    response-http-404:
+      $ref: './multiFile/components/examples/response-http-404.yaml'
+    response-http-409:
+      $ref: './multiFile/components/examples/response-http-409.yaml'
+    response-http-412:
+      $ref: './multiFile/components/examples/response-http-412.yaml'
+    response-http-422:
+      $ref: './multiFile/components/examples/response-http-422.yaml'

@@ -1,14 +1,13 @@
 # Esquema relacionado con los estados de los trabajos.
 
-Estados_Trabajos:
-      description: |
-        Estado del trabajo:
-        * 'Creado':       Se ha dado de alta un trabajo para un vehículo en el taller.
-        * 'Planificado':  El trabajo ha sido presupuestado y está pendiente de iniciar.
-        * 'Iniciado':     El trabajo sigue su planificación y es iniciado.
-        * 'Terminado':    El trabajo ha sido finalizado correctamente.
-        * 'Anulado':      El trabajo ha sido anulado debido a una complicación, obligación u otras causas.
-      type: string
-      default: 'Creado'
-      enum: ["Creado", "Planificado", "Iniciado", "Terminado", "Anulado"]
-      x-faker: helpers.arrayElement([ 'Creado', 'Planificado', 'Iniciado', 'Terminado', 'Anulado' ])
+description: |
+  Estado del trabajo:
+  * 'Creado':       Se ha dado de alta un trabajo para un vehículo en el taller.
+  * 'Planificado':  El trabajo ha sido presupuestado y está pendiente de iniciar.
+  * 'Iniciado':     El trabajo sigue su planificación y es iniciado.
+  * 'Terminado':    El trabajo ha sido finalizado correctamente.
+  * 'Anulado':      El trabajo ha sido anulado debido a una complicación, obligación u otras causas.
+type: string
+default: 'Creado'
+enum: ["Creado", "Planificado", "Iniciado", "Terminado", "Anulado"]
+x-faker: helpers.arrayElement([ 'Creado', 'Planificado', 'Iniciado', 'Terminado', 'Anulado' ])

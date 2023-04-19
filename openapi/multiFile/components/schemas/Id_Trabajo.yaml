@@ -1,5 +1,5 @@
 
 # Esquema sobre el que está definido el patrón de un Id de trabajo.
-Id_Trabajo:
-      type: string
-      pattern: "^[0-9]{4}-[0-9]{4}$"
+
+type: string
+pattern: "^[0-9]{4}-[0-9]{4}$"
