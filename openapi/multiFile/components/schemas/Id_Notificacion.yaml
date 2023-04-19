@@ -2,4 +2,5 @@
 
 title: Identificador único de notificación
 type: string
+example: '1234-1234-12'
 pattern: "^[0-9]{4}-[0-9]{4}-[0-9]{2}$"
