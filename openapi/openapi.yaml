@@ -248,8 +248,10 @@ paths:
             $ref: '#/components/responses/Response_404'
 
     #/trabajos/{trabajo-id}/notificaciones: 
+    
     # Se trata de otra manera de poder desarrollar este endpoint, y vendría dado para el equipo que se esté dedicando a la especificación de trabajos.
     # Ya que vemos conveniente que la ruta venga dada por trabajo y no por notificaciones, aunque lo dejamos de la otra manera porque no podemos especificar APIs ajenas.
+
     #    parameters:
     #        - $ref: '#/components/parameters/trabajoId'
     #    options:

@@ -1,4 +1,6 @@
-  Id_Notificacion:
-        title: Identificador único de notificación
-        type: string
-        pattern: "^[0-9]{4}-[0-9]{4}-[0-9]{2}$"
+# Esquema sobre el que está definido el patrón de un Id de notificación.
+
+Id_Notificacion:
+      title: Identificador único de notificación
+      type: string
+      pattern: "^[0-9]{4}-[0-9]{4}-[0-9]{2}$"
