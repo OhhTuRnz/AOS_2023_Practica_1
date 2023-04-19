@@ -12,10 +12,7 @@ docker run --rm `
     "/aos/openapi.yaml"
 
 # REDOCLY REDOC
-docker run -d --rm -p 8080:80 --name aos2023_redoc `
-   -v C:\Xampp\htdocs\AOS\AOS_2023\openapi\openapi.yaml:/usr/share/nginx/html/openapi.yaml `
-   -e SPEC_URL=openapi.yaml `
-   redocly/redoc
+docker run -d --rm -p 8080:80 --name aos2023_redoc -v C:\Xampp\htdocs\AOS\AOS_2023\openapi\openapi.yaml:/usr/share/nginx/html/openapi.yaml -e SPEC_URL=openapi.yaml redocly/redoc
 
 # REDOCLY CLI
 # redocly/cli HELP
@@ -28,14 +25,10 @@ docker run --rm `
    redocly/cli stats /aos/openapi.yaml
 
 # redocly/cli LINT
-docker run --rm `
-    -v C:\Xampp\htdocs\AOS\AOS_2023\openapi\openapi.yaml:/aos/openapi.yaml `
-    redocly/cli lint /aos/openapi.yaml
+docker run --rm -v C:\Xampp\htdocs\AOS\AOS_2023\openapi\openapi.yaml:/aos/openapi.yaml redocly/cli lint /aos/openapi.yaml
 
 # redocly/cli SPLIT
-docker run -it --rm `
-    -v C:\Xampp\htdocs\AOS\AOS_2023\openapi:/aos `
-    redocly/cli split /aos/openapi.yaml --outDir /aos/multiFile
+docker run -it --rm -v C:\Xampp\htdocs\AOS\AOS_2023\openapi:/aos redocly/cli split /aos/openapi.yaml --outDir /aos/multiFile
 
 # STOPLIGHT-PRISM
 =============================================================================

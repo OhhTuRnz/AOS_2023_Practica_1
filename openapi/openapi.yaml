@@ -1,7 +1,7 @@
 openapi: 3.0.3
 
 info:
-  version: 0.0.1
+  version: 1.0.0
   title: 🔧 [AOS 2023] Envío de notificaciones relacionadas con el funcionamiento del taller 🔧
   description: >
     ## **[AOS 2023]** 🔧 API REST para la gestión de Notificaciones.
@@ -11,10 +11,27 @@ info:
   contact:
     name: Equipo 5 - Arquitectura Orientada a Servicios
     url: 'https://moodle.upm.es/titulaciones/oficiales/course/view.php?id=528'
-    email: miw.etsisi@upm.es
+    email: aosgrupo5@aos.es
 
 servers:
-- url: http://127.0.0.1:80/api/v1
+- url: '{schema}://{server}:{port}/{basePath}'
+  description: Servidor para peticiones locales
+  variables:
+    schema:
+      description: Esquema
+      default: http
+      enum:
+        - http
+        - https
+    server:
+      description: Nombre del servidor
+      default: 127.0.0.1
+    port:
+      description: Puerto expuesto
+      default: '80'
+    basePath:
+      description: Ruta base
+      default: api/v1
 
 tags:
   - name: '🔔 Notificación'
@@ -137,13 +154,14 @@ paths:
       summary: Obtiene una notificación identificada por `notificaciónId`
       description: |
         La siguiente tabla define los códigos de estado que puede devolver este endpoint
-        
-        | Status Code | Descripción   | Motivo                              |
-        | ------------| --------------| ------------------------------------|
-        | **200**     | OK            | Si la notificación existe           |
-        | **401**     | UNAUTHORIZED  | El usuario no está autorizado       |  
-        | **403**     | FORBIDDEN     | El servidor ha denegado la petición |
-        | **404**     | NOT FOUND     | Si no existe la notificación        |
+          
+          | Status Code | Descripción   | Motivo                              |
+          | ------------| --------------| ------------------------------------|
+          | **200**     | OK            | Si la notificación existe           |
+          | **401**     | UNAUTHORIZED  | El usuario no está autorizado       |  
+          | **403**     | FORBIDDEN     | El servidor ha denegado la petición |
+          |             |               | Al usuario                          |
+          | **404**     | NOT FOUND     | Si no existe la notificación        |
       operationId: notificacion_get
       tags: [ '🔔 Notificación' ]
       responses:
@@ -160,22 +178,6 @@ paths:
           $ref: '#/components/responses/Response_401'
         '403':
           $ref: '#/components/responses/Response_403' 
-        '404':
-          $ref: '#/components/responses/Response_404'
-    delete:
-      summary: Elimina la notificación identificada por `notificaciónId`
-      description: |
-        La siguiente tabla define los códigos de estado que puede devolver este endpoint
-        
-        | Status Code | Descripción   | Motivo                                      |
-        | ------------| --------------| --------------------------------------------|
-        | **204**     | NO CONTENT    | La notificación existía y ha sido eliminada |
-        | **404**     | NOT FOUND     | Si la notificación no existe                |
-      operationId: notificacion_delete
-      tags: [ '🔔 Notificación' ]
-      responses:
-        '204':
-          description: Plataforma eliminada &lt:Cuerpo de la respuesta vacío&gt;
         '404':
           $ref: '#/components/responses/Response_404'
         
@@ -203,9 +205,13 @@ paths:
           | **200**     | OK            | Si la notificación existe           |
           | **401**     | UNAUTHORIZED  | El usuario no está autorizado       |  
           | **403**     | FORBIDDEN     | El servidor ha denegado la petición |
+          |             |               | Al usuario                          |
           | **404**     | NOT FOUND     | Si no existe la notificación        |
-        operationId: notificacion_trabajo_get
+        operationId: notificacion_trabajo_cget
         tags: [ '🔔 Notificación' ]
+        parameters:
+          - $ref: '#/components/parameters/pageParam'
+          - $ref: '#/components/parameters/orderingParam'
         responses:
           '200':
             description: Notificación
@@ -215,78 +221,86 @@ paths:
             content:
               application/json:
                 schema:
-                  $ref: '#/components/schemas/Notificacion'
+                  type: object
+                  properties:
+                    notificaciones:
+                      description: array de notificaciones
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Notificacion'
+                    links:
+                      description: Enlaces de paginación
+                      readOnly: true
+                      type: object
+                      properties:
+                        prevPage:
+                          $ref: '#/components/schemas/Link'
+                        nextPage:
+                          $ref: '#/components/schemas/Link'
+                examples:
+                  notificaciones-example:
+                    $ref: '#/components/examples/notificaciones-example'
           '401':
             $ref: '#/components/responses/Response_401'
           '403':
             $ref: '#/components/responses/Response_403' 
           '404':
             $ref: '#/components/responses/Response_404'
-    delete:
-      summary: Elimina la notificación identificada por `notificaciónId`
-      description: |
-        La siguiente tabla define los códigos de estado que puede devolver este endpoint
-        
-        | Status Code | Descripción   | Motivo                                      |
-        | ------------| --------------| --------------------------------------------|
-        | **204**     | NO CONTENT    | La notificación existía y ha sido eliminada |
-        | **404**     | NOT FOUND     | Si la notificación no existe                |
-      operationId: notificacion_trabajo_delete
-      tags: [ '🔔 Notificación' ]
-      responses:
-        '204':
-          description: Plataforma eliminada &lt:Cuerpo de la respuesta vacío&gt;
-        '404':
-          $ref: '#/components/responses/Response_404'
+
+    #/trabajos/{trabajo-id}/notificaciones: 
+    # Se trata de otra manera de poder desarrollar este endpoint, y vendría dado para el equipo que se esté dedicando a la especificación de trabajos.
+    # Ya que vemos conveniente que la ruta venga dada por trabajo y no por notificaciones, aunque lo dejamos de la otra manera porque no podemos especificar APIs ajenas.
+    #    parameters:
+    #        - $ref: '#/components/parameters/trabajoId'
+    #    options:
+    #        summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+    #        description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
+    #        operationId: trabajo_notificacion_options
+    #        tags: [ '🔔 Notificación' ]
+    #        responses:
+    #          '204':
+    #            description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+    #            headers:
+    #              Allow:
+    #                $ref: '#/components/headers/Allow'
+    #    get:
+    #        summary: Obtiene una notificación identificada por `trabajoId`
+    #        description: |
+    #          La siguiente tabla define los códigos de estado que puede devolver este endpoint
+    #          
+    #          | Status Code | Descripción   | Motivo                              |
+    #          | ------------| --------------| ------------------------------------|
+    #          | **200**     | OK            | Si la notificación existe           |
+    #          | **401**     | UNAUTHORIZED  | El usuario no está autorizado       |  
+    #          | **403**     | FORBIDDEN     | El servidor ha denegado la petición |
+    #          | **404**     | NOT FOUND     | Si no existe la notificación        |
+    #        operationId: ntrabajo_notificacion_get
+    #        tags: [ '🔔 Notificación' ]
+    #        responses:
+    #          '200':
+    #            description: Notificación
+    #            headers:
+    #              ETag:
+    #                $ref: '#/components/headers/ETag'
+    #            content:
+    #              application/json:
+    #                schema:
+    #                  $ref: '#/components/schemas/Notificacion'
+    #          '401':
+    #            $ref: '#/components/responses/Response_401'
+    #          '403':
+    #            $ref: '#/components/responses/Response_403' 
+    #          '404':
+    #            $ref: '#/components/responses/Response_404'"""
 
 components:
   schemas:
-
     Notificacion:
-      title: ' 🔔 Notificaciones sobre las modificaciones de cambio de estado de los trabajos'
-      description: >
-        Comunicación, cualquiera que sea su denominación, realizada por un Taller por la que manifiesta cualquier modificación sobre el trabajo de un vehículo en considerarse obligado por un tratado multilateral concluido por un contrato.
-      type: object
-      properties:
-        notificacion:
-          type: object
-          required: [id, id_trabajo, estado]
-          properties:
-            id:
-              $ref: '#/components/schemas/Id_Notificacion'
-            id_trabajo:
-              $ref: '#/components/schemas/Id_Trabajo'
-            estado:
-              $ref: '#/components/schemas/Estados_Trabajos'
-            detalle:
-              description: Texto con información adicional de la notificación
-              type: string
-      example: { "notificacion": { 
-                      "id":"0000-0000-01",
-                      "id_trabajo": "0000-0000",
-                      "estado" : "Creado",
-                      "links": {
-                        "parent": {
-                            "href":"https://example.com/api/v1/notificaciones",
-                            "rel": "notificacion_post notificacion_cget"
-                        },
-                        "self": {
-                            "href":"https://example.com/api/v1/notificaciones/0000-0000-01",
-                            "rel": "notificacion_get" 
-                        }
-                      }
-                    }
-                }
-              
-
+      $ref: './schemas/Notificacion.yaml'
     Id_Notificacion:
-      title: Identificador único de notificación
-      type: string
-      pattern: "^[0-9]{4}-[0-9]{4}-[0-9]{2}$"
-
+      $ref: './schemas/Id_Notificacion.yaml'
     Id_Trabajo:
-      type: string
-      pattern: "^[0-9]{4}-[0-9]{4}$"
+      $ref: './schemas/Id_Trabajo.yaml'
     
     #VIN:
     #  title: 'Cochecito con emoji'                                                                                    # CAMBIAR
@@ -295,64 +309,13 @@ components:
     #  pattern: /^[A-HJ-NPR-Z\d]{8}[\dX][A-HJ-NPR-Z\d]{2}\d{6}$/i
     
     Estados_Trabajos:
-      description: |
-        Estado del trabajo:
-        * 'Creado':       Se ha dado de alta un trabajo para un vehículo en el taller.
-        * 'Planificado':  El trabajo ha sido presupuestado y está pendiente de iniciar.
-        * 'Iniciado':     El trabajo sigue su planificación y es iniciado.
-        * 'Terminado':    El trabajo ha sido finalizado correctamente.
-        * 'Anulado':      El trabajo ha sido anulado debido a una complicación, obligación u otras causas.
-      type: string
-      default: 'Creado'
-      enum: ["Creado", "Planificado", "Iniciado", "Terminado", "Anulado"]
-      x-faker: helpers.arrayElement([ 'Creado', 'Planificado', 'Iniciado', 'Terminado', 'Anulado' ])
+      $ref: './schemas/Estados_Trabajos.yaml'
       
     HTTP_Problem:
-      type: object
-      externalDocs:
-        url: https://tools.ietf.org/html/rfc7807
-      description: |
-        Problem Details for HTTP APIs
-        [https://tools.ietf.org/html/rfc7807](https://tools.ietf.org/html/rfc7807)
-      properties:
-        type:
-          type: string
-          format: uri
-          description: A URI reference [RFC3986] that identifies the problem type
-        title:
-          type: string
-          description: short human-readable summary of the problem type
-        status:
-          type: number
-          description: HTTP status code
-        detail:
-          type: string
-          description: Human-readable explanation specific to this occurrence of the problem
-        instance:
-          type: string
-          format: uri
-          description: >
-            A URI reference that identifies the specific occurrence of the problem.
-            It may or may not yield further information if dereferenced.
+      $ref: './schemas/HTTP_Problem.yaml'
   
     Link:
-      description: Enlace de relación
-      title: '🔗 Link'
-      type: object
-      properties:
-        href:
-          description: URL del enlace
-          type: string
-          format: uri
-          x-faker: internet.url
-        rel:
-          description: "Relación del recurso enlazado con el actual. Contiene una lista de tipos
-                    de relaciones separados por espacio."
-          type: string
-          x-faker: lorem.words
-      example:
-        href: https://www.example.com/path/resource
-        rel: relAction1 relAction2    
+      $ref: './schemas/Link.yaml'   
 
   headers:
     ETag:
@@ -530,7 +493,7 @@ components:
     notificaciones-example:
       value:
         notificaciones:
-          - { "notificacion": { "id": "0000-0000-01", "id_trabajo": "0000-0000", "estado" : "Creado",
+          - { "notificacion": { "id": "0000-0000-01", "id_trabajo": "0000-0000", "estado" : "Creado", "detalle" : "El coche ha sido recibido en el taller.",
                 "links": {
                   "parent": { "href": "https://example.com/api/v1/notificaciones", "rel": "notificacion_post notificacion_cget"},
                   "self": { "href": "https://example.com/api/v1/notificaciones/0000-0000-01", "rel": "notificacion_get" }

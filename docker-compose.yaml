@@ -11,7 +11,7 @@ services:
             - ./openapi:/aos:ro
 
     frontend:
-        image: swaggerapi/swagger-ui:latest
+        image: swaggerapi/swagger-ui:v5.0.0-alpha.5
         container_name: aos2023_notificaciones_ui
         ports:
             - "8000:8080"

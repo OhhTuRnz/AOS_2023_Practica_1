@@ -30,11 +30,6 @@ GET http://127.0.0.1:80/api/v1/notificaciones/1
 Accept: application/json
 
 ###
-# DELETE 204
-DELETE http://127.0.0.1:80/api/v1/notificaciones/1234-1234-12
-Accept: application/json
-
-###
 # OPTIONS 422 (Mal ID)
 OPTIONS http://127.0.0.1:80/api/v1/notificaciones/1
 
@@ -55,15 +50,11 @@ GET http://127.0.0.1:80/api/v1/notificaciones/trabajo/1
 Accept: application/json
 
 ###
-# DELETE 204
-DELETE http://127.0.0.1:80/api/v1/notificaciones/trabajo/1234-1234
-Accept: application/json
-
-###
 # OPTIONS 422 (Mal ID)
 OPTIONS http://127.0.0.1:80/api/v1/notificaciones/trabajo/1
 
 ###
 # OPTIONS 204
 OPTIONS http://127.0.0.1:80/api/v1/notificaciones/trabajo/1234-1234
+
 
