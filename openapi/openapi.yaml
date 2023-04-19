@@ -358,8 +358,7 @@ components:
     orderingParam:
       $ref: './multiFile/components/parameters/orderingParam.yaml'
     pageParam:
-      $ref: './multiFile/components/parameters/pageParam.yaml'
-        
+      $ref: './multiFile/components/parameters/pageParam.yaml'    
     notificacionId:
       $ref: './multiFile/components/parameters/notificacionId.yaml'
     trabajoId:
