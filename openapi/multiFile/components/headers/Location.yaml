@@ -3,4 +3,4 @@ schema:
   type: string
   format: uri
   x-faker: internet.url
-  example: https://example.com/api/v1/notificaciones/0000-0000-01
+  example: https://example.com/api/v1/notificaciones/1234-1234-12

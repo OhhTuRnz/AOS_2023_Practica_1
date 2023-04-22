@@ -1,15 +1,17 @@
 value:
   notificaciones:
     - notificacion:
-        id: 0000-0000-01
-        id_trabajo: 0000-0000
-        estado: Creado
+        id: 1234-1234-12
+        id_trabajo: 1234-1234
+        estado: default
+        detalle: ''
+        fecha_emision: '2023-04-05 12:00:58'
         links:
           parent:
             href: https://example.com/api/v1/notificaciones
             rel: notificacion_post notificacion_cget
           self:
-            href: https://example.com/api/v1/notificaciones/0000-0000-01
+            href: https://example.com/api/v1/notificaciones/1234-1234-12
             rel: notificacion_get
   links:
     prevPage:

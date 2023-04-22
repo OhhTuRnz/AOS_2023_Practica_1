@@ -1,0 +1,43 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: >-
+    🔧 [AOS 2023] Envío de notificaciones relacionadas con el funcionamiento del
+    taller 🔧
+  description: |
+    ## **[AOS 2023]** 🔧 API REST para la gestión de Notificaciones.
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  contact:
+    name: Equipo 5 - Arquitectura Orientada a Servicios
+    url: https://moodle.upm.es/titulaciones/oficiales/course/view.php?id=528
+    email: aosgrupo5@aos.es
+servers:
+  - url: '{schema}://{server}:{port}/{basePath}'
+    description: Servidor para peticiones locales
+    variables:
+      schema:
+        description: Esquema
+        default: http
+        enum:
+          - http
+          - https
+      server:
+        description: Nombre del servidor
+        default: 127.0.0.1
+      port:
+        description: Puerto expuesto
+        default: '80'
+      basePath:
+        description: Ruta base
+        default: api/v1
+tags:
+  - name: 🔔 Notificación
+paths:
+  /notificaciones:
+    $ref: paths/notificaciones.yaml
+  /notificaciones/{notificacion_id}:
+    $ref: paths/notificaciones_{notificacion_id}.yaml
+  /notificaciones/trabajo/{trabajo_id}:
+    $ref: paths/notificaciones_trabajo_{trabajo_id}.yaml
