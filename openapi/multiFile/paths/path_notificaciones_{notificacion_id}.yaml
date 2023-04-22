@@ -10,7 +10,7 @@ options:
       description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
       headers:
         Allow:
-          $ref: '../components/headers/Allow.yaml'
+          $ref: '../components/headers/AllowN.yaml'
 get:
   summary: Obtiene una notificación identificada por `notificaciónId`
   description: |

@@ -99,7 +99,7 @@ paths:
           description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
           headers:
             Allow:
-              $ref: '#/components/headers/Allow'
+              $ref: '#/components/headers/AllowCN'
     post:
       summary: Añade una nueva notificación
       description: |
@@ -150,7 +150,7 @@ paths:
           description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
           headers:
             Allow:
-              $ref: '#/components/headers/Allow'
+              $ref: '#/components/headers/AllowN'
     get:
       parameters:
         - $ref: '#/components/parameters/notificacionId'
@@ -214,7 +214,7 @@ paths:
           description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
           headers:
             Allow:
-              $ref: '#/components/headers/Allow'
+              $ref: '#/components/headers/AllowCT'
     get:
       parameters:
         - $ref: '#/components/parameters/trabajoId'
@@ -258,7 +258,7 @@ components:
       properties:
         notificacion:
           type: object
-          required: [id, id_trabajo, estado]
+          required: [id, id_trabajo, fecha_emision]
           properties:
             id:
               $ref: '#/components/schemas/Id_Notificacion'
@@ -384,11 +384,21 @@ components:
         pattern: "[0-9a-f]*"
         example:
           33a64df551425fcc
-    Allow:
+    AllowCN:
       description: Lista de métodos HTTP soportados
       schema:
         type: string
       example: GET, POST, OPTIONS
+    AllowN:
+      description: Lista de métodos HTTP soportados
+      schema:
+        type: string
+      example: GET, DELETE, OPTIONS
+    AllowTN:
+      description: Lista de métodos HTTP soportados
+      schema:
+        type: string
+      example: GET, OPTIONS
     Location:
       description: '`URI` del nuevo recurso'
       schema:
@@ -398,6 +408,7 @@ components:
         example:
           https://example.com/api/v1/notificaciones/0000-0000-01
 
+
   requestBodies:
     notificacionRB:
       description: Información de la nueva Notificación
@@ -406,10 +417,8 @@ components:
         application/json:
           schema:
             type: object
-            required: [ id, id_trabajo, estado ]
+            required: [id_trabajo]
             properties:
-              id:
-                $ref: '#/components/schemas/Id_Notificacion'
               id_trabajo:
                 $ref: '#/components/schemas/Id_Trabajo'
               estado:
