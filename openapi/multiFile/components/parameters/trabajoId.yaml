@@ -3,4 +3,4 @@ in: path
 description: Identificador único de trabajo
 required: true
 schema:
-  $ref: '../schemas/Id_Trabajo.yaml'
+  $ref: ../schemas/Id_Trabajo.yaml

@@ -4,11 +4,14 @@ content:
   application/json:
     schema:
       type: object
-      required: [ id, id_trabajo, estado ]
+      required:
+        - id
+        - id_trabajo
+        - estado
       properties:
         id:
-          $ref: '../schemas/Id_Notificacion.yaml'
+          $ref: ../schemas/Id_Notificacion.yaml
         id_trabajo:
-          $ref: '../schemas/Id_Trabajo.yaml'
+          $ref: ../schemas/Id_Trabajo.yaml
         estado:
-          $ref: '../schemas/Estados_Trabajos.yaml'
+          $ref: ../schemas/Estados_Trabajos.yaml

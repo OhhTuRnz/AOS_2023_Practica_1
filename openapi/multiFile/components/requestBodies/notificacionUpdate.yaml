@@ -6,4 +6,4 @@ content:
       type: object
       properties:
         estado:
-          $ref: '../schemas/Estados_Trabajos.yaml'
+          $ref: ../schemas/Estados_Trabajos.yaml

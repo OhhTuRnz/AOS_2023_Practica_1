@@ -1,5 +1,3 @@
-# Esquema sobre el que está construido un HTTP Problem Response.
-
 type: object
 externalDocs:
   url: https://tools.ietf.org/html/rfc7807
@@ -24,5 +22,5 @@ properties:
     type: string
     format: uri
     description: >
-      A URI reference that identifies the specific occurrence of the problem.
-      It may or may not yield further information if dereferenced.
+      A URI reference that identifies the specific occurrence of the problem. It
+      may or may not yield further information if dereferenced.

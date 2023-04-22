@@ -1,0 +1,6 @@
+description: >
+  Se trata de la fecha en la que la notificación ha sido emitida. Formato
+  yyyy-mm-dd HH:MM:SS
+type: string
+pattern: "^[0-9]{4}-[0-9]{2}-[0-9]{2}[ \t][0-9]{2}:[0-9]{2}:[0-9]{2}$"
+example: '2023-04-05 12:00:58'

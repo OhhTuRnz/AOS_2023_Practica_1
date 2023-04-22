@@ -1,6 +1,8 @@
-value: 
+value:
   type: https://httpstatuses.com/401
   title: UNAUTHORIZED
   status: 401
-  detail: La solicitud requiere autenticación y el usuario no está autorizado para acceder al recurso.
+  detail: >-
+    La solicitud requiere autenticación y el usuario no está autorizado para
+    acceder al recurso.
   instance: about:blank

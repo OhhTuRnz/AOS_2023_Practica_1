@@ -1,8 +1,10 @@
-description: '`CONFLICT`: La petición no ha sido completada debido a un conflicto con el servidor.'
+description: >-
+  `CONFLICT`: La petición no ha sido completada debido a un conflicto con el
+  servidor.
 content:
   application/problem+json:
     schema:
-      $ref: '../schemas/HTTP_Problem.yaml'
+      $ref: ../schemas/HTTP_Problem.yaml
     examples:
       response-http-409:
-        $ref: '../examples/response-http-409.yaml'
+        $ref: ../examples/response-http-409.yaml

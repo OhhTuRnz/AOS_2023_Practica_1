@@ -2,7 +2,7 @@ description: '`FORBIDDEN` El servidor ha denegado la petición.'
 content:
   application/problem+json:
     schema:
-      $ref: '../schemas/HTTP_Problem.yaml'
+      $ref: ../schemas/HTTP_Problem.yaml
     examples:
       response-http-403:
-        $ref: '../examples/response-http-403.yaml'
+        $ref: ../examples/response-http-403.yaml

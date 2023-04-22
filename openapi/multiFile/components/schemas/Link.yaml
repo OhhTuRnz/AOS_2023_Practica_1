@@ -1,7 +1,5 @@
-# Esquema sobre el que está construido un link para la paginación (HATEOAS).
-
 description: Enlace de relación
-title: '🔗 Link'
+title: 🔗 Link
 type: object
 properties:
   href:
@@ -10,8 +8,9 @@ properties:
     format: uri
     x-faker: internet.url
   rel:
-    description: "Relación del recurso enlazado con el actual. Contiene una lista de tipos
-              de relaciones separados por espacio."
+    description: >-
+      Relación del recurso enlazado con el actual. Contiene una lista de tipos
+      de relaciones separados por espacio.
     type: string
     x-faker: lorem.words
 example:

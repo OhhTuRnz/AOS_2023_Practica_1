@@ -1,6 +1,6 @@
 name: page
 in: query
-description: 'Número de página'
+description: Número de página
 required: false
 allowEmptyValue: false
 schema:

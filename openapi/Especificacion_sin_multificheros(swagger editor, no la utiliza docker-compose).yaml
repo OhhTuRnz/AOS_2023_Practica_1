@@ -246,6 +246,8 @@ components:
             detalle:
               description: Texto con información adicional de la notificación
               type: string
+            fecha_emision:
+              $ref: '#/components/schemas/Fecha_Emision'
       example: { "notificacion": { 
                       "id":"0000-0000-01",
                       "id_trabajo": "0000-0000",
@@ -293,6 +295,14 @@ components:
       default: 'Creado'
       enum: ["Creado", "Planificado", "Iniciado", "Terminado", "Anulado"]
       x-faker: helpers.arrayElement([ 'Creado', 'Planificado', 'Iniciado', 'Terminado', 'Anulado' ])
+    
+    Fecha_Emision:
+      description: |
+        Se trata de la fecha en la que la notificación ha sido emitida. Formato yyyy-mm-dd HH:MM:SS
+      type: string
+      pattern: "^[0-9]{4}-[0-9]{2}-[0-9]{2}[ \t][0-9]{2}:[0-9]{2}:[0-9]{2}$"
+      example: "2023-04-05 12:00:58"
+
       
     HTTP_Problem:
       type: object
