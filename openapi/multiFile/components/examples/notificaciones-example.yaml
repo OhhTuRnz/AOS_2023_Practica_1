@@ -11,7 +11,7 @@ value:
             href: https://example.com/api/v1/notificaciones
             rel: notificacion_post notificacion_cget
           self:
-            href: https://example.com/api/v1/notificaciones/1234-1234-12
+            href: https://example.com/api/v1/notificaciones/0000-0000-01
             rel: notificacion_get
   links:
     prevPage:

@@ -30,7 +30,7 @@ docker run --rm `
 docker run --rm -v C:\Xampp\htdocs\AOS\AOS_2023\openapi\openapi.yaml:/aos/openapi.yaml redocly/cli lint /aos/openapi.yaml
 
 # redocly/cli SPLIT
-docker run -it --rm -v C:\Xampp\htdocs\AOS\AOS_2023\openapi:/aos redocly/cli split /aos/openapi.yaml --outDir /aos/multiFile
+docker run --rm -v F:\aos:/aos redocly/cli split /aos/openapi.yaml --outDir /aos/multiFile
 
 # STOPLIGHT-PRISM
 =============================================================================

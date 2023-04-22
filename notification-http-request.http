@@ -57,4 +57,12 @@ OPTIONS http://127.0.0.1:80/api/v1/notificaciones/trabajo/1
 # OPTIONS 204 (NO CONTENT)
 OPTIONS http://127.0.0.1:80/api/v1/notificaciones/trabajo/1234-1234
 
+###
+# DELETE 204
+DELETE http://127.0.0.1:80/api/v1/notificaciones/1234-1234-12
+
+###
+# DELETE 422
+DELETE http://127.0.0.1:80/api/v1/notificaciones/1
+
 

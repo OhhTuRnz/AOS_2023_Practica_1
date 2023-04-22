@@ -93,8 +93,11 @@ post:
     | **409**     | CONFLICT             | Se ha intentado crear una
     notificación    |
 
-    |             |                      | con un estado que no es
-    posible           |
+    |             |                      | con un estado distinto a creado,
+    pero     |
+
+    |             |                      | es la primera notificación del
+    trabajo.   |
 
     | **422**     | UNPROCESSABLE ENTITY | Falta alguno de los atributos
     obligatorios|

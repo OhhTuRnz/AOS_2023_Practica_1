@@ -1,6 +1,6 @@
-parameters:
-  - $ref: ../components/parameters/notificacionId.yaml
 options:
+  parameters:
+    - $ref: ../components/parameters/notificacionId.yaml
   summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
   description: >-
     Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados
@@ -15,6 +15,8 @@ options:
         Allow:
           $ref: ../components/headers/Allow.yaml
 get:
+  parameters:
+    - $ref: ../components/parameters/notificacionId.yaml
   summary: Obtiene una notificación identificada por `notificaciónId`
   description: >
     La siguiente tabla define los códigos de estado que puede devolver este
@@ -49,5 +51,33 @@ get:
       $ref: ../components/responses/Response_401.yaml
     '403':
       $ref: ../components/responses/Response_403.yaml
+    '404':
+      $ref: ../components/responses/Response_404.yaml
+delete:
+  parameters:
+    - $ref: ../components/parameters/notificacionId.yaml
+  summary: Elimina la notificación identificada por `notificaciónId`
+  description: >
+    La siguiente tabla define los códigos de estado que puede devolver este
+    endpoint
+
+
+    | Status Code | Descripción   | Motivo                                     
+    |
+
+    | ------------| --------------|
+    --------------------------------------------|
+
+    | **204**     | NO CONTENT    | La notificación existía y ha sido eliminada
+    |
+
+    | **404**     | NOT FOUND     | Si la notificación no existe               
+    |
+  operationId: notificacion_delete
+  tags:
+    - 🔔 Notificación
+  responses:
+    '204':
+      description: Plataforma eliminada &lt:Cuerpo de la respuesta vacío&gt;
     '404':
       $ref: ../components/responses/Response_404.yaml

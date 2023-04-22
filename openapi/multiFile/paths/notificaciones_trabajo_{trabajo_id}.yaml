@@ -1,6 +1,6 @@
-parameters:
-  - $ref: ../components/parameters/trabajoId.yaml
 options:
+  parameters:
+    - $ref: ../components/parameters/trabajoId.yaml
   summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
   description: >-
     Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados
@@ -15,6 +15,8 @@ options:
         Allow:
           $ref: ../components/headers/Allow.yaml
 get:
+  parameters:
+    - $ref: ../components/parameters/trabajoId.yaml
   summary: Obtiene una notificación identificada por `trabajoId`
   description: >
     La siguiente tabla define los códigos de estado que puede devolver este
