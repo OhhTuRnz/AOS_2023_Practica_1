@@ -1,19 +1,30 @@
 # Entrega Práctica 1 - Equipo 5 - Subsistema de notificaciones - AOS 2023
-## Especificación de una api utilizando openapi y su despliegue con docker.
+## Especificación de una api utilizando OpenAPI y su despliegue con docker.
 
 ### Pasos para acceder a la especificación:
 
+Para acceder al repositiorio, este se podrá clonar mediante el siguiente comando:
+
+     git clone git@github.com:OhhTuRnz/AOS_2023_Practica_1.git
+     
+Una vez clonado, ejecutaremos el siguiente comando en la terminal
+
+    cd AOS_2023_Practica_1/
+
 En la terminal introducir el siguiente comando:
 
-    - docker-compose up o docker compose up dependiendo de tu versión de docker.
+     docker-compose up 
+     
+O bien:
 
-Una vez introducido, observar como se lanzan los contenedores aos2023\_notificaciones\_mock, aos2023\_notificaciones\_ui y aos2023\_notificaciones\_proxy.
+    docker compose up
+    
+Dependiendo de la versión de Docker que estés ejecutando.
 
-La especificación esta disponible en localhost:8000 o 127.0.0.1:8000.
+Una vez introducido, observar como se lanzan los contenedores *aos2023\_notificaciones\_mock, aos2023\_notificaciones\_ui y aos2023\_notificaciones\_proxy.*
 
-En caso de querer acceder al repositiorio, este se podrá clonar mediante el siguiente comando:
+La especificación está disponible en **localhost:8000** o **127.0.0.1:8000.**
 
-    - git clone git@github.com:OhhTuRnz/AOS_2023_Practica_1.git
 
 ### Decisiones de diseño
 
