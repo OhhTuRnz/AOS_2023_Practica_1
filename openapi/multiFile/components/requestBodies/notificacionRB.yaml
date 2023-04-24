@@ -11,3 +11,5 @@ content:
           $ref: ../schemas/Id_Trabajo.yaml
         estado:
           $ref: ../schemas/Estados_Trabajos.yaml
+        detalle:
+          type: string

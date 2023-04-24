@@ -432,6 +432,8 @@ components:
                 $ref: '#/components/schemas/Id_Trabajo'
               estado:
                 $ref: '#/components/schemas/Estados_Trabajos'
+              detalle:
+                type: string
     notificacionUpdate:
       description: Nuevos atributos de la Notificación
       required: true
