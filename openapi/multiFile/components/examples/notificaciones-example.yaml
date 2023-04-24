@@ -3,7 +3,7 @@ value:
     - notificacion:
         id: 1234-1234-12
         id_trabajo: 1234-1234
-        estado: default
+        estado: Creado
         detalle: ''
         fecha_emision: '2023-04-05 12:00:58'
         links:
