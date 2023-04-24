@@ -69,5 +69,6 @@ La especificación está disponible en **localhost:8000** o **127.0.0.1:8000.**
 - Como en el repositorio de F. Javier, hemos añadido un documento http para probar la conexión con un cliente REST a la api desplegada.
 - El único valor que necesitamos indicar en un post para notificación es el id de trabajo, esto se debe a que el id se generará automáticamente en base al trabajo, el estado tiene un valor por defecto (Creado) y la fecha la calculará el sistema, se podrá añadir opcionalmente estado y detalle.
 
+Como diría Alberto:
 > Nunca useis el tag latest de cualquier imagen porque si sacan
 > una nueva versión sin retrocompatibilidad la has cagado.
