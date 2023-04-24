@@ -26,10 +26,3 @@ value:
           self:
             href: https://example.com/api/v1/notificaciones/1234-1234-01
             rel: notificacion_get
-  links:
-    prevPage:
-      href: https://example.com/api/v1/noitificaciones?page=6
-      rel: prevPage
-    nextPage:
-      href: https://example.com/api/v1/notificaciones?page=8
-      rel: nextPage

@@ -228,18 +228,27 @@ paths:
         | **401**     | UNAUTHORIZED  | El usuario no está autorizado       |  
         | **403**     | FORBIDDEN     | El servidor ha denegado la petición |
         | **404**     | NOT FOUND     | Si no existe la notificación        |
-      operationId: notificacion_trabajo_get
+      operationId: notificacion_trabajo_cget
       tags: [ '🔔 Notificación' ]
       responses:
         '200':
-          description: Notificación
+          description: Lista de notificaciones disponibles
           headers:
             ETag:
               $ref: '#/components/headers/ETag'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Notificacion'
+                type: object
+                properties:
+                  notificaciones:
+                    description: array de notificaciones
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Notificacion'
+              examples:
+                notificaciones-trabajo-example:
+                  $ref: '#/components/examples/notificaciones-trabajo-example'
         '401':
           $ref: '#/components/responses/Response_401'
         '403':
@@ -406,7 +415,7 @@ components:
         format: uri
         x-faker: internet.url
         example:
-          https://example.com/api/v1/notificaciones/0000-0000-01
+          https://example.com/api/v1/notificaciones/1234-1234-12
 
 
   requestBodies:
@@ -564,12 +573,32 @@ components:
           - { "notificacion": { "id": "1234-1234-12", "id_trabajo": "1234-1234", "estado" : Creado, "detalle" : "", "fecha_emision" : "2023-04-05 12:00:58",
                 "links": {
                   "parent": { "href": "https://example.com/api/v1/notificaciones", "rel": "notificacion_post notificacion_cget"},
-                  "self": { "href": "https://example.com/api/v1/notificaciones/0000-0000-01", "rel": "notificacion_get" }
+                  "self": { "href": "https://example.com/api/v1/notificaciones/1234-1234-12", "rel": "notificacion_get" }
+                }}}
+
+          - { "notificacion": { "id": "1234-1234-01", "id_trabajo": "1234-1234", "estado" : Creado, "detalle" : "", "fecha_emision" : "2023-05-12 21:05:30",
+                "links": {
+                  "parent": { "href": "https://example.com/api/v1/notificaciones", "rel": "notificacion_post notificacion_cget"},
+                  "self": { "href": "https://example.com/api/v1/notificaciones/1234-1234-01", "rel": "notificacion_get" }
                 }}}
         links: {
           "prevPage": { "href": "https://example.com/api/v1/noitificaciones?page=6", "rel": "prevPage" },
           "nextPage": { "href": "https://example.com/api/v1/notificaciones?page=8", "rel": "nextPage" }
         }
+    notificaciones-trabajo-example:
+      value:
+        notificaciones:
+          - { "notificacion": { "id": "1234-1234-12", "id_trabajo": "1234-1234", "estado" : Creado, "detalle" : "", "fecha_emision" : "2023-04-05 12:00:58",
+                "links": {
+                  "parent": { "href": "https://example.com/api/v1/notificaciones", "rel": "notificacion_post notificacion_cget"},
+                  "self": { "href": "https://example.com/api/v1/notificaciones/1234-1234-12", "rel": "notificacion_get" }
+                }}}
+
+          - { "notificacion": { "id": "1234-1234-01", "id_trabajo": "1234-1234", "estado" : Creado, "detalle" : "", "fecha_emision" : "2023-05-12 21:05:30",
+                "links": {
+                  "parent": { "href": "https://example.com/api/v1/notificaciones", "rel": "notificacion_post notificacion_cget"},
+                  "self": { "href": "https://example.com/api/v1/notificaciones/1234-1234-01", "rel": "notificacion_get" }
+                }}}
     response-http-400:
       value:
         type: https://httpstatuses.com/400

@@ -13,7 +13,7 @@ options:
       description: cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;
       headers:
         Allow:
-          $ref: ../components/headers/AllowTN.yaml
+          $ref: ../components/headers/AllowCT.yaml
 get:
   parameters:
     - $ref: ../components/parameters/trabajoId.yaml
@@ -34,19 +34,28 @@ get:
     | **403**     | FORBIDDEN     | El servidor ha denegado la petición |
 
     | **404**     | NOT FOUND     | Si no existe la notificación        |
-  operationId: notificacion_trabajo_get
+  operationId: notificacion_trabajo_cget
   tags:
     - 🔔 Notificación
   responses:
     '200':
-      description: Notificación
+      description: Lista de notificaciones disponibles
       headers:
         ETag:
           $ref: ../components/headers/ETag.yaml
       content:
         application/json:
           schema:
-            $ref: ../components/schemas/Notificacion.yaml
+            type: object
+            properties:
+              notificaciones:
+                description: array de notificaciones
+                type: array
+                items:
+                  $ref: ../components/schemas/Notificacion.yaml
+          examples:
+            notificaciones-trabajo-example:
+              $ref: ../components/examples/notificaciones-trabajo-example.yaml
     '401':
       $ref: ../components/responses/Response_401.yaml
     '403':

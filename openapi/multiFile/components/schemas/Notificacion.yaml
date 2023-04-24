@@ -10,7 +10,7 @@ properties:
     required:
       - id
       - id_trabajo
-      - estado
+      - fecha_emision
     properties:
       id:
         $ref: ./Id_Notificacion.yaml
