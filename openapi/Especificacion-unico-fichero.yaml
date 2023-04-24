@@ -394,7 +394,7 @@ components:
       schema:
         type: string
       example: GET, DELETE, OPTIONS
-    AllowTN:
+    AllowCT:
       description: Lista de métodos HTTP soportados
       schema:
         type: string
