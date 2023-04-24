@@ -66,6 +66,8 @@ La especificación está disponible en **localhost:8000** o **127.0.0.1:8000.**
 - Siguiendo las recomendaciones de Alberto Díaz no se utiliza el tag latest en las imágenes de Docker porque en caso de que se lance una nueva versión de alguna imagen sin retrocompatibilidad podemos tener problemas a la hora de desplegar la especificación.
 - Tener en cuenta, también, que el endpoint donde se agrupan las notificaciones por trabajo correspondería canónicamente a la API dedicada a trabajos, pero como esta primera entrega no permite coordinación con el resto de las APIs se codifica en esta misma pudiéndose trasladar a la de trabajos en un futuro.
 - Al no tener tantas notificaciones un trabajo, no vemos necesaria la paginación como sí vemos en el cget de todas las notificaciones.
+- Como en el repositorio de F. Javier, hemos añadido un documento http para probar la conexión con un cliente REST a la api desplegada.
+- El único valor que necesitamos indicar en un post para notificación es el id de trabajo, esto se debe a que el id se generará automáticamente en base al trabajo, el estado tiene un valor por defecto (Creado) y la fecha la calculará el sistema, se podrá añadir opcionalmente estado y detalle.
 
 > Nunca useis el tag latest de cualquier imagen porque si sacan
 > una nueva versión sin retrocompatibilidad la has cagado.
