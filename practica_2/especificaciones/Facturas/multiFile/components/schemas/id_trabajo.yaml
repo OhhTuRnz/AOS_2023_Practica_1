@@ -1,0 +1,5 @@
+title: 🔨Id trabajo
+description: Id único del trabajo realizado al vehículo del cliente
+type: string
+example: T234
+pattern: ^T[0-9]{3}$

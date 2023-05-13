@@ -1,0 +1,10 @@
+name: ordering
+in: query
+description: 'Ordenación: `ASC` | `DESC`'
+required: false
+allowEmptyValue: false
+schema:
+  type: string
+  enum:
+    - ASC
+    - DESC

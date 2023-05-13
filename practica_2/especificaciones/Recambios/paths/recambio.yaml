@@ -1,0 +1,98 @@
+options:
+  parameters:
+    - $ref: '../parameters/Numero_Serie.yaml'
+  summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+  description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
+  operationId: recambio_options
+  tags: [ '⚙️Inventario' ]
+  responses:
+    '204':
+      description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+      headers:
+        Allow:
+          $ref: '../headers/Allow.yaml' 
+get:
+  parameters:
+    - $ref: '../parameters/Numero_Serie.yaml'
+  summary: Obtiene un recambio identificad0 por `Numero_Serie`
+  description: |
+    La siguiente tabla define los códigos de estado que puede devolver este endpoint
+    
+    | Status Code | Descripción | Motivo                             |
+    | ------------| ------------| -----------------------------------|
+    | **200**     | OK          | Si el recambio existe              |
+    | **404**     | NOT FOUND   | Si no existe el recambio           |
+  operationId: recambio_get
+  tags: [ '⚙️Inventario' ]
+  responses:
+    '200':
+      description: Recambio
+      headers:
+        ETag:
+          $ref: '../headers/Etag.yaml'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              Recambios:
+                description: array de recambios
+                type: array
+                items:
+                  $ref: '../schemas/Recambio.yaml'
+          examples:
+            recambioExample:
+              $ref: '../examples/recambios-busqueda-examples.yaml'
+    '404':
+      $ref: '../responses/Response_404.yaml'
+delete:
+  parameters:
+    - $ref: '../parameters/Numero_Serie.yaml'
+  summary: Elimina el recambio identificado por `Numero_Serie`
+  description: |
+    La siguiente tabla define los códigos de estado que puede devolver este endpoint
+    
+    | Status Code      | Descripción | Motivo                                    |
+    | ---------------- | ------------| ------------------------------------------|
+    | **204**          | NO CONTENT  | El recambio existía y ha sido eliminado   |
+    | **404**          | NOT FOUND   | Si el recambio no existe                  |
+  operationId: recambio_delete
+  tags: [ '⚙️Inventario' ]
+  responses:
+    '204':
+      description: Recambio eliminado &lt;Cuerpo de la respuesta vacío&gt;
+    '404':
+      $ref: '../responses/Response_404.yaml'
+put:
+  parameters:
+    - $ref: '../parameters/Numero_Serie.yaml'
+    - $ref: '../parameters/ifMatchParam.yaml'
+  tags: [ '⚙️Inventario' ]
+  summary: Modifica el recambio identificado por `Numero_Serie`.
+  description:  |
+    La siguiente tabla define los códigos de estado que puede devolver este endpoint
+    | Status Code | Descripción         | Motivo                                        |
+    | ------------| --------------------| ----------------------------------------------|
+    | **209**     | CONTENT RETURNED    | El recambio existía y ha sido actualizado     |
+    | **404**     | NOT FOUND           | Si el recambio no existe                      |
+    | **409**     | CONFLICT            | Si existe un conflicto con el recurso         |
+    | **412**     | PRECONDITION FAILED | Si el ETag proporcionado no está actualizado  |
+    | **422**     | UNPROCESSABLE ENTITY| Valor no permitido en alguno de los atributos |
+  operationId: recambio_put
+  requestBody:
+    $ref: '../requestBodies/recambioUpdate.yaml'
+  responses:
+    '209':
+      description: '`CONTENT RETURNED`: el recambio ha sido actualizado'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Recambio.yaml'
+    '404':
+      $ref: '../responses/Response_404.yaml'
+    '409':
+      $ref: '../responses/Response_409.yaml'
+    '412':
+      $ref: '../responses/Response_412.yaml'
+    '422':
+      $ref: '../responses/Response_422.yaml'

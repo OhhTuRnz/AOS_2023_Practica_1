@@ -1,0 +1,14 @@
+name: intervalo inferior
+in: query
+description: >
+  Define un intervalo mínimo de importe para buscar facturas que tengan un
+  importe superior a ese mínimo.
+
+  Para la búsqueda recordar que es obligatorio el símbolo "€" al final y los
+  decimales separados por un punto y solo 
+
+  se admiten centesilames
+required: false
+example: 0.00€
+schema:
+  $ref: ../schemas/importe_total.yaml

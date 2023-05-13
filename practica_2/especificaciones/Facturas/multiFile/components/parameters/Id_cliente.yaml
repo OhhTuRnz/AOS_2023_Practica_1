@@ -1,0 +1,6 @@
+name: ID cliente
+in: query
+description: DNI o NIE del cliente beneficiado
+required: false
+schema:
+  $ref: ../schemas/Id_cliente.yaml

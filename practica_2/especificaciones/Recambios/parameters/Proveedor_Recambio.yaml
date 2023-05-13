@@ -1,0 +1,6 @@
+name: Proveedor_Recambio
+in: query
+description: El proveedor de un recambio para el taller de vehículos
+required: false
+schema:
+  $ref: '../schemas/Proveedor_Recambio.yaml'

@@ -1,0 +1,103 @@
+openapi: 3.0.3
+
+info:
+  version: 1.0.0
+  title: 🚗[AOS 2023] Inventario de Recambios del taller 🚗
+  description: >
+    ## 🚘 API REST para la gestión de inventario de taller de coches
+  license:
+    name: MIT
+    url: 'https://opensource.org/licenses/MIT'
+  contact:
+    name: Escuela Técnica Superior de Ingeniería de Sistemas Informaticos
+    url: 'https://www.etsisi.upm.es/'
+    email: webmaster@etsisi.upm.es
+servers:
+  - url: http://127.0.0.1:80/api/v1
+tags:
+  - name: '⚙️Inventario'
+  
+paths:
+  /recambios:
+    $ref: "./paths/recambios.yaml"
+  /recambios/{Numero_Serie}:
+    $ref: "./paths/recambio.yaml"
+components:
+  schemas:
+    Recambio:
+      $ref: "./schemas/Recambio.yaml"
+    Numero_Serie:
+      $ref: "./schemas/Numero_Serie.yaml"
+    Nombre_Recambio:
+      $ref: "./schemas/Nombre_Recambio.yaml"
+    Descripcion_Recambio:
+      $ref: "./schemas/Descripcion_Recambio.yaml"
+    Proveedor_Recambio:
+      $ref: "./schemas/Proveedor_Recambio.yaml"
+    Equivalencias_Recambio:
+      $ref: "./schemas/Equivalencias_Recambio.yaml"
+    Garantia_Recambio:
+      $ref: "./schemas/Garantia_Recambio.yaml"
+    Precio_Recambio:
+      $ref: "./schemas/Precio_Recambio.yaml"
+    IVA_Recambio:
+      $ref: "./schemas/IVA_Recambio.yaml"
+    Importe_Recambio:
+      $ref: "./schemas/Importe_Recambio.yaml"
+    Cantidad_Recambio:
+      $ref: "./schemas/Cantidad_Recambio.yaml"
+    HTTP_Problem:
+      $ref: "./schemas/Http_Problem.yaml"
+    Link:
+      $ref: "./schemas/Link.yaml"
+  headers:
+    Etag:
+      $ref: "./headers/Etag.yaml"
+    Allow:
+      $ref: "./headers/Allow.yaml"
+    Location:
+      $ref: "./headers/Location.yaml"
+  parameters:
+    Numero_Serie:
+      $ref: "./parameters/Numero_Serie.yaml"
+    Nombre_Recambio:
+      $ref: "./parameters/Nombre_Recambio.yaml"
+    Proveedor_Recambio:
+      $ref: "./parameters/Proveedor_Recambio.yaml"
+    Equivalencias_Recambio:
+      $ref: "./parameters/Equivalencias_Recambio.yaml"
+    Importe_Recambio:
+      $ref: "./parameters/Importe_Recambio.yaml"
+    Cantidad_Recambio:
+      $ref: "./parameters/Cantidad_Recambio.yaml"
+    ifMatchParam:
+      $ref: "./parameters/ifMatchParam.yaml"
+  requestBodies:
+    recambioRB:
+      $ref: "./requestBodies/recambioRB.yaml"
+    recambioUpdate:
+      $ref: "./requestBodies/recambioUpdate.yaml"
+  responses:
+    Response_400:
+      $ref: "./responses/Response_400.yaml"
+    Response_404:
+      $ref: "./responses/Response_404.yaml"
+    Response_409:
+      $ref: "./responses/Response_409.yaml"
+    Response_412:
+      $ref: "./responses/Response_412.yaml"
+    Response_422:
+      $ref: "./responses/Response_422.yaml"
+  examples:
+    recambios-examples:
+      $ref: "./examples/recambios-examples.yaml"
+    response-http-400:
+      $ref: "./examples/response-http-400.yaml"
+    response-http-404:
+      $ref: "./examples/response-http-404.yaml"
+    response-http-409:
+      $ref: "./examples/response-http-409.yaml"
+    response-http-412:
+      $ref: "./examples/response-http-412.yaml"
+    response-http-422:
+      $ref: "./examples/response-http-422.yaml"

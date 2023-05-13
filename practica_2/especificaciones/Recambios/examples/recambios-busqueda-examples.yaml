@@ -1,0 +1,19 @@
+value:
+  recambios:
+    - { 
+      "numero_serie": "Z0000001-A", 
+      "nombre": "Kit Frenos Brembo" , 
+      "descripcion": "Los kits Brembo GT | M están compuestos por discos compuestos y perforados; 
+      pinzas de aluminio de 6 pistones;  un set completo de pastillas de altas prestaciones; tubos con trenzado metálico y tornillería de gran calidad." , 
+      "proveedor": "Brembo", 
+      "equivalencias": {"nombre": "Kit Frenos EBC", "fabricante": "EBC Brakes", "modelo": "Golf GTI MK7" } , 
+      "garantia": "3 meses", 
+      "precio": "448.32", 
+      "iva": "21%", 
+      "importe": "587.50", 
+      "cantidad": "10",
+      "links": {
+          "parent": { "href": "https://example.com/api/v1/recambios", "rel": "recambio_post recambio_cget"},
+          "self": { "href": "https://example.com/api/v1/recambios/Z0000001-A", "rel": "recambio_get recambio_delete recambio_put" }
+      }
+      }

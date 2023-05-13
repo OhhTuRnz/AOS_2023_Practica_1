@@ -1,0 +1,49 @@
+title: '⚙️ Recambio de un artículo del taller'
+description: >
+  Un recambio de un taller de vehículos se refiere a la sustitución de una pieza o componente
+  dañado o desgastado en un vehículo por uno nuevo o reemplazo. Los talleres de vehículos
+  ofrecen una amplia variedad de recambios para distintas marcas y modelos de vehículos,
+  desde elementos tan básicos como las bujías hasta componentes más complejos como motores y transmisiones.
+type: object
+properties:
+  Recambio:
+    type: object
+    required: [numero_serie, nombre, descripcion, proveedor, equivalencias, garantia, precio, iva, importe, cantidad]
+    properties:
+      numero_serie:
+        $ref: './Numero_Serie.yaml'
+      nombre:
+        $ref: './Nombre_Recambio.yaml'
+      descripcion:
+        $ref: './Descripcion_Recambio.yaml'
+      proveedor:
+        $ref: './Proveedor_Recambio.yaml'
+      equivalencias:
+        $ref: './Equivalencias_Recambio.yaml'
+      garantia:
+        $ref: './Garantia_Recambio.yaml'
+      precio: 
+        $ref: './Precio_Recambio.yaml'
+      iva:
+        $ref: './IVA_Recambio.yaml'
+      importe:
+        $ref: './Importe_Recambio.yaml'
+      cantidad: 
+        $ref: './Cantidad_Recambio.yaml'
+example: { "recambio": { 
+  "numero_serie": "Z0000001-A", 
+  "nombre": "Kit Frenos Brembo" , 
+  "descripcion": "Los kits Brembo GT | M están compuestos por discos compuestos y perforados; 
+  pinzas de aluminio de 6 pistones;  un set completo de pastillas de altas prestaciones; tubos con trenzado metálico y tornillería de gran calidad." , 
+  "proveedor": "Brembo", 
+  "equivalencias": {"nombre": "Kit Frenos EBC", "fabricante": "EBC Brakes", "modelo": "Golf GTI MK7" } , 
+  "garantia": "3 meses", 
+  "precio": "448.32", 
+  "iva": "21%", 
+  "importe": "587.50", 
+  "cantidad": "10",
+  "links": {
+      "parent": { "href": "https://example.com/api/v1/recambios", "rel": "recambio_post recambio_cget"},
+      "self": { "href": "https://example.com/api/v1/recambios/Z0000001-A", "rel": "recambio_get recambio_delete recambio_put" }
+    }
+  } }

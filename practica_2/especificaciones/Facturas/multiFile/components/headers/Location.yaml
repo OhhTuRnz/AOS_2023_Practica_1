@@ -1,0 +1,6 @@
+description: '`URI` del nuevo recurso'
+schema:
+  type: string
+  format: uri
+  x-faker: internet.url
+  example: https://tallermecanico.com/api/v1/factura/2023-0000

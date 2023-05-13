@@ -1,0 +1,4 @@
+description: "Lista de métodos HTTP soportados"
+schema:
+  type: string
+example: GET, DELETE, PUT, OPTIONS

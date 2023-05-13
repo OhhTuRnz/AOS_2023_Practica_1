@@ -1,0 +1,6 @@
+name: facturaid
+in: path
+description: Identificador único de la Factura
+required: true
+schema:
+  $ref: ../schemas/id_factura.yaml

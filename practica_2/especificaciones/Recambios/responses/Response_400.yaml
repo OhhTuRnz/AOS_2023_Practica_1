@@ -1,0 +1,9 @@
+description: '`BAD REQUEST`: El identificador único ya existe'
+content: 
+  application/problem+json:
+    schemas:
+      HTTP_Problem:
+        $ref: '../schemas/Http_Problem.yaml'
+    examples:
+      response-http-400:
+        $ref: '../examples/response-http-400.yaml'

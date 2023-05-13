@@ -1,0 +1,8 @@
+title: 'Numero de serie'
+description: >
+  Código alfanumérico que permite identificar un recambio
+type: string
+pattern: '^[A-Z]{1}[0-9]{7}-[A-Z]$'
+example: "Z0000001-A"
+# https://v6.fakerjs.dev/guide/
+x-faker: helpers.regexpStyleStringParse('/^[A-Z]{1}[0-9]{7}-[A-Z]$/')

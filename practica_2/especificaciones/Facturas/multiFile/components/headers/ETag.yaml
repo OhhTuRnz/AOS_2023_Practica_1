@@ -1,0 +1,5 @@
+description: Entity Tag (identificador único proporcionado para validación de caché)
+schema:
+  type: string
+  pattern: '[0-9a-f]*'
+  example: 99a32df777121hii

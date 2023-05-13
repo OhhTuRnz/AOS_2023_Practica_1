@@ -1,0 +1,10 @@
+title: 'IVA '
+description: >
+  Es un tributo de carácter indirecto. Recae sobre los consumidores,
+  puesto que lo pagan al adquirir un producto o servicio: sobre el precio neto 
+  de los mismos se establece una aplicación que varía en su porcentaje.
+type: string
+pattern: '^[0-9]{1,2}[%]$'
+example: '21%'
+  # https://v6.fakerjs.dev/guide/
+x-faker: helpers.regexpStyleStringParse('^[0-9]{1,2}[%]$')

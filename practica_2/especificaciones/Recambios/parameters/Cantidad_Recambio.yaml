@@ -1,0 +1,6 @@
+name: Cantidad_Recambio
+in: query
+description: Número de unidades del recambio disponibles en el taller
+required: false
+schema:
+  $ref: '../schemas/Cantidad_Recambio.yaml'

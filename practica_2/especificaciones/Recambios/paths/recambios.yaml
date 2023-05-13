@@ -1,0 +1,81 @@
+get:
+  summary: Obtiene todos los recambios
+  description: |
+    La siguiente tabla define los códigos de estado que puede devolver este endpoint
+    
+    | Status Code | Descripción | Motivo                             |
+    | ------------| ------------| -----------------------------------|
+    | **200**     | OK          | Listado de los recambios           |
+    | **404**     | NOT FOUND   | No hay ningun recambio             |
+  operationId: recambio_cget
+  tags: [ '⚙️Inventario' ]
+  responses:
+    '200':
+      description: Lista de recambios disponibles
+      headers:
+        ETag:
+          $ref: '../headers/Etag.yaml'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              Recambios:
+                description: array de recambios
+                type: array
+                items:
+                  $ref: '../schemas/Recambio.yaml'
+              links:
+                description: Enlaces de paginación
+                readOnly: true
+                type: object
+                properties:
+                  prevPage:
+                    $ref: '../schemas/Link.yaml'
+                  nextPage:
+                    $ref: '../schemas/Link.yaml'
+          examples:
+            recambioExample:
+              $ref: '../examples/recambios-examples.yaml'
+    '404':
+      $ref: '../responses/Response_404.yaml'
+options:
+  summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+  description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
+  operationId: recambio_coptions
+  tags: [ '⚙️Inventario' ]
+  responses:
+    '204':
+      description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+      headers:
+        Allow:
+          $ref: '../headers/Allow.yaml'
+post:
+  summary: Añade un nuevo recambio
+  description: |
+    La siguiente tabla define los códigos de estado que puede devolver este endpoint
+    
+    | Status Code | Descripción          | Motivo                                    |
+    | ------------| ---------------------| ------------------------------------------|
+    | **201**     | CREATED              | El recambio ha sido creado                |
+    | **400**     | BAD REQUEST          | El identificador único ya existe          |
+    | **422**     | UNPROCESSABLE ENTITY | Falta alguno de los atributos obligatorios|
+    |             |                      | o el valor no está permitido              |
+  tags: [ '⚙️Inventario' ]
+  operationId: recambio_post
+  requestBody:
+    $ref: '../requestBodies/recambioRB.yaml'
+  responses:
+    '201':
+      description: Nuevo Recambio creado
+      headers:
+        Location:
+          $ref: '../headers/Location.yaml'
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/Recambio.yaml'
+    '400':
+      $ref: '../responses/Response_400.yaml'
+    '422':
+      $ref: '../responses/Response_422.yaml' 

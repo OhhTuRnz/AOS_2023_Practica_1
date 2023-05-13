@@ -1,0 +1,4 @@
+title: 📆Fecha de la factura
+description: Fecha de la emisión de la factura al cliente interesado
+type: string
+format: date

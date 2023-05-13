@@ -1,0 +1,6 @@
+title: 'Cantidad'
+description: 'Número de unidades del recambio disponibles en el taller'
+type: integer
+minimum: 0
+maximum: 10000
+example: 200

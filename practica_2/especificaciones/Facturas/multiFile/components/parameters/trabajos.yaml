@@ -1,0 +1,6 @@
+name: trabajos
+in: query
+description: Identificadores de los trabajos
+required: false
+schema:
+  $ref: ../schemas/trabajos.yaml

@@ -1,0 +1,18 @@
+title: 'Equivalencias'
+description: >
+  Las equivalencias de un recambio para un vehículo se refieren a piezas o componentes que,
+  aunque no sean exactamente iguales en diseño o especificaciones técnicas a la pieza 
+  original del vehículo, pueden ser utilizadas como reemplazo para dicha pieza.
+type: object
+required: [nombre, fabricante, modelo]
+properties:
+  nombre: 
+    type: string
+    description: 'Nombre de la pieza equivalente'
+  fabricante:
+    type: string
+    description: 'Nombre del fabricante de la pieza equivalente'
+  modelo:
+    type: string
+    description: 'Modelo de vehículo compatible con la pieza equivalente'
+example: {"nombre": "Kit Frenos EBC", "fabricante": "EBC Brakes", "modelo": "Golf GTI MK7" }

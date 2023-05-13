@@ -1,0 +1,117 @@
+get:
+  summary: >-
+    Obtiene todas las facturas que coincidan con los parametros del query
+    opcionales
+  description: >
+    La siguiente tabla define los códigos de estado que puede devolver este
+    endpoint
+
+
+    | Status Code | Descripción | Motivo                             |
+
+    | ------------| ------------| -----------------------------------|
+
+    | **200**     | OK          | Listado de facturas |             
+
+    | **404**     | NOT FOUND   | No hay ninguna factura o no hay ninguna
+    factura que coincida con los datos proporcionados|
+  operationId: factura_cget
+  tags:
+    - Factura 📋
+  parameters:
+    - $ref: ../components/parameters/pageParam.yaml
+    - $ref: ../components/parameters/orderParam.yaml
+    - $ref: ../components/parameters/orderingParam.yaml
+    - $ref: ../components/parameters/VIN_coche.yaml
+    - $ref: ../components/parameters/Id_cliente.yaml
+    - $ref: ../components/parameters/fecha.yaml
+    - $ref: ../components/parameters/estado_factura.yaml
+    - $ref: ../components/parameters/trabajos.yaml
+    - $ref: ../components/parameters/intervalo_inferior.yaml
+    - $ref: ../components/parameters/intervalo_superior.yaml
+  responses:
+    '200':
+      description: Lista de las facturas creadas
+      headers:
+        ETag:
+          $ref: ../components/headers/ETag.yaml
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              facturas:
+                description: array de facturas
+                type: array
+                items:
+                  $ref: ../components/schemas/Factura.yaml
+              links:
+                description: Enlaces de paginación
+                readOnly: true
+                type: object
+                properties:
+                  prevPage:
+                    $ref: ../components/schemas/Link.yaml
+                  nextPage:
+                    $ref: ../components/schemas/Link.yaml
+          examples:
+            facturas-example:
+              $ref: ../components/examples/facturas-example.yaml
+    '404':
+      $ref: ../components/responses/Response_404.yaml
+options:
+  summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+  description: >-
+    Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados
+    (separados por comas).
+  operationId: factura_coptions
+  tags:
+    - Factura 📋
+  responses:
+    '204':
+      description: cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;
+      headers:
+        Allow:
+          $ref: ../components/headers/Allow.yaml
+post:
+  summary: Añade una nueva factura
+  description: >
+    La siguiente tabla define los códigos de estado que puede devolver este
+    endpoint
+
+
+    | Status Code | Descripción          |
+    Motivo                                    |
+
+    | ------------| ---------------------|
+    ------------------------------------------|
+
+    | **201**     | CREATED              | La factura ha sido
+    creada              |
+
+    | **400**     | BAD REQUEST          | El identificador único ya
+    existe          |
+
+    | **422**     | UNPROCESSABLE ENTITY | Falta alguno de los atributos
+    obligatorios|
+
+    |             |                      | o el valor no está permitido
+  tags:
+    - Factura 📋
+  operationId: factura_post
+  requestBody:
+    $ref: ../components/requestBodies/facturaPOST.yaml
+  responses:
+    '201':
+      description: Nueva Factura creada
+      headers:
+        Location:
+          $ref: ../components/headers/Location.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Factura.yaml
+    '400':
+      $ref: ../components/responses/Response_400.yaml
+    '422':
+      $ref: ../components/responses/Response_422.yaml

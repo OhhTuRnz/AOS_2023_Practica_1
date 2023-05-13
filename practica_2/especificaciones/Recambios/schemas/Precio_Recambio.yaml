@@ -1,0 +1,7 @@
+title: 'Precio'
+description: 'Precio sin IVA asignado a cada recambio'
+type: number
+format: double
+minimum: 0
+exclusiveMinimum: true
+example: 120.25

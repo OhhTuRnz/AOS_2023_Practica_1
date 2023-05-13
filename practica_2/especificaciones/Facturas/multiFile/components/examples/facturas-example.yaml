@@ -1,0 +1,65 @@
+value:
+  facturas:
+    - factura:
+        id_factura: 2023-0000
+        estado: Emitida
+        VIN_coche: 1GCHK23255F889350
+        Id_cliente: 09975463Y
+        fecha_factura: '2023-01-22'
+        trabajos:
+          - T234
+          - T777
+        importe_total: 223.40€
+        links:
+          parent:
+            href: https://tallermecanico.com/api/v1/facturas
+            rel: factura_post factura_cget factura_coptions
+          self:
+            href: https://tallermecanico.com/api/v1/facturas/2023-0000
+            rel: factura_get factura_delete factura_put
+          cliente:
+            href: https://tallermecanico.com/api/v1/clientes/09975463-Y
+            rel: cliente_get cliente_put cliente_delete cliente_options
+          vehiculo:
+            href: https://tallermecanico.com/api/v1/vehiculos/1GCHK23255F889350
+            rel: vehiculo_get vehiculo_put vehiculo_delete vehiculo_options
+          trabajos:
+            - href: https://tallermecanico.com/api/v1/trabajos/T234
+              rel: trabajos_get trabajos_put trabajos_delete trabajos_options
+            - href: https://tallermecanico.com/api/v1/trabajos/T777
+              rel: trabajos_get trabajos_put trabajos_delete trabajos_options
+    - factura:
+        id_factura: 2023-8989
+        estado: Pagada
+        VIN_coche: 2G1WB5EK4B1234567
+        Id_cliente: 02243222M
+        fecha_factura: '2023-03-03'
+        trabajos:
+          - T111
+          - T122
+        importe_total: 500.00€
+        links:
+          parent:
+            href: https://tallermecanico.com/api/v1/facturas
+            rel: factura_post factura_cget factura_coptions
+          self:
+            href: https://tallermecanico.com/api/v1/facturas/2023-8989
+            rel: factura_get factura_delete factura_put
+          cliente:
+            href: https://tallermecanico.com/api/v1/clientes/02243222M
+            rel: cliente_get cliente_put cliente_delete cliente_options
+          vehiculo:
+            href: https://tallermecanico.com/api/v1/vehiculos/2G1WB5EK4B1234567
+            rel: vehiculo_get vehiculo_put vehiculo_delete vehiculo_options
+          trabajos:
+            - href: https://tallermecanico.com/api/v1/trabajos/T111
+              rel: trabajos_get trabajos_put trabajos_delete trabajos_options
+            - href: https://tallermecanico.com/api/v1/trabajos/T122
+              rel: trabajos_get trabajos_put trabajos_delete trabajos_options
+  links:
+    prevPage:
+      href: https://www.tallermecanico.com/api/v1/facturas?page=2
+      rel: prevpage
+    nextPage:
+      href: https://www.tallermecanico.com/api/v1/facturas?page=4
+      rel: nextpage

@@ -1,0 +1,8 @@
+name: VIN_coche
+in: query
+description: >-
+  VIN del coche en el que se han realizado los trabajos constatados en la
+  factura
+required: false
+schema:
+  $ref: ../schemas/VIN_coche.yaml

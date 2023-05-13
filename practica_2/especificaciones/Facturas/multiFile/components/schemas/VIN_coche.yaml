@@ -1,0 +1,9 @@
+title: 🚘 VIN del vehículo
+type: string
+pattern: ^[A-HJ-NPR-Za-hj-npr-z\d]{8}[\dX][A-HJ-NPR-Za-hj-npr-z\d]{2}\d{6}$
+description: >-
+  VIN del coche en el que se han realizado los trabajos que se detallan en la
+  factura
+example: RT3DKGNF0KX480214
+x-faker: >-
+  helpers.regexpStyleStringParse('^[A-HJ-NPR-Za-hj-npr-z\\d]{8}[\\dX][A-HJ-NPR-Za-hj-npr-z\\d]{2}\\d{6}$')

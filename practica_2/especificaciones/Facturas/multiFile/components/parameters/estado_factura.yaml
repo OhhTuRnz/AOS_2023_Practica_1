@@ -1,0 +1,6 @@
+name: estado factura
+in: query
+description: Estado de la factura
+required: false
+schema:
+  $ref: ../schemas/estado.yaml

@@ -1,0 +1,9 @@
+description: '`NOT FOUND`: Recurso no disponbible'
+content: 
+  application/problem+json:
+    schemas:
+      HTTP_Problem:
+        $ref: '../schemas/Http_Problem.yaml'
+    examples:
+      response-http-404:
+        $ref: '../examples/response-http-404.yaml'

@@ -1,0 +1,6 @@
+title: 🆔Id_factura
+type: string
+description: Id único de la factura
+example: 2023-0000
+pattern: ^[0-9]{4}-[0-9]{4}$
+x-faker: helpers.regexpStyleStringParse('^[0-9]{4}-[0-9]{4}$')

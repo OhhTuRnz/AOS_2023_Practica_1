@@ -1,0 +1,28 @@
+description: Información del nuevo recambio
+required: true
+content:
+  application/json:
+    schema:
+      type: object
+      required: [numero_serie, nombre, proveedor, garantia, precio, iva, cantidad]
+      properties:
+        numero_serie:
+          $ref: '../schemas/Numero_Serie.yaml'
+        nombre:
+          $ref: '../schemas/Nombre_Recambio.yaml'
+        descripcion:
+          $ref: '../schemas/Descripcion_Recambio.yaml'
+        proveedor:
+          $ref: '../schemas/Proveedor_Recambio.yaml'
+        equivalencias:
+          $ref: '../schemas/Equivalencias_Recambio.yaml'
+        garantia:
+          $ref: '../schemas/Garantia_Recambio.yaml'
+        precio: 
+          $ref: '../schemas/Precio_Recambio.yaml'
+        iva:
+          $ref: '../schemas/IVA_Recambio.yaml'
+        importe:
+          $ref: '../schemas/Importe_Recambio.yaml'
+        cantidad:
+          $ref: '../schemas/Cantidad_Recambio.yaml'

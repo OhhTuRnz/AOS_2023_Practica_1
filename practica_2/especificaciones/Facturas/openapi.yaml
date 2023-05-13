@@ -1,0 +1,803 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: (Equipo 8)Servicio de Facturas de taller mecánico
+  description: >
+    ## **[AOS 2023]** API REST para la gestión de Facturas de un taller mecánico🚗
+  license:
+    name: UPM
+    url:  https://cic.etsisi.upm.es/
+  contact:
+    name: Grupo 8 AOS
+    email: jorge.mpavon@alumnos.upm.es
+servers:
+  - url: http://127.0.0.1:80/api/v1
+
+tags:
+  - name: 'Factura 📋'
+    description: Factura
+
+paths:
+  /facturas:
+    get:
+      summary: "Obtiene todas las facturas que coincidan con los parametros del query opcionales"
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code | Descripción | Motivo                             |
+        | ------------| ------------| -----------------------------------|
+        | **200**     | OK          | Listado de facturas |             
+        | **404**     | NOT FOUND   | No hay ninguna factura o no hay ninguna factura que coincida con los datos proporcionados|
+      operationId: factura_cget
+      tags: ['Factura 📋']
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/orderParam'
+        - $ref: '#/components/parameters/orderingParam'
+        - $ref: '#/components/parameters/VIN_coche'
+        - $ref: '#/components/parameters/Id_cliente'
+        - $ref: '#/components/parameters/fecha'
+        - $ref: '#/components/parameters/estado_factura'
+        - $ref: '#/components/parameters/trabajos'
+        - $ref: '#/components/parameters/intervalo_inferior'
+        - $ref: '#/components/parameters/intervalo_superior'
+      responses:  
+        '200':
+          description: Lista de las facturas creadas
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  facturas:
+                    description: array de facturas
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Factura'
+                  links:
+                    description: Enlaces de paginación
+                    readOnly: true
+                    type: object
+                    properties:
+                      prevPage:
+                        $ref: '#/components/schemas/Link'
+                      nextPage:
+                        $ref: '#/components/schemas/Link'
+              examples:
+                facturas-example:
+                  $ref: '#/components/examples/facturas-example'  
+        
+        '404':
+          $ref: '#/components/responses/Response_404'
+      
+        
+    
+    options:
+      summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+      description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
+      operationId: factura_coptions
+      tags: [ 'Factura 📋' ]
+      responses:
+        '204':
+          description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+    
+    post:
+      summary: Añade una nueva factura
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code | Descripción          | Motivo                                    |
+        | ------------| ---------------------| ------------------------------------------|
+        | **201**     | CREATED              | La factura ha sido creada              |
+        | **400**     | BAD REQUEST          | El identificador único ya existe          |
+        | **422**     | UNPROCESSABLE ENTITY | Falta alguno de los atributos obligatorios|
+        |             |                      | o el valor no está permitido
+      
+      tags: ['Factura 📋']
+      operationId: factura_post
+      requestBody:
+        $ref: '#/components/requestBodies/facturaPOST'
+      responses:
+        '201':
+          description: Nueva Factura creada
+          headers:
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Factura'
+        '400':
+          $ref: '#/components/responses/Response_400'
+        '422':
+          $ref: '#/components/responses/Response_422'
+  
+  
+  /facturas/{facturaid}:
+    
+    parameters:
+      - $ref: '#/components/parameters/facturaid'
+    
+    options:
+      summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+      description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
+      operationId: factura_options
+      tags: [ 'Factura 📋' ]
+      responses:
+        '204':
+          description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+    
+    get:
+      summary: Obtiene una factura identificada por `id_factura`
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code | Descripción | Motivo                             |
+        | ------------| ------------| -----------------------------------|
+        | **200**     | OK          | Si la factura existe               |
+        | **404**     | NOT FOUND   | Si no existe la factura |
+      operationId: factura_get
+      tags: [ 'Factura 📋' ]
+      responses:
+        '200':
+          description: Factura con el id único de factura proporcionado
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Factura'
+        '404':
+          $ref: '#/components/responses/Response_404'
+    
+    
+    delete:
+      summary: Elimina la factura identificada por `id_factura`
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code      | Descripción | Motivo                                    |
+        | ---------------- | ------------| ------------------------------------------|
+        | **204**          | NO CONTENT  | La factura existía y ha sido eliminada |
+        | **404**          | NOT FOUND   | Si la factura no existe  |
+      operationId: factura_delete
+      tags: [ 'Factura 📋' ]
+      responses:
+        '204':
+          description: Factura eliminada &lt;Cuerpo de la respuesta vacío&gt;
+        '404':
+          $ref: '#/components/responses/Response_404'
+    
+    put:
+      tags: [ 'Factura 📋' ]
+      summary: Modifica la factura identificada por 'id_factura'
+      description:
+       |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        | Status Code | Descripción         | Motivo                                        |
+        | ------------| --------------------| ----------------------------------------------|
+        | **209**     | CONTENT RETURNED    | La factura existía y ha sido actualizada   |
+        | **404**     | NOT FOUND           | Si la factura no existe                    |
+        | **412**     | PRECONDITION FAILED | Si el ETag proporcionado no está actualizado  |
+        | **422**     | UNPROCESSABLE ENTITY| Valor no permitido en alguno de los atributos|
+      operationId: factura_put
+      parameters:
+        - $ref: '#/components/parameters/ifMatchParam'
+      requestBody:
+        $ref: '#/components/requestBodies/facturaPUT'
+      responses:
+        '209':
+          description: '`CONTENT RETURNED`: la Factura ha sido actualizada'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Factura'
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '412':
+          $ref: '#/components/responses/Response_412'
+        '422':
+          $ref: '#/components/responses/Response_422'
+  
+   
+      
+      
+components:
+  schemas:
+  
+    Link:
+      description: Enlace de relación
+      title: '🔗 Link'
+      type: object
+      properties:
+        href:
+          description: URL del enlace
+          type: string
+          format: uri
+          x-faker: internet.url
+        rel:
+          description: "Relación del recurso enlazado con el actual. Contiene una lista de tipos
+                    de relaciones separados por espacio."
+          type: string
+          x-faker: lorem.words
+      example:
+        href: https://www.tallermecanico.com/api/v1/facturas
+        rel: relation
+    
+    
+    
+    #Aqui encontramos el esquema para la factura
+    Factura:
+      title:  '🧾Factura'
+      description: "Documento que contiene toda la información de los trabajos realizados sobre el vehículo de un cliente"
+      type: object
+      properties:
+        factura:
+          type: object
+          required: [id_factura,estado,VIN_coche,Id_cliente,trabajos,importe_total,fecha_factura]
+          properties:
+          
+            links:
+              description: Enlaces de relación de la Factura
+              readOnly: true
+              type: object
+              properties:
+                parent:
+                  $ref: '#/components/schemas/Link'
+                self:
+                  $ref: '#/components/schemas/Link'
+                cliente:
+                  $ref: '#/components/schemas/Link'
+                vehiculo:
+                  $ref: '#/components/schemas/Link'
+                trabajos:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Link'
+            
+            
+            id_factura:
+              $ref: '#/components/schemas/id_factura'
+            estado:
+              $ref: '#/components/schemas/estado'
+            VIN_coche:
+              $ref: '#/components/schemas/VIN_coche'
+            Id_cliente:
+              $ref: '#/components/schemas/Id_cliente'
+            trabajos:
+              $ref: '#/components/schemas/trabajos'
+            importe_total:
+              $ref: '#/components/schemas/importe_total'
+            fecha_factura:
+              $ref: '#/components/schemas/fecha_factura'
+      example:  {"factura":{
+        "id_factura":"2023-0000",
+        "estado":"Emitida",
+        "VIN_coche":"1GCHK23255F889350",
+        "Id_cliente":"09975463Y",
+        "fecha_factura":"2023-01-22",
+        "trabajos":[
+          "T234","T777"
+          ],
+        "importe_total":"223.40€",
+        "links": {
+                       "parent": {
+                         "href": "https://tallermecanico.com/api/v1/facturas",
+                         "rel": "factura_post factura_cget factura_coptions"
+                       },
+                       "self": {
+                          "href": "https://tallermecanico.com/api/v1/facturas/2023-0000",
+                          "rel": "factura_get factura_delete factura_put factura_options"
+                       },
+                       "cliente": {
+                          "href": "https://tallermecanico.com/api/v1/clientes/09975463Y",
+                          "rel": "cliente_get cliente_put cliente_delete cliente_options"
+                       },
+                       "vehiculo": {
+                          "href": "https://tallermecanico.com/api/v1/vehiculos/1GCHK23255F889350",
+                          "rel": "vehiculo_get vehiculo_put vehiculo_delete vehiculo_options"
+                       },
+                       "trabajos":[
+                         {  
+                           "href": "https://tallermecanico.com/api/v1/trabajos/T234",
+                          "rel": "trabajos_get trabajos_put trabajos_delete trabajos_options"
+                           
+                         },
+                         {
+                           "href": "https://tallermecanico.com/api/v1/trabajos/T777",
+                          "rel": "trabajos_get trabajos_put trabajos_delete trabajos_options"
+                         }
+                         
+                         ]
+                     }
+      }
+      }
+    
+    #Aqui encontramos los atributos de la factura
+    id_factura:
+      title:  '🆔Id_factura'
+      type: string
+      description:  "Id único de la factura"
+      example:  "2023-0000"
+      pattern: "^[0-9]{4}-[0-9]{4}$"
+      x-faker: helpers.regexpStyleStringParse('^[0-9]{4}-[0-9]{4}$')
+      
+    
+    
+    estado:
+      title:  '✅Estado'
+      description:   |
+        Estado de la Plataforma:
+        * `Emitida`: Factura no pagada
+        * `Pagada`: Factura pagada
+      type: string
+      default: "Emitida"
+      enum: ["Emitida","Pagada"]
+      x-faker: helpers.arrayElement(['Emitida', 'Pagada'])
+    
+    VIN_coche:
+      title:  '🚘 VIN del vehículo'
+      type: string
+      pattern:  "^[A-HJ-NPR-Za-hj-npr-z\\d]{8}[\\dX][A-HJ-NPR-Za-hj-npr-z\\d]{2}\\d{6}$"
+      description:  "VIN del coche en el que se han realizado los trabajos que se detallan en la factura"
+      example: "RT3DKGNF0KX480214"
+      x-faker: helpers.regexpStyleStringParse('^[A-HJ-NPR-Za-hj-npr-z\\d]{8}[\\dX][A-HJ-NPR-Za-hj-npr-z\\d]{2}\\d{6}$')
+    
+    
+    Id_cliente:
+      title:  "👔Identificador del cliente"
+      type: string
+      pattern:  '^[XYZ]?\d{7,8}[A-Z]$'
+      description:  "DNI o NIE de la persona poseedora del vehículo y beneficiada de los trabajos que se detallan en la factura"
+      x-faker: helpers.regexpStyleStringParse('^[XYZ]?\d{7,8}[A-Z]$')
+    
+    fecha_factura:
+      title:  "📆Fecha de la factura"
+      description:  "Fecha de la emisión de la factura al cliente interesado"
+      type: string
+      format: date
+    
+    id_trabajo:
+      title:  "🔨Id trabajo"
+      description:  "Id único del trabajo realizado al vehículo del cliente"
+      type: string
+      example:  "T234"
+      pattern:  "^T[0-9]{3}$"
+    
+    
+    trabajos:
+      title:  "💼Trabajos"
+      description: "Lista con el id único de todos lostrabajos realizados sobre el vehículo del cliente"
+      type: array
+      items:
+        $ref: '#/components/schemas/id_trabajo'
+      minItems: 1
+    
+    importe_total:
+      title: "💰Importe total"
+      description: "Valor monetario total que se debe pagar por los trabajos de los que se ha beneficiado el cliente."
+      type: string
+      pattern: "^\\d{1,}((\\,\\d{3})+)?(\\.\\d{2})?\\u20AC$"
+
+
+        
+    
+    #Aqui se definde el HTTP problem
+    HTTP_Problem:
+      type: object
+      externalDocs:
+        url: https://tools.ietf.org/html/rfc7807
+      description: |
+        Problem Details for HTTP APIs
+        [https://tools.ietf.org/html/rfc7807](https://tools.ietf.org/html/rfc7807)
+      properties:
+        type:
+          type: string
+          format: uri
+          description: A URI reference [RFC3986] that identifies the problem type
+        title:
+          type: string
+          description: short human-readable summary of the problem type
+        status:
+          type: number
+          description: HTTP status code
+        detail:
+          type: string
+          description: Human-readable explanation specific to this occurrence of the problem
+        instance:
+          type: string
+          format: uri
+          description: >
+            A URI reference that identifies the specific occurrence of the problem.
+            It may or may not yield further information if dereferenced.
+            
+    
+    
+    
+  responses:
+    
+    Response_400:
+      description: '`BAD REQUEST` El identificador único ya existe.'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-400:
+              $ref: '#/components/examples/response-http-400'
+    
+    
+    Response_404:
+      description: '`NOT FOUND`: recurso no disponible'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-404:
+              $ref: '#/components/examples/response-http-404'
+    
+    Response_409:
+      description: '`CONFLICT`: el recurso no reúne las condiciones adecuadas'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-404:
+              $ref: '#/components/examples/response-http-409'
+    Response_412:
+      description: '`PRECONDITION FAILED`: El ETag proporcionado no está actualizado'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-412:
+              $ref: '#/components/examples/response-http-412'
+    Response_422:
+      description: '`UNPROCESSABLE ENTITY` Falta alguno de los atributos obligatorios o son incorrectos.'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-422:
+              $ref: '#/components/examples/response-http-422'
+  
+  requestBodies:
+    
+    facturaPOST:
+      description: Información de la nueva factura
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [id_factura,VIN_coche,Id_cliente,trabajos,fecha_factura,estado]
+            
+            properties:
+            
+              id_factura:
+                $ref: '#/components/schemas/id_factura'
+            
+              estado:
+                $ref: '#/components/schemas/estado'
+                
+              VIN_coche:
+                $ref: '#/components/schemas/VIN_coche'
+            
+              Id_cliente:
+                $ref: '#/components/schemas/Id_cliente'
+            
+              trabajos:
+                $ref: '#/components/schemas/trabajos'
+            
+              fecha_factura:
+                $ref: '#/components/schemas/fecha_factura'
+    facturaPUT:
+      description: Información de la factura modificada
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [id_factura,VIN_coche,Id_cliente,trabajos,fecha_factura,estado]
+            
+            properties:
+            
+              id_factura:
+                $ref: '#/components/schemas/id_factura'
+            
+              estado:
+                $ref: '#/components/schemas/estado'
+                
+              VIN_coche:
+                $ref: '#/components/schemas/VIN_coche'
+            
+              Id_cliente:
+                $ref: '#/components/schemas/Id_cliente'
+            
+              trabajos:
+                $ref: '#/components/schemas/trabajos'
+            
+              fecha_factura:
+                $ref: '#/components/schemas/fecha_factura'
+  headers:
+    ETag:
+      description: "Entity Tag (identificador único proporcionado para validación de caché)"
+      schema:
+        type: string
+        pattern: "[0-9a-f]*"
+        example:
+          99a32df777121hii
+    Allow:
+      description: Lista de métodos HTTP soportados
+      schema:
+        type: string
+      example: GET, DELETE, PUT, OPTIONS
+    Location:
+      description: '`URI` del nuevo recurso'
+      schema:
+        type: string
+        format: uri
+        x-faker: internet.url
+        example:
+          https://tallermecanico.com/api/v1/factura/2023-0000
+    
+  examples:
+    response-http-400:
+      value:
+        type: https://httpstatuses.com/400
+        title: UNPROCESSABLE ENTITY
+        status: 400
+        detail: El identificador único ya existe
+        instance: about:blank
+    response-http-404:
+      value:
+        type: https://httpstatuses.com/404
+        title: NOT FOUND
+        status: 404
+        detail: El recurso solicitado no está disponible.
+        instance: about:blank
+    response-http-409:
+      value:
+        type: https://httpstatuses.com/409
+        title: NOT FOUND
+        status: 409
+        detail: El recurso no reúne las condiciones requeridas para la operación.
+        instance: about:blank
+    response-http-412:
+      value:
+        type: https://httpstatuses.com/412
+        title: PRECONDITION FAILED
+        status: 412
+        detail: El ETag proporcionado no está actualizado
+        instance: about:blank
+    response-http-422:
+      value:
+        type: https://httpstatuses.com/422
+        title: UNPROCESSABLE ENTITY
+        status: 422
+        detail: Falta alguno de los atributos obligatorios o contiene un valor no admitido
+        instance: about:blank
+    
+    facturas-example:
+      value:
+        facturas:
+          - { "factura": {"id_factura":"2023-0000",
+          "estado":"Emitida",
+          "VIN_coche":"1GCHK23255F889350",
+          "Id_cliente":"09975463Y",
+          "fecha_factura":"2023-01-22",
+          "trabajos":[
+              "T234","T777"
+            ],
+          "importe_total":"223.40€",
+                "links": {
+                       "parent": {
+                         "href": "https://tallermecanico.com/api/v1/facturas",
+                         "rel": "factura_post factura_cget factura_coptions"
+                       },
+                       "self": {
+                          "href": "https://tallermecanico.com/api/v1/facturas/2023-0000",
+                          "rel": "factura_get factura_delete factura_put"
+                       },
+                       "cliente": {
+                          "href": "https://tallermecanico.com/api/v1/clientes/09975463-Y",
+                          "rel": "cliente_get cliente_put cliente_delete cliente_options"
+                       },
+                       "vehiculo": {
+                          "href": "https://tallermecanico.com/api/v1/vehiculos/1GCHK23255F889350",
+                          "rel": "vehiculo_get vehiculo_put vehiculo_delete vehiculo_options"
+                       },
+                       "trabajos":[
+                         {  
+                           "href": "https://tallermecanico.com/api/v1/trabajos/T234",
+                          "rel": "trabajos_get trabajos_put trabajos_delete trabajos_options"
+                           
+                         },
+                         {
+                           "href": "https://tallermecanico.com/api/v1/trabajos/T777",
+                          "rel": "trabajos_get trabajos_put trabajos_delete trabajos_options"
+                         }
+                         
+                         ]
+                     } }}
+          - { "factura": { "id_factura":"2023-8989",
+                  "estado":"Pagada",
+                  "VIN_coche":"2G1WB5EK4B1234567",
+                  "Id_cliente":"02243222M",
+                  "fecha_factura":"2023-03-03",
+                  "trabajos":[
+                      "T111",T122
+                      ],
+                  "importe_total":"500.00€",
+                      "links": {
+                             "parent": {
+                            "href": "https://tallermecanico.com/api/v1/facturas",
+                            "rel": "factura_post factura_cget factura_coptions"
+                       },
+                       "self": {
+                          "href": "https://tallermecanico.com/api/v1/facturas/2023-8989",
+                          "rel": "factura_get factura_delete factura_put"
+                       },
+                       "cliente": {
+                          "href": "https://tallermecanico.com/api/v1/clientes/02243222M",
+                          "rel": "cliente_get cliente_put cliente_delete cliente_options"
+                       },
+                       "vehiculo": {
+                          "href": "https://tallermecanico.com/api/v1/vehiculos/2G1WB5EK4B1234567",
+                          "rel": "vehiculo_get vehiculo_put vehiculo_delete vehiculo_options"
+                       },
+                       "trabajos":[
+                         {  
+                           "href": "https://tallermecanico.com/api/v1/trabajos/T111",
+                          "rel": "trabajos_get trabajos_put trabajos_delete trabajos_options"
+                           
+                         },
+                         {
+                           "href": "https://tallermecanico.com/api/v1/trabajos/T122",
+                          "rel": "trabajos_get trabajos_put trabajos_delete trabajos_options"
+                         }
+                         
+                         ]
+                     }}}
+        links: {
+          "prevPage": {
+              "href": "https://www.tallermecanico.com/api/v1/facturas?page=2",
+            "rel": "prevpage"
+         },
+          "nextPage": {
+            "href": "https://www.tallermecanico.com/api/v1/facturas?page=4",
+              "rel": "nextpage"
+           }
+        }
+  
+  parameters:
+    
+    facturaid:
+      name: facturaid
+      in: path
+      description: Identificador único de la Factura
+      required: true
+      schema:
+        $ref: '#/components/schemas/id_factura'
+  
+    trabajos:
+      name: trabajos
+      in: query
+      description:  Identificadores de los trabajos
+      required: false
+      schema:
+        $ref: '#/components/schemas/trabajos'
+
+    intervalo_inferior:
+      name: intervalo inferior
+      in: query
+      description: | 
+        Define un intervalo mínimo de importe para buscar facturas que tengan un importe superior a ese mínimo.
+        Para la búsqueda recordar que es obligatorio el símbolo "€" al final y los decimales separados por un punto y solo 
+        se admiten centesilames
+      required: false
+      example: "0.00€"
+      schema:
+        $ref: '#/components/schemas/importe_total'
+
+    intervalo_superior:
+      name: intervalo superior
+      in: query
+      description: |
+       Define un intervalo máximo de importe para buscar facturas que tengan un importe inferior a ese máximo.
+       Para la búsqueda recordar que es obligatorio el símbolo "€" al final y los decimales separados por un punto y solo 
+        se admiten centesilames
+      required: false
+      example: "999.50€"
+      schema:
+        $ref: '#/components/schemas/importe_total'
+
+    estado_factura:
+      name: estado factura
+      in: query
+      description:  Estado de la factura
+      required: false
+      schema:
+        $ref: '#/components/schemas/estado'
+    
+    VIN_coche:
+      name: VIN_coche
+      in: query
+      description: VIN del coche en el que se han realizado los trabajos constatados en la factura
+      required: false
+      schema:
+        $ref: '#/components/schemas/VIN_coche'
+    
+    Id_cliente:
+      name: ID cliente
+      in: query
+      description:  DNI o NIE del cliente beneficiado
+      required: false
+      schema:
+        $ref: '#/components/schemas/Id_cliente'
+    
+    fecha:
+      name: fecha factura
+      in: query
+      description:  Fecha de la creación de la factura
+      required: false
+      schema: 
+        $ref: '#/components/schemas/fecha_factura'
+    
+    
+    ifMatchParam:
+      name: If-Match
+      in: header
+      description: ETag actual del recurso que se desea modificar u obtener
+      required: true
+      schema:
+        type: string
+        pattern: "[0-9a-f]*"
+      example: "99a32df777121hii"
+
+    orderParam:
+      name: order
+      in: query
+      description: 'Criterio de ordenación: `id_factura` | `fecha de la factura`'
+      required: false
+      allowEmptyValue: false
+      schema:
+        type: string
+        enum:
+          - id_factura
+          - fecha_factura
+    orderingParam:
+      name: ordering
+      in: query
+      description: 'Ordenación: `ASC` | `DESC`'
+      required: false
+      allowEmptyValue: false
+      schema:
+        type: string
+        enum:
+          - ASC
+          - DESC
+    pageParam:
+      name: page
+      in: query
+      description: 'Número de página'
+      required: false
+      allowEmptyValue: false
+      schema:
+        type: integer
+        minimum: 1
+      

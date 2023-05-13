@@ -1,0 +1,7 @@
+title: 'Proveedor del recambio'
+description: >
+  El proveedor de un recambio para un taller de vehículos puede ser una empresa
+  especializada en la fabricación y distribución de piezas de repuesto para automóviles
+  o bien un distribuidor que suministre los repuestos de diferentes fabricantes. 
+type: string
+example: "Michelin"

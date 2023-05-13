@@ -1,0 +1,7 @@
+title: 👔Identificador del cliente
+type: string
+pattern: ^[XYZ]?\d{7,8}[A-Z]$
+description: >-
+  DNI o NIE de la persona poseedora del vehículo y beneficiada de los trabajos
+  que se detallan en la factura
+x-faker: helpers.regexpStyleStringParse('^[XYZ]?\d{7,8}[A-Z]$')

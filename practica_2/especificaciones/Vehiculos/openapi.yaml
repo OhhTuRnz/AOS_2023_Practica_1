@@ -1,0 +1,713 @@
+## Subsistema_2: Gestión de los vehículos que son propiedad de los clientes
+## y que se reparan y/o revisan en el taller. 
+## Cada vehículo estará identificado de forma única por su VIN.
+
+openapi: 3.0.3
+info:
+  version: 1.1.0
+  title: '[AOS] Especificación API REST de un servicio'
+  description: '*Gestion de vehiculos'
+  license:
+    name: MIT
+    url: 'https://opensource.org/licenses/MIT'
+
+servers:
+  - url: http://127.0.0.1:80/api/v1
+
+tags:
+  - name: '🚗Vehiculos'
+    description: Gestion de vehiculos
+  - name: '🧰Taller'
+    description: Reparacion y revisión de vehículos en el taller
+
+paths:
+  /vehiculos:
+    get:
+      summary: Obtiene todos los vehiculos
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code | Descripción | Motivo                             |
+        | ------------| ------------| -----------------------------------|
+        | **200**     | OK          | Listado de vehiculos             |
+        | **404**     | NOT FOUND   | No hay ningun vehiculo     
+      operationId: vehiculo_cget
+      tags: ['🚗Vehiculos']
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/orderParam'
+        - $ref: '#/components/parameters/orderingParam'
+      responses:
+        '200':
+          description: Listado de vehiculos disponibles
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  vehiculos:
+                    description: array de vehiculos
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Vehiculos'
+                  links:
+                    description: Enlaces de paginación
+                    readOnly: true
+                    type: object
+                    properties:
+                      prevPage:
+                        $ref: '#/components/schemas/Link'
+                      nextPage:
+                        $ref: '#/components/schemas/Link'
+              examples:
+                vehiculos-example:
+                  $ref: '#/components/examples/vehiculos-example'
+        '404':
+            $ref: '#/components/responses/Response_404'
+
+    post:
+      summary: Añade un nuevo vehiculo
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code | Descripción          | Motivo                                    |
+        | ------------| ---------------------| ------------------------------------------|
+        | **201**     | CREATED              | EL vehiculo ha sido creado                |
+        | **400**     | BAD REQUEST          | El identificador único ya existe          |
+        | **422**     | UNPROCESSABLE ENTITY | Falta alguno de los atributos obligatorios|
+        |             |                      | o el valor no está permitido              |
+      tags: [ '🚗Vehiculos' ]
+      operationId: vehiculo_post
+      requestBody:
+        $ref: '#/components/requestBodies/vehiculosRB'
+      responses:
+        '201':
+          description: Nuevo vehiculo creado
+          headers:
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehiculos'
+        '400':
+          $ref: '#/components/responses/Response_400'
+        '422':
+          $ref: '#/components/responses/Response_422'
+
+    options:
+      summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+      description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
+      operationId: vehiculos_coptions
+      tags: [ '🚗Vehiculos']
+      responses:
+        '204':
+          description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+
+  /vehiculos/{vehiculo_id}:
+    parameters:
+      - $ref: '#/components/parameters/vehiculoId'
+    get:
+      summary: Obtiene un vehiculo identificado por `vehiculoId`
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code | Descripción | Motivo                             |
+        | ------------| ------------| -----------------------------------|
+        | **200**     | OK          | Si el vehiculo existe            |
+        | **404**     | NOT FOUND   | Si no existe el vehiculo         |
+      operationId: vehiculo_get
+      tags: [ '🚗Vehiculos' ]
+      responses:
+        '200':
+          description: Vehiculo
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehiculos'
+        '404':
+          $ref: '#/components/responses/Response_404'
+
+    delete:
+      summary: Elimina el vehiculo identificado por `vehiculoId`
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code      | Descripción | Motivo                                    |
+        | ---------------- | ------------| ------------------------------------------|
+        | **204**          | NO CONTENT  | El vehiculo existía y ha sido eliminada |
+        | **404**          | NOT FOUND   | Si el vehiculo no existe                |
+      operationId: vehiculo_delete
+      tags: [ '🚗Vehiculos' ]
+      responses:
+        '204':
+          description: Vehiculo eliminada &lt;Cuerpo de la respuesta vacío&gt;
+        '404':
+          $ref: '#/components/responses/Response_404'
+
+    put:
+      tags: [ '🚗Vehiculos' ]
+      summary: Modifica el vehiculo identificado por `vehiculoId`.
+      description:  |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+
+        | Status Code | Descripción         | Motivo                                        |
+        | ------------| --------------------| ----------------------------------------------|
+        | **209**     | CONTENT RETURNED    | El vehiculo existía y ha sido actualizado     |
+        | **404**     | NOT FOUND           | Si el vehiculo no existe                      |
+        | **412**     | PRECONDITION FAILED | Si el ETag proporcionado no está actualizado  |
+        | **422**     | UNPROCESSABLE ENTITY| Valor no permitido en alguno de los attributos|
+      operationId: vehiculo_put
+      parameters:
+        # https://www.rfc-editor.org/rfc/rfc7232.html#page-13
+        - $ref: '#/components/parameters/ifMatchParam'
+      requestBody:
+        $ref: '#/components/requestBodies/vehiculoUpdate'
+      responses:
+        '209':
+          description: '`CONTENT RETURNED`: el vehiculo ha sido actualizado'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehiculos'
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '412':
+          $ref: '#/components/responses/Response_412'
+        '422':
+          $ref: '#/components/responses/Response_422'
+
+    options:
+      summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+      description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
+      operationId: vehiculos_options
+      tags: [ '🚗Vehiculos' ]
+      responses:
+        '204':
+          description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+  
+  /vehiculos/{matricula}:
+    parameters:
+      - $ref: '#/components/parameters/Matricula'
+    get:
+      summary: Obtiene un vehiculo identificado por `Matricula`
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code | Descripción | Motivo                             |
+        | ------------| ------------| -----------------------------------|
+        | **200**     | OK          | Si la matricula existe            |
+        | **404**     | NOT FOUND   | Si no existe la matricula         |
+      operationId: vehiculos_matricula_get
+      tags: [ '🚗Vehiculos' ]
+      responses:
+        '200':
+          description: Vehiculo
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehiculos'
+        '404':
+          $ref: '#/components/responses/Response_404'
+
+    delete:
+      summary: Elimina el vehiculo identificado por `vehiculoMatricula`
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code      | Descripción | Motivo                                            |
+        | ---------------- | ------------| ------------------------------------------        |
+        | **204**          | NO CONTENT  | La matricula del vehiculo existía y ha sido eliminada |
+        | **404**          | NOT FOUND   | Si la matricula del vehiculo no existe                |
+      operationId: vehiculo_matricula_delete
+      tags: [ '🚗Vehiculos' ]
+      responses:
+        '204':
+          description: Vehiculo eliminada &lt;Cuerpo de la respuesta vacío&gt;
+        '404':
+          $ref: '#/components/responses/Response_404'
+
+    put:
+      tags: [ '🚗Vehiculos' ]
+      summary: Modifica el vehiculo identificado por `vehiculoMatricula`.
+      description:  |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+
+        | Status Code | Descripción         | Motivo                                        |
+        | ------------| --------------------| ----------------------------------------------|
+        | **209**     | CONTENT RETURNED    | La matricula del vehiculo existía y ha sido actualizado     |
+        | **404**     | NOT FOUND           | Si la matricula del vehiculo no existe                      |
+        | **412**     | PRECONDITION FAILED | Si el ETag proporcionado no está actualizado  |
+        | **422**     | UNPROCESSABLE ENTITY| Valor no permitido en alguno de los attributos|
+      operationId: vehiculo_matricula_put
+      parameters:
+        # https://www.rfc-editor.org/rfc/rfc7232.html#page-13
+        - $ref: '#/components/parameters/ifMatchParam'
+      requestBody:
+        $ref: '#/components/requestBodies/vehiculoUpdate'
+      responses:
+        '209':
+          description: '`CONTENT RETURNED`: la matricula del vehiculo ha sido actualizada'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vehiculos'
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '412':
+          $ref: '#/components/responses/Response_412'
+        '422':
+          $ref: '#/components/responses/Response_422'
+
+    options:
+      summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+      description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
+      operationId: vehiculos_optionsMat
+      tags: [ '🚗Vehiculos' ]
+      responses:
+        '204':
+          description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+
+  /taller/{trabajo_id}/{vehiculo_id}:
+    parameters:
+      - $ref: '#/components/parameters/vehiculoId'
+      - $ref: '#/components/parameters/trabajoId'
+    post:
+      summary: Añade una nueva reserva de un vehiculo para repararlo
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code | Descripción          | Motivo                                    |
+        | ------------| ---------------------| ------------------------------------------|
+        | **201**     | CREATED              | La reserva ha sido creada                 |
+        | **404**     | BAD REQUEST          | El identificador del vehiculo no existe   |
+        | **409**     | CONFLICT             | El vehiculo no está disponible            |
+      tags: [ '🧰Taller',  '🚗Vehiculos']
+      operationId: reserva_trabajo_post
+      responses:
+        '201':
+          description: Nueva reserva creada
+          headers:
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservaTrabajo'
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '409':
+          $ref: '#/components/responses/Response_409'
+
+    options:
+      summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+      description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
+      operationId: reserva_coptions
+      tags: [ '🧰Taller',  '🚗Vehiculos']
+      responses:
+        '204':
+          description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+
+components:
+  headers:
+    ETag:
+      description: "Entity Tag (identificador único proporcionado para validación de caché)"
+      schema:
+        type: string
+        pattern: "[0-9a-f]*"
+        example:
+          33a64df551425fcc
+
+    Allow:
+      description: Lista de métodos HTTP soportados
+      schema:
+        type: string
+      example: GET, DELETE, PUT, OPTIONS
+
+    Location:
+      description: '`URI` del nuevo recurso'
+      schema:
+        type: string
+        format: uri
+        x-faker: internet.url
+        example:
+          https://example.com/api/v1/plataformas/P01-001-A
+
+  requestBodies:
+    vehiculosRB:
+      description: Información del nuevo vehiculo
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [ id, matricula, marca, estado ]
+            properties:
+              id:
+                $ref: '#/components/schemas/Id_Vehiculo'
+              propietario_id:
+                description: Dni propietario
+                type: string
+                pattern: "^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKE]$"
+                example: "00000000X"
+              trabajo_id:
+                $ref: '#/components/schemas/Id_Trabajo'
+              matrícula:
+                description: Matrícula del coche
+                type: string
+                pattern: "^[0-9]{4}-[A-Z]{3}$"
+                example: "0000-AAA"
+              estado:
+                $ref: '#/components/schemas/Estados_Vehiculos'
+          example: { "id": "111", "matrícula": "0000-AAA", "marca": "opel", "estado": "Recepcionado"}
+    
+    vehiculoUpdate:
+      description: Nuevos atributos del vehiculo
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              estado:
+                $ref: '#/components/schemas/Estados_Vehiculos'
+          example: { "estado": "En reparacion" }
+
+  parameters:
+    vehiculoId:
+      name: vehiculo_id
+      in: path
+      description: Identificador único del Vehiculo (VIN)
+      required: true
+      schema:
+        $ref: '#/components/schemas/Id_Vehiculo'
+    
+    trabajoId:
+      name: trabajo_id
+      in: path
+      description: Identificador del trabajo a realizar
+      required: true
+      schema:
+        $ref: '#/components/schemas/Id_Trabajo'
+    
+    Matricula:
+      name: matricula
+      in: path
+      description: Matricula del vehiculo
+      required: true
+      schema:
+        type: string
+        $ref: '#/components/schemas/Matricula'
+    
+    ifMatchParam:
+      name: If-Match
+      in: header
+      description: ETag actual del recurso que se desea modificar
+      required: true
+      schema:
+        type: string
+        pattern: "[0-9a-f]*"
+
+    orderParam:
+      name: order
+      in: query
+      description: 'Criterio de ordenación: `id` | `matricula` | `marca` | `estado`'
+      required: false
+      allowEmptyValue: false
+      schema:
+        type: string
+        enum:
+          - id
+          - matricula
+          - marca
+          - estado
+
+    orderingParam:
+      name: ordering
+      in: query
+      description: 'Ordenación: `ASC` | `DESC`'
+      required: false
+      allowEmptyValue: false
+      schema:
+        type: string
+        enum:
+          - ASC
+          - DESC
+
+    pageParam:
+      name: page
+      in: query
+      description: 'Número de página'
+      required: false
+      allowEmptyValue: false
+      schema:
+        type: integer
+        minimum: 1
+
+  schemas:
+    Vehiculos:
+      title: '🚗Plataforma de gestión de Vehiculos'
+      description: >
+        Plataforma que tiene vehículos que son propiedad de los clientes 
+        y que se reparan y/o revisan en el taller. 
+        Cada vehículo estará identificado de forma única por su VIN.<br>
+      type: object
+      properties:
+        plataforma:
+          type: object
+          required: [ id, id_cliente, matricula, id_trabajo, estado ]
+          properties:
+            id:
+              $ref: '#/components/schemas/Id_Vehiculo'
+            id_cliente:
+              $ref: '#/components/schemas/Id_Cliente'
+            matricula:
+              $ref: '#/components/schemas/Matricula'
+            id_trabajo:
+              $ref: '#/components/schemas/Id_Trabajo'
+            estado:
+              $ref: '#/components/schemas/Estados_Vehiculos'
+      example: { "vehiculo": {
+                     "id": "5G1DC5000R7252367",
+                     "id_cliente": "00000000X", 
+                     "id_trabajo": "1000",
+                     "matricula": "0000-AAA",
+                     "estado": "Recepcionado",
+                     "links": {
+                        "parent": {
+                            "href": "http://127.0.0.1:80/api/v1/vehiculos",
+                            "rel":"vehiculo_post vehiculo_cget"
+                        },
+                        "self": {
+                            "href": "http://127.0.0.1:80/api/v1/vehiculos/5G1DC5000R7252367",
+                            "rel":"vehiculo_post vehiculo_delete vehiculo_put"
+                        }
+                     }
+                  }
+                }
+
+    ReservaTrabajo:
+      title: '📋 Reserva para reparacion/revision de vehiculo'
+      type: object
+      properties:
+        reserva:
+          type: object
+          required: [ id_vehiculo, id_trabajo, estado]
+          properties:
+            id_vehiculo:
+              $ref: '#/components/schemas/Id_Vehiculo'
+            id_trabajo:
+              $ref: '#/components/schemas/Id_Trabajo'
+      example: { "reserva trabajo": { "id_vehiculo":"1G1JC5444R7252367", "id_trabajo":"1000" } }
+
+    Id_Vehiculo:
+      title: Identificador único del vehículo (VIN)
+      type: string
+      pattern: "^[A-HJ-NPR-Z\\d]{17}$"
+      example: "1G1JC5444R7252367"
+      x-faker: random.alphaNumeric(17, true, /^[A-HJ-NPR-Z\\d]{17}$/)
+
+    Id_Cliente:
+      title: Dni propietario
+      type: string
+      pattern: "^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKE]$"
+      example: "00000000X"
+      x-faker: random.alphaNumeric(17, true, /^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKE]$/)
+
+    Id_Trabajo:
+      title: Identificador del trabajo que se va realizar en taller
+      type: string
+      pattern: "^[0-9]{4}$"
+      example: "1000"
+      x-faker: random.alphaNumeric(17, true, /^[0-9]{4}$/)
+
+    Matricula:
+      type: array
+      items:
+        type: string
+        pattern: "^[0-9]{4}[A-Z]{3}$"
+        example: "0000-AAA"
+        x-faker: random.regex("[0-9]{4}[A-Z]{3}")
+
+    Estados_Vehiculos:
+      description: |
+        Estado de reserva de Vehiculos:
+        * `En reparación`: Vehiculo dañado en proceso de ser reparado
+        * `Reparado`: Vehiculo ya arreglado, disponible para ser recogido por el cliente
+        * `En revisión`: Vehiculo en proceso de ser revisado
+        * `Revisado`: Vehiculo ya revisado, disponible para ser recogido por el cliente
+         * `Recepcionado`: Vehiculo no recepcionado
+      type: string
+      default: "Recepcionado"
+      enum: [ "En reparación", "Reparado", "En revisión", "Revisado", "Recepcionado" ]
+      # https://v6.fakerjs.dev/guide/
+      x-faker: helpers.arrayElement([ 'En reparación', 'Reparado', 'En revisión', 'Revisado', 'Inhabilitado' ])
+
+    Link:
+      description: Enlace de relación
+      title: '🔗 Link'
+      type: object
+      properties:
+        href:
+          description: URL del enlace
+          type: string
+          format: uri
+          x-faker: internet.url
+        rel:
+          description: "Relación del recurso enlazado con el actual. Contiene una lista de tipos
+                    de relaciones separados por espacio."
+          type: string
+          x-faker: lorem.words
+      example:
+        href: https://www.example.com/path/resource
+        rel: relAction1 relAction2
+
+    HTTP_Problem:
+      type: object
+      externalDocs:
+        url: https://tools.ietf.org/html/rfc7807
+      description: |
+        Problem Details for HTTP APIs
+        [https://tools.ietf.org/html/rfc7807](https://tools.ietf.org/html/rfc7807)
+      properties:
+        type:
+          type: string
+          format: uri
+          description: A URI reference [RFC3986] that identifies the problem type
+        title:
+          type: string
+          description: short human-readable summary of the problem type
+        status:
+          type: number
+          description: HTTP status code
+        detail:
+          type: string
+          description: Human-readable explanation specific to this occurrence of the problem
+        instance:
+          type: string
+          format: uri
+          description: >
+            A URI reference that identifies the specific occurrence of the problem.
+            It may or may not yield further information if dereferenced.
+
+  responses:
+    Response_400:
+      description: '`BAD REQUEST` El identificador único ya existe.'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-400:
+              $ref: '#/components/examples/response-http-400'
+
+    Response_404:
+      description: '`NOT FOUND`: recurso no disponible'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-404:
+              $ref: '#/components/examples/response-http-404'
+    Response_409:
+      description: '`CONFLICT`: el recurso no reúne las condiciones adecuadas'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-404:
+              $ref: '#/components/examples/response-http-409'
+    Response_412:
+      description: '`PRECONDITION FAILED`: El ETag proporcionado no está actualizado'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-412:
+              $ref: '#/components/examples/response-http-412'
+    Response_422:
+      description: '`UNPROCESSABLE ENTITY` Falta alguno de los atributos obligatorios o son incorrectos.'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-422:
+              $ref: '#/components/examples/response-http-422'
+
+  examples:
+    vehiculos-example:
+      value:
+        vehiculos:
+          - { "vehiculo" : {"id": "1G1JC5444R7252386", "id_cliente":"00000000X", "id_trabajo":"1000", "matricula":"0001-ABB", "estado":"reparado",
+              "links": {
+                  "parent": { "href": "http://127.0.0.1:80/api/v1/vehiculos", "rel": "vehiculo_post vehiculo_cget"},
+                  "self": { "href": "http://127.0.0.1:80/api/v1/vehiculos/1G1JC5444R7252386", "rel": "vehiculo_get vehiculo_put" }
+               } }
+            }
+
+          - { "vehiculo" : {"id": "2A1JC5444R7252386", "id_cliente":"00000000A", "id_trabajo":"1001", "matricula":"1001-ABB", "estado":"en revision",
+              "links": {
+                  "parent": { "href": "http://127.0.0.1:80/api/v1/vehiculos", "rel": "vehiculo_post vehiculo_cget"},
+                  "self": { "href": "http://127.0.0.1:80/api/v1/vehiculos/2A1JC5444R7252386", "rel": "vehiculo_get vehiculo_put" }
+               } }
+            }
+    response-http-400:
+      value:
+        type: https://httpstatuses.com/400
+        title: UNPROCESSABLE ENTITY
+        status: 400
+        detail: El identificador único ya existe
+        instance: about:blank
+    response-http-404:
+      value:
+        type: https://httpstatuses.com/404
+        title: NOT FOUND
+        status: 404
+        detail: El recurso solicitado no está disponible.
+        instance: about:blank
+    response-http-409:
+      value:
+        type: https://httpstatuses.com/409
+        title: NOT FOUND
+        status: 409
+        detail: El recurso no reúne las condiciones requeridas para la operación.
+        instance: about:blank
+    response-http-412:
+      value:
+        type: https://httpstatuses.com/412
+        title: PRECONDITION FAILED
+        status: 412
+        detail: El ETag proporcionado no está actualizado
+        instance: about:blank
+    response-http-422:
+      value:
+        type: https://httpstatuses.com/422
+        title: UNPROCESSABLE ENTITY
+        status: 422
+        detail: Falta alguno de los atributos obligatorios o contiene un valor no admitido
+        instance: about:blank

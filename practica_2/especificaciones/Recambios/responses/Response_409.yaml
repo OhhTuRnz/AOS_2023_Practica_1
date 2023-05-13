@@ -1,0 +1,9 @@
+description: '`CONFLICT`: Existe un conflicto con el recurso'
+content: 
+  application/problem+json:
+    schemas:
+      HTTP_Problem:
+        $ref: '../schemas/Http_Problem.yaml'
+    examples:
+      response-http-412:
+        $ref: '../examples/response-http-409.yaml'

@@ -1,0 +1,26 @@
+description: Nuevos atributos del recambio
+required: true
+content:
+  application/json:
+    schema:
+      type: object
+      properties:
+        nombre:
+          $ref: '../schemas/Nombre_Recambio.yaml'
+        descripcion:
+          $ref: '../schemas/Descripcion_Recambio.yaml'
+        proveedor:
+          $ref: '../schemas/Proveedor_Recambio.yaml'
+        equivalencias:
+          $ref: '../schemas/Equivalencias_Recambio.yaml'
+        garantia:
+          $ref: '../schemas/Garantia_Recambio.yaml'
+        precio: 
+          $ref: '../schemas/Precio_Recambio.yaml'
+        iva:
+          $ref: '../schemas/IVA_Recambio.yaml'
+        importe:
+          $ref: '../schemas/Importe_Recambio.yaml'
+        cantidad: 
+          $ref: '../schemas/Cantidad_Recambio.yaml'
+    example: { "precio": 19.95, "cantidad": 50 }

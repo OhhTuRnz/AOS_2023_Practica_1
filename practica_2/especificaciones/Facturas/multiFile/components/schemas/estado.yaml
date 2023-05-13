@@ -1,0 +1,11 @@
+title: ✅Estado
+description: |
+  Estado de la Plataforma:
+  * `Emitida`: Factura no pagada
+  * `Pagada`: Factura pagada
+type: string
+default: Emitida
+enum:
+  - Emitida
+  - Pagada
+x-faker: helpers.arrayElement(['Emitida', 'Pagada'])

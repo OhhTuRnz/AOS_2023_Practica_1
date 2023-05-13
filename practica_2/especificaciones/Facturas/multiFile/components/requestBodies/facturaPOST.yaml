@@ -1,0 +1,26 @@
+description: Información de la nueva factura
+required: true
+content:
+  application/json:
+    schema:
+      type: object
+      required:
+        - id_factura
+        - VIN_coche
+        - Id_cliente
+        - trabajos
+        - fecha_factura
+        - estado
+      properties:
+        id_factura:
+          $ref: ../schemas/id_factura.yaml
+        estado:
+          $ref: ../schemas/estado.yaml
+        VIN_coche:
+          $ref: ../schemas/VIN_coche.yaml
+        Id_cliente:
+          $ref: ../schemas/Id_cliente.yaml
+        trabajos:
+          $ref: ../schemas/trabajos.yaml
+        fecha_factura:
+          $ref: ../schemas/fecha_factura.yaml

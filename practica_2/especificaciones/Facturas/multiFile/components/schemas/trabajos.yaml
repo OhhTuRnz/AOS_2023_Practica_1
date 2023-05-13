@@ -1,0 +1,8 @@
+title: 💼Trabajos
+description: >-
+  Lista con el id único de todos lostrabajos realizados sobre el vehículo del
+  cliente
+type: array
+items:
+  $ref: ./id_trabajo.yaml
+minItems: 1

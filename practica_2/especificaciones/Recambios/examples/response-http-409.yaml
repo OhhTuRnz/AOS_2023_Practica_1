@@ -1,0 +1,6 @@
+value:
+  type: https://httpstatuses.com/409
+  title: CONFLICT
+  status: 409
+  detail: Existe un conflicto con el recurso
+  instance: about:blank

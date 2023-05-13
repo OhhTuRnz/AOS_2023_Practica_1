@@ -1,0 +1,6 @@
+name: Numero_Serie
+in: path
+description: Identificador del recambio correspondiente a un artículo del taller
+required: true
+schema:
+  $ref: '../schemas/Numero_Serie.yaml'

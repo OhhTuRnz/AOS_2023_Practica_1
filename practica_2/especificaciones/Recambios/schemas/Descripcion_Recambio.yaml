@@ -1,0 +1,7 @@
+title: 'Descripcion'
+description: >
+  Explicación detallada de las características, funciones y especificaciones
+  técnicas de una pieza o componente de repuesto para un vehículo. Esta descripción
+  es importante para asegurarse de que el recambio es adecuado para el vehículo y 
+  para comprender su función dentro del mismo.
+type: string

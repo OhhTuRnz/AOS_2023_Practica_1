@@ -1,0 +1,6 @@
+title: 💰Importe total
+description: >-
+  Valor monetario total que se debe pagar por los trabajos de los que se ha
+  beneficiado el cliente.
+type: string
+pattern: ^\d{1,}((\,\d{3})+)?(\.\d{2})?\u20AC$

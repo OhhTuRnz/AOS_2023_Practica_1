@@ -1,0 +1,6 @@
+value:
+  type: https://httpstatuses.com/422
+  title: UNPROCESSABLE ENTITY
+  status: 422
+  detail: Falta alguno de los atributos obligatorios o contiene un valor no admitido
+  instance: about:blank

@@ -1,0 +1,8 @@
+description: '`PRECONDITION FAILED`: El ETag proporcionado no está actualizado'
+content:
+  application/problem+json:
+    schema:
+      $ref: ../schemas/HTTP_Problem.yaml
+    examples:
+      response-http-412:
+        $ref: ../examples/response-http-412.yaml

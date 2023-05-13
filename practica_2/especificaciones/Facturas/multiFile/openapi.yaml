@@ -1,0 +1,23 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: (Equipo 8)Servicio de Facturas de taller mecánico
+  description: >
+    ## **[AOS 2023]** API REST para la gestión de Facturas de un taller
+    mecánico🚗
+  license:
+    name: UPM
+    url: https://cic.etsisi.upm.es/
+  contact:
+    name: Grupo 8 AOS
+    email: jorge.mpavon@alumnos.upm.es
+servers:
+  - url: http://127.0.0.1:80/api/v1
+tags:
+  - name: Factura 📋
+    description: Factura
+paths:
+  /facturas:
+    $ref: paths/facturas.yaml
+  /facturas/{facturaid}:
+    $ref: paths/facturas_{facturaid}.yaml

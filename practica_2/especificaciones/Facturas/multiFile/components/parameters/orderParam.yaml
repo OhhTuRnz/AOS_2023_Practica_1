@@ -1,0 +1,10 @@
+name: order
+in: query
+description: 'Criterio de ordenación: `id_factura` | `fecha de la factura`'
+required: false
+allowEmptyValue: false
+schema:
+  type: string
+  enum:
+    - id_factura
+    - fecha_factura

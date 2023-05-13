@@ -1,0 +1,112 @@
+parameters:
+  - $ref: ../components/parameters/facturaid.yaml
+options:
+  summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+  description: >-
+    Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados
+    (separados por comas).
+  operationId: factura_options
+  tags:
+    - Factura 📋
+  responses:
+    '204':
+      description: cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;
+      headers:
+        Allow:
+          $ref: ../components/headers/Allow.yaml
+get:
+  summary: Obtiene una factura identificada por `id_factura`
+  description: >
+    La siguiente tabla define los códigos de estado que puede devolver este
+    endpoint
+
+
+    | Status Code | Descripción | Motivo                             |
+
+    | ------------| ------------| -----------------------------------|
+
+    | **200**     | OK          | Si la factura existe               |
+
+    | **404**     | NOT FOUND   | Si no existe la factura |
+  operationId: factura_get
+  tags:
+    - Factura 📋
+  responses:
+    '200':
+      description: Factura con el id único de factura proporcionado
+      headers:
+        ETag:
+          $ref: ../components/headers/ETag.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Factura.yaml
+    '404':
+      $ref: ../components/responses/Response_404.yaml
+delete:
+  summary: Elimina la factura identificada por `id_factura`
+  description: >
+    La siguiente tabla define los códigos de estado que puede devolver este
+    endpoint
+
+
+    | Status Code      | Descripción | Motivo                                   
+    |
+
+    | ---------------- | ------------|
+    ------------------------------------------|
+
+    | **204**          | NO CONTENT  | La factura existía y ha sido eliminada |
+
+    | **404**          | NOT FOUND   | Si la factura no existe  |
+  operationId: factura_delete
+  tags:
+    - Factura 📋
+  responses:
+    '204':
+      description: Factura eliminada &lt;Cuerpo de la respuesta vacío&gt;
+    '404':
+      $ref: ../components/responses/Response_404.yaml
+put:
+  tags:
+    - Factura 📋
+  summary: Modifica la factura identificada por 'id_factura'
+  description: >
+    La siguiente tabla define los códigos de estado que puede devolver este
+    endpoint
+
+    | Status Code | Descripción         |
+    Motivo                                        |
+
+    | ------------| --------------------|
+    ----------------------------------------------|
+
+    | **209**     | CONTENT RETURNED    | La factura existía y ha sido
+    actualizada   |
+
+    | **404**     | NOT FOUND           | Si la factura no
+    existe                    |
+
+    | **412**     | PRECONDITION FAILED | Si el ETag proporcionado no está
+    actualizado  |
+
+    | **422**     | UNPROCESSABLE ENTITY| Valor no permitido en alguno de los
+    atributos|
+  operationId: factura_put
+  parameters:
+    - $ref: ../components/parameters/ifMatchParam.yaml
+  requestBody:
+    $ref: ../components/requestBodies/facturaPUT.yaml
+  responses:
+    '209':
+      description: '`CONTENT RETURNED`: la Factura ha sido actualizada'
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Factura.yaml
+    '404':
+      $ref: ../components/responses/Response_404.yaml
+    '412':
+      $ref: ../components/responses/Response_412.yaml
+    '422':
+      $ref: ../components/responses/Response_422.yaml

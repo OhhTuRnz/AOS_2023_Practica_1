@@ -1,0 +1,6 @@
+name: Importe_Recambio
+in: query
+description: Precio final añadiendo el IVA al precio a cada recambio
+required: false
+schema:
+  $ref: '../schemas/Importe_Recambio.yaml'

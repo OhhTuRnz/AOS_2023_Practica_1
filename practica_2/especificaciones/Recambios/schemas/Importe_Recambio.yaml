@@ -1,0 +1,7 @@
+title: 'Importe'
+description: 'Precio final añadiendo el IVA al precio a cada recambio'
+type: number
+format: double
+minimum: 0
+exclusiveMinimum: true
+example: 145.5

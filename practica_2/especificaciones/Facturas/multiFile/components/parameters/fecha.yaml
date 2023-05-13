@@ -1,0 +1,6 @@
+name: fecha factura
+in: query
+description: Fecha de la creación de la factura
+required: false
+schema:
+  $ref: ../schemas/fecha_factura.yaml

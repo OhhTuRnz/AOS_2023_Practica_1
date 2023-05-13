@@ -1,0 +1,6 @@
+name: Nombre_Recambio
+in: query
+description: Nombre del recambio correspondiente a un artículo del taller
+required: false
+schema:
+  $ref: '../schemas/Nombre_Recambio.yaml'

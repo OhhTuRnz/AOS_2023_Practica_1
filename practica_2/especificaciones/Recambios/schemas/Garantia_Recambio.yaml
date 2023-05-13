@@ -1,0 +1,7 @@
+title: 'Garantía del recambio'
+description: >
+  La garantía de un recambio de un vehículo es un compromiso que el fabricante o vendedor 
+  del recambio adquiere con el comprador, en el que se asegura que el recambio funcionará 
+  de manera adecuada y sin defectos durante un periodo de tiempo determinado.
+type: string
+example: "2 años"
