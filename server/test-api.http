@@ -1,0 +1,97 @@
+# curl -X "GET" "http://127.0.0.1:8000/api/v1/notificaciones"  -H "accept: application/json"
+GET http://127.0.0.1:8000/api/v1/notificaciones
+accept: application/json
+
+<> 2023-05-14T184814.200.json
+<> 2023-05-14T184225.500.txt
+<> 2023-05-14T181955.200.json
+<> 2023-05-14T181805.200.json
+<> 2023-05-14T181359.200.json
+<> 2023-05-14T181158.200.json
+
+###
+# curl -X "POST"   "http://127.0.0.1:8000/api/v1/notificaciones"   -H "accept: application/json"   -H "Content-Type: application/json"   -d "{  \"id_trabajo\": '1234-1234',  \"estado\": 'Creado',  \"detalle\": 'Detalles'}"
+POST http://127.0.0.1:8000/api/v1/notificaciones
+accept: application/json
+Content-Type: application/json
+
+{
+  "id_trabajo": '1234-1234',
+  "estado": 'Creado',
+  "detalle": 'Detalles',
+  "fecha_emision" = '2023-04-05 12:00:58'
+}
+
+<> 2023-05-14T184814.422.json
+<> 2023-05-14T184225.422.json
+<> 2023-05-14T181955.422.json
+<> 2023-05-14T181805.422.json
+<> 2023-05-14T181755.422.json
+<> 2023-05-14T181359.422.json
+
+###
+# curl -X "OPTIONS" "http://127.0.0.1:8000/api/v1/notificaciones" -H "accept: */*"
+OPTIONS http://127.0.0.1:8000/api/v1/notificaciones
+accept: */*
+
+<> 2023-05-14T184814-1.200.json
+<> 2023-05-14T184225.200.json
+<> 2023-05-14T181955-1.200.json
+<> 2023-05-14T181805-1.200.json
+<> 2023-05-14T181359-1.200.json
+<> 2023-05-14T181318.200.json
+
+###
+# curl -X "GET" "http://127.0.0.1:8000/api/v1/notificaciones/1234-1234"  -H "accept: application/json"
+GET http://127.0.0.1:8000/api/v1/notificaciones/1234-1234
+accept: application/json
+
+<> 2023-05-14T184814-2.200.json
+<> 2023-05-14T184225-1.500.txt
+<> 2023-05-14T181955-2.200.json
+<> 2023-05-14T181806.200.json
+<> 2023-05-14T181400.200.json
+
+###
+# curl -X "OPTIONS" "http://127.0.0.1:8000/api/v1/notificaciones/1234-1234" -H "accept: */*"
+OPTIONS http://127.0.0.1:8000/api/v1/notificaciones/1234-1234
+accept: */*
+
+<> 2023-05-14T184814-3.200.json
+<> 2023-05-14T184225-1.200.json
+<> 2023-05-14T181956.200.json
+<> 2023-05-14T181806-1.200.json
+<> 2023-05-14T181400-1.200.json
+
+###
+# curl -X "DELETE" "http://127.0.0.1:8000/api/v1/notificaciones/1234-1234-1" -H "accept: */*"
+DELETE http://127.0.0.1:8000/api/v1/notificaciones/1234-1234-1
+accept: */*
+
+<> 2023-05-14T184814-4.200.json
+<> 2023-05-14T184225-2.200.json
+<> 2023-05-14T181956-1.200.json
+<> 2023-05-14T181806-2.200.json
+<> 2023-05-14T181400-2.200.json
+
+###
+# curl -X "GET" "http://127.0.0.1:8000/api/v1/notificaciones/trabajo/1234-1234"  -H "accept: application/json"
+GET http://127.0.0.1:8000/api/v1/notificaciones/trabajo/1234-1234
+accept: application/json
+
+<> 2023-05-14T184815.200.json
+<> 2023-05-14T184225-2.500.txt
+<> 2023-05-14T181956-2.200.json
+<> 2023-05-14T181806-3.200.json
+<> 2023-05-14T181400-3.200.json
+
+###
+# curl -X "OPTIONS" "http://127.0.0.1:8000/api/v1/notificaciones/trabajo/1234-1234" -H "accept: */*"
+OPTIONS http://127.0.0.1:8000/api/v1/notificaciones/trabajo/1234-1234
+accept: */*
+
+<> 2023-05-14T184815-1.200.json
+<> 2023-05-14T184225-3.200.json
+<> 2023-05-14T181956-3.200.json
+<> 2023-05-14T181806-4.200.json
+

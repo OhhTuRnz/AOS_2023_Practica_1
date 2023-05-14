@@ -1,0 +1,636 @@
+openapi: 3.0.3
+
+info:
+  version: 1.0.0
+  title: AOS 2023 Grupo 9 Trabajos
+  description: >
+    ## **[AOS 2023]** API REST para la gestión de Trabajos.
+
+    ### Grupo 9 - Subsistema 3
+
+    #### Licencia
+  license:
+    name: MIT
+    url: "https://opensource.org/licenses/MIT"
+
+servers:
+  - url: http://127.0.0.1:80/api/v1
+
+tags:
+  - name: Trabajos
+    description: Operaciones sobre los trabajos del taller
+
+paths:
+  /trabajos:
+    get:
+      security: []
+      tags:
+        - Trabajos
+      summary: Recupera todos los trabajos
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+
+        | Status Code | Descripción | Motivo                             |
+        | ------------| ------------| -----------------------------------|
+        | **200**     | OK          | Listado de trabajos obtenidos                   |
+        | **404**     | NOT FOUND   | No hay ningun trabajo              |
+        | **500**     | INTERNAL SERVER ERROR   | Error interno del servidor         |
+      operationId: getTrabajos
+      parameters:
+        - $ref: "#/components/parameters/pageParam"
+        - $ref: "#/components/parameters/orderParam"
+        - $ref: "#/components/parameters/orderingParam"
+      responses:
+        "200":
+          description: Lista de trabajos
+          headers:
+            ETag:
+              $ref: "#/components/headers/ETag"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  trabajos:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Trabajo"
+                  links:
+                    description: Enlaces de paginación
+                    readOnly: true
+                    type: object
+                    properties:
+                      prevPage:
+                        $ref: "#/components/schemas/Link"
+                      nextPage:
+                        $ref: '#/components/schemas/Link'
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '500':
+          $ref: '#/components/responses/Response_500'
+    
+    options:
+      security: []
+      tags:
+        - Trabajos
+      summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+      description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
+      operationId: trabajo_coptions
+      responses:
+        '204':
+          description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+        "404":
+          $ref: "#/components/responses/Response_404"
+        "500":
+          $ref: "#/components/responses/Response_500"
+    post:
+      security: []
+      tags:
+        - Trabajos
+      summary: Crea un nuevo trabajo
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+
+        | Status Code | Descripción | Motivo                             |
+        | ------------| ------------| -----------------------------------|
+        | **201**     | CREATED          | Trabajo creado                   |
+        | **400**     | BAD REQUEST   | El trabajo no es valido              |
+        | **500**     | INTERNAL SERVER ERROR   | Error interno del servidor         |
+        | **422**     | UNPROCESSABLE ENTITY | Falta alguno de los atributos obligatorios|
+      operationId: createTrabajo
+      requestBody:
+        $ref: "#/components/requestBodies/trabajoRB"
+      responses:
+        "201":
+          description: Trabajo creado
+          headers:
+            Location:
+              $ref: "#/components/headers/Location"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Trabajo"
+        "400":
+          $ref: "#/components/responses/Response_400"
+        "500":
+          $ref: "#/components/responses/Response_500"
+        "422":
+          $ref: "#/components/responses/Response_422"
+  /trabajos/{idTrabajoParam}:
+    parameters:
+      - $ref: "#/components/parameters/IdTrabajoParam"
+    get:
+      security: []
+      tags:
+        - Trabajos
+      summary: Recupera un trabajo por su id
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+
+        | Status Code | Descripción | Motivo                             |
+        | ------------| ------------| -----------------------------------|
+        | **200**     | OK          | Trabajo obtenido                   |
+        | **404**     | NOT FOUND   | No existe el trabajo              |
+        | **500**     | INTERNAL SERVER ERROR   | Error interno del servidor         |
+      operationId: getTrabajo
+      responses:
+        "200":
+          description: Trabajo
+          headers:
+            ETag:
+              $ref: "#/components/headers/ETag"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trabajo'
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '500':
+          $ref: '#/components/responses/Response_500'
+    delete:
+      security: []
+      tags:
+        - Trabajos
+      summary: Elimina el trabajo identificado por `idTrabajoParam`
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+
+        | Status Code | Descripción | Motivo                                 |
+        | ------------| ------------| ---------------------------------------|
+        | **204**     | NO CONTENT  | El trabajo ha sido eliminado con éxito |
+        | **404**     | NOT FOUND   | Si el trabajo no existe                |
+        | **500**     | INTERNAL SERVER ERROR   | Error interno del servidor         |
+      operationId: trabajo_delete
+      responses:
+        '204':
+          description: trabajo eliminado &lt;Cuerpo de la respuesta vacío&gt;
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '500':
+          $ref: '#/components/responses/Response_500'
+
+    options:
+      security: []
+      tags: 
+        - Trabajos
+      summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+      description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
+      operationId: trabajo_options
+      responses:
+        '204':
+          description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+        '500':
+          $ref: '#/components/responses/Response_500'
+        '404':
+          $ref: '#/components/responses/Response_404'
+    put:
+      security: []
+      tags:
+        - Trabajos
+      summary: Actualiza el trabajo identificado por `idTrabajoParam`
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+
+        | Status Code | Descripción | Motivo                                 |
+        | ------------| ------------| ---------------------------------------|
+        | **200**     | OK          | El trabajo ha sido actualizado con éxito |
+        | **404**     | NOT FOUND   | Si el trabajo no existe                |
+        | **500**     | INTERNAL SERVER ERROR   | Error interno del servidor         |
+        | **422**     | UNPROCESSABLE ENTITY | Falta alguno de los atributos obligatorios|
+      operationId: trabajo_put
+      parameters:
+        - $ref: '#/components/parameters/ifMatchParam'
+      requestBody:
+        $ref: "#/components/requestBodies/trabajoPutRB"
+      responses:
+        '200':
+          description: trabajo actualizado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Trabajo"
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '500':
+          $ref: '#/components/responses/Response_500'
+        "422":
+          $ref: "#/components/responses/Response_422"
+components:
+  schemas:
+    Trabajo:
+      title: "Trabajo"
+      description: "Representacion del recurso trabajo, identifica el ingreso de un vehiculo al taller, estado y descripcion del proceso de reparacion necesario"
+      type: object
+      properties:
+        idTrabajo:
+          $ref: "#/components/schemas/IdTrabajo"
+        descripcionTrabajo:
+          type: string
+          description: "descripcion del trabajo a realizar"
+        fechaIngresoTrabajo:
+          type: string
+          format: date-time
+          description: "fecha de ingreso del vehiculo al taller"
+        fechaIncioTrabajo:
+          type: string
+          format: date-time
+          description: "fecha de inicio del trabajo"
+        fechaFinalizacionTrabajo:
+          type: string
+          format: date-time
+          description: "fecha de finalizacion del trabajo"
+        estadoTrabajo:
+          $ref: "#/components/schemas/Estados_Trabajo"
+        categoriaTrabajo:
+          $ref: "#/components/schemas/Categorias_Trabajo"
+        cotizacionTrabajo:
+          type: number
+          format: double
+        clienteIdTrabajo:
+          $ref: "#/components/schemas/ClienteId"
+        mecanicoIdTrabajo:
+          $ref: "#/components/schemas/MecanicoId"
+        vehiculoVINTrabajo:
+          $ref: "#/components/schemas/VehiculoVIN"
+        compejidadTrabajo:
+          $ref: "#/components/schemas/Compejidad_Trabajo"
+        links:
+          description: Enlaces de relación del trabajo
+          readOnly: true
+          type: object
+          properties:
+            vehiculo:
+              $ref: "#/components/schemas/Link"
+            cliente:
+              $ref: "#/components/schemas/Link"
+            mecanico:
+              $ref: "#/components/schemas/Link"
+            self:
+              $ref: "#/components/schemas/Link"
+            parent:
+              $ref: "#/components/schemas/Link"
+      required:
+        - idTrabajo
+        - descripcionTrabajo
+        - estadoTrabajo
+        - categoriaTrabajo
+        - clienteIdTrabajo
+        - vehiculoVINTrabajo
+        - compejidadTrabajo
+      example:
+        {
+          "idTrabajo": 1,
+          "descripcionTrabajo": "descripcion del trabajo",
+          "fechaIngresoTrabajo": "2023-03-21T10:31:28.258Z",
+          "fechaIncioTrabajo": "2023-03-21T10:31:28.258Z",
+          "fechaFinalizacionTrabajo": "2023-03-21T10:31:28.258Z",
+          "estadoTrabajo": "Creado",
+          "categoriaTrabajo": "Reparacion",
+          "cotizacionTrabajo": 122,
+          "clienteIdTrabajo": 1,
+          "mecanicoIdTrabajo": "M01",
+          "vehiculoVINTrabajo": "D8PAHRVZ78UVX54PM",
+          "compejidadTrabajo": "Baja",
+          "links":
+            {
+              "vehiculo":
+                {
+                  "href": "https://www.example.com/vehiculos/D8PAHRVZ78UVX54PM",
+                  "rel": "vehiculo_get vehiculo_options",
+                },
+              "cliente":
+                {
+                  "href": "https://www.example.com/clientes/1",
+                  "rel": "cliente_get cliente_options",
+                },
+              "mecanico":
+                {
+                  "href": "https://www.example.com/mecanicos/M01",
+                  "rel": "mecanico_get mecanico_options",
+                },
+              "self":
+                {
+                  "href": "https://www.example.com/trabajos/1",
+                  "rel": "trabajo_get trabajo_put trabajo_delete trabajo_options",
+                },
+              "parent":
+                {
+                  "href": "https://www.example.com/trabajos",
+                  "rel": "trabajos_get trabajos_option",
+                },
+            },
+        }
+    IdTrabajo:
+      type: integer
+      format: int64
+      description: "identificador unico del trabajo en el sistema de persistencia"
+      example: 1
+    Estados_Trabajo:
+      description: |
+        Estado del trabajo:
+        * `Creado`: trabajo ingresado al sistema
+        * `Planificado`: trabajo en cola -> mecanico asignado
+        * `Iniciado`: trabajo en curso
+        * `Terminado`: trabajo finalizado
+      type: string
+      default: "Creado"
+      enum: ["Creado", "Planificado", "Iniciado", "Terminado"]
+      # https://v6.fakerjs.dev/guide/
+      x-faker: helpers.arrayElement([ "Creado", "Planificado", "Iniciado", "Terminado" ])
+    Categorias_Trabajo:
+      description: |
+        cateogorias de un trabajo:
+        * `Reparacion`: trabajo de reparacion de partes internas del vehiculo
+        * `Recambio`: trabajo de cambio de piezas del vehiculo
+        * `Estetica`: trabajos de estetica y pintura
+      type: string
+      default: "Reparacion"
+      enum: ["Reparacion", "Recambio", "Estetica"]
+      # https://v6.fakerjs.dev/guide/
+      x-faker: helpers.arrayElement([ "Reparacion", "Recambio", "Estetica"])
+    ClienteId:
+      description: |
+        identificador del cliente dentro del sistema
+      type: integer
+      format: int64
+      default: 1
+      # https://v6.fakerjs.dev/guide/
+      x-faker: helpers.randomize([ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ])
+    MecanicoId:
+      description: |
+        identificador del mecanico dentro del sistema
+      type: string
+      pattern: "^[A-Z]{1}[0-9]{2}"
+      default: "M00"
+      example: "M01"
+      # https://v6.fakerjs.dev/guide/
+      x-faker: helpers.regexpStyleStringParse('M[10-99]')
+    VehiculoVIN:
+      description: |
+        identificador del vehiculo dentro del sistema
+      type: string
+      pattern: "[A-HJ-NPR-Z0-9]{17}"
+      default: "D8PAHRVZ78UVX54PM"
+      example: "D8PAHRVZ78UVX54PM"
+      # https://v6.fakerjs.dev/guide/
+      x-faker: helpers.regexpStyleStringParse('[A-HJ-NPR-Z0-9]{17}')
+    Compejidad_Trabajo:
+      description: |
+        complejidad del trabajo:
+        * `Baja`: trabajo de baja complejidad
+        * `Media`: trabajo de media complejidad
+        * `Alta`: trabajo de alta complejidad
+      type: string
+      default: "Baja"
+      enum: ["Baja", "Media", "Alta"]
+      # https://v6.fakerjs.dev/guide/
+      x-faker: helpers.arrayElement([ "Baja", "Media", "Alta"])
+
+    HTTP_Problem:
+      type: object
+      externalDocs:
+        url: https://tools.ietf.org/html/rfc7807
+      description: |
+        Problem Details for HTTP APIs
+        [https://tools.ietf.org/html/rfc7807](https://tools.ietf.org/html/rfc7807)
+      properties:
+        type:
+          type: string
+          format: uri
+          description: A URI reference [RFC3986] that identifies the problem type
+        title:
+          type: string
+          description: short human-readable summary of the problem type
+        status:
+          type: number
+          description: HTTP status code
+        detail:
+          type: string
+          description: Human-readable explanation specific to this occurrence of the problem
+        instance:
+          type: string
+          format: uri
+          description: >
+            A URI reference that identifies the specific occurrence of the problem.
+            It may or may not yield further information if dereferenced.
+    Link:
+      description: Enlace de relación
+      title: "🔗 Link"
+      type: object
+      properties:
+        href:
+          description: URL del enlace
+          type: string
+          format: uri
+          x-faker: internet.url
+        rel:
+          description:
+            "Relación del recurso enlazado con el actual. Contiene una lista de tipos
+            de relaciones separados por espacio."
+          type: string
+          x-faker: lorem.words
+      example:
+        href: https://www.example.com/path/resource
+        rel: relAction1 relAction2
+  headers:
+    ETag:
+      description: "Entity Tag (identificador único proporcionado para validación de caché)"
+      schema:
+        type: string
+        pattern: "[0-9a-f]*"
+        example: 33a64df551425fcc
+    Allow:
+      description: Lista de métodos HTTP soportados
+      schema:
+        type: string
+      example: GET, DELETE, PUT, OPTIONS
+    Location:
+      description: "`URI` del nuevo recurso"
+      schema:
+        type: string
+        format: uri
+        x-faker: internet.url
+        example: https://example.com/api/v1/Trabajos/1
+  responses:
+    Response_404:
+      description: "`NOT FOUND`: recurso no disponible"
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/HTTP_Problem"
+          examples:
+            response-http-404:
+              $ref: "#/components/examples/response-http-404"
+    Response_500:
+      description: "`INTERNAL SERVER ERROR`: error interno del servidor"
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/HTTP_Problem"
+          examples:
+            response-http-500:
+              $ref: "#/components/examples/response-http-500"
+    Response_422:
+      description: "`UNPROCESSABLE ENTITY` Falta alguno de los atributos obligatorios o son incorrectos."
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/HTTP_Problem"
+          examples:
+            response-http-422:
+              $ref: "#/components/examples/response-http-422"
+    Response_400:
+      description: "`BAD REQUEST` El identificador único ya existe."
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/HTTP_Problem"
+          examples:
+            response-http-400:
+              $ref: "#/components/examples/response-http-400"
+  parameters:
+    ifMatchParam:
+      name: If-Match
+      in: header
+      description: ETag actual del recurso que se desea modificar
+      required: true
+      schema:
+        type: string
+        pattern: "[0-9a-f]*"
+    orderParam:
+      name: order
+      in: query
+      description: "Criterio de ordenación: `id` | `fechaIngresoTrabajo`"
+      required: false
+      allowEmptyValue: false
+      schema:
+        type: string
+        enum:
+          - id
+          - fechaIngresoTrabajo
+    orderingParam:
+      name: ordering
+      in: query
+      description: "Ordenación: `ASC` | `DESC`"
+      required: false
+      allowEmptyValue: false
+      schema:
+        type: string
+        enum:
+          - ASC
+          - DESC
+    pageParam:
+      name: page
+      in: query
+      description: "Número de página"
+      required: false
+      allowEmptyValue: false
+      schema:
+        type: integer
+        minimum: 1
+    IdTrabajoParam:
+      name: idTrabajoParam
+      in: path
+      description: Identificador único del trabajo dentro del sistema
+      required: true
+      schema:
+        $ref: "#/components/schemas/IdTrabajo"
+
+  examples:
+    response-http-404:
+      value:
+        type: https://httpstatuses.com/404
+        title: NOT FOUND
+        status: 404
+        detail: El recurso no está disponible.
+        instance: about:blank
+    response-http-500:
+      value:
+        type: https://httpstatuses.com/500
+        title: INTERNAL SERVER ERROR
+        status: 500
+        detail: Ha ocurrido un error en el servidor.
+        instance: about:blank
+    response-http-400:
+      value:
+        type: https://httpstatuses.com/400
+        title: UNPROCESSABLE ENTITY
+        status: 400
+        detail: El identificador único ya existe
+        instance: about:blank
+    response-http-422:
+      value:
+        type: https://httpstatuses.com/422
+        title: UNPROCESSABLE ENTITY
+        status: 422
+        detail: Falta alguno de los atributos obligatorios o contiene un valor no admitido
+        instance: about:blank
+  requestBodies:
+    trabajoRB:
+      description: |
+        Datos del trabajo
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - fechaIngresoTrabajo
+              - fechaSalidaTrabajo
+              - mecanicoId
+              - vehiculoVIN
+              - compejidadTrabajo
+              - cotizacionTrabajo
+              - categoriaTrabajo
+            properties:
+              fechaIngresoTrabajo:
+                type: string
+                format: date-time
+              fechaSalidaTrabajo:
+                type: string
+                format: date-time
+              mecanicoId:
+                $ref: "#/components/schemas/MecanicoId"
+              vehiculoVIN:
+                $ref: "#/components/schemas/VehiculoVIN"
+              compejidadTrabajo:
+                $ref: "#/components/schemas/Compejidad_Trabajo"
+              cotizacionTrabajo:
+                type: number
+                format: double
+              categoriaTrabajo:
+                $ref: "#/components/schemas/Categorias_Trabajo"
+    trabajoPutRB:
+      description: |
+        Datos actualizables del trabajo
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              descripcionTrabajo:
+                type: string
+              fechaInicioTrabajo:
+                type: string
+                format: date-time
+              fechaFinalizacionTrabajo:
+                type: string
+                format: date-time
+              mecanicoId:
+                $ref: "#/components/schemas/MecanicoId"
+              compejidadTrabajo:
+                $ref: "#/components/schemas/Compejidad_Trabajo"
+              cotizacionTrabajo:
+                type: number
+                format: double
+              categoriaTrabajo:
+                $ref: "#/components/schemas/Categorias_Trabajo"
+              estadoTrabajo:
+                $ref: "#/components/schemas/Estados_Trabajo"

@@ -1,0 +1,661 @@
+openapi: 3.0.3
+
+info:
+  version: 1.0.0
+  title: 🔧 [AOS 2023] Envío de notificaciones relacionadas con el funcionamiento del taller 🔧
+  description: >
+    ## **[AOS 2023]** 🔧 API REST para la gestión de Notificaciones.
+  license:
+    name: MIT
+    url: 'https://opensource.org/licenses/MIT'
+  contact:
+    name: Equipo 5 - Arquitectura Orientada a Servicios
+    url: 'https://moodle.upm.es/titulaciones/oficiales/course/view.php?id=528'
+    email: aosgrupo5@aos.es
+
+servers:
+- url: '{schema}://{server}:{port}/{basePath}'
+  description: Servidor para peticiones locales
+  variables:
+    schema:
+      description: Esquema
+      default: http
+      enum:
+        - http
+        - https
+    server:
+      description: Nombre del servidor
+      default: 127.0.0.1
+    port:
+      description: Puerto expuesto
+      default: '80'
+    basePath:
+      description: Ruta base
+      default: api/v1
+
+tags:
+  - name: '🔔 Notificación'
+
+paths:
+  /notificaciones:
+    get:
+      summary: Obtiene todas las notificaciones
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code | Descripción   | Motivo                                 |
+        | ------------| --------------| ---------------------------------------|
+        | **200**     | OK            | Listado de notificaciones              |
+        | **401**     | UNAUTHORIZED  | El usuario no está autorizado          |  
+        | **403**     | FORBIDDEN     | El servidor ha denegado la petición    |
+        | **404**     | NOT FOUND     | No hay ninguna notificación            |
+      operationId: notificacion_cget
+      tags: [ '🔔 Notificación' ]
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/orderParam'
+        - $ref: '#/components/parameters/orderingParam'
+      responses:
+        '200':
+          description: Lista de notificaciones disponibles
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  notificaciones:
+                    description: array de notificaciones
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Notificacion'
+                  links:
+                    description: Enlaces de paginación
+                    readOnly: true
+                    type: object
+                    properties:
+                      prevPage:
+                        $ref: '#/components/schemas/Link'
+                      nextPage:
+                        $ref: '#/components/schemas/Link'
+              examples:
+                notificaciones-example:
+                  $ref: '#/components/examples/notificaciones-example'
+        '401':
+          $ref: '#/components/responses/Response_401'
+        '403':
+          $ref: '#/components/responses/Response_403'       
+        '404':
+          $ref: '#/components/responses/Response_404'
+    options:
+      summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+      description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
+      operationId: notificacion_coptions
+      tags: [ '🔔 Notificación' ]
+      responses:
+        '204':
+          description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+          headers:
+            Allow:
+              $ref: '#/components/headers/AllowCN'
+    post:
+      summary: Añade una nueva notificación
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code | Descripción          | Motivo                                    |
+        | ------------| ---------------------| ------------------------------------------|
+        | **201**     | CREATED              | La notificación ha sido creada            |
+        | **400**     | BAD REQUEST          | El identificador único ya existe          |
+        | **409**     | CONFLICT             | Se ha intentado crear una notificación    |
+        |             |                      | con un estado distinto a creado, pero     |
+        |             |                      | es la primera notificación del trabajo.   |
+        | **422**     | UNPROCESSABLE ENTITY | Falta alguno de los atributos obligatorios|
+        |             |                      | o el valor no está permitido              |
+        
+      tags: ['🔔 Notificación']
+      operationId: notificacion_post
+      requestBody:
+        $ref: '#/components/requestBodies/notificacionRB'    
+      responses:
+        '201':
+          description: Nueva notificación creada
+          headers:
+            location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notificacion'
+        '400':
+          $ref: '#/components/responses/Response_400'
+        '422':
+          $ref: '#/components/responses/Response_422'
+        '409':
+          $ref: '#/components/responses/Response_409'
+
+  
+  /notificaciones/{notificacion_id}:
+    options:
+      parameters:
+        - $ref: '#/components/parameters/notificacionId'
+      summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+      description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
+      operationId: notificacion_options
+      tags: [ '🔔 Notificación' ]
+      responses:
+        '204':
+          description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+          headers:
+            Allow:
+              $ref: '#/components/headers/AllowN'
+    get:
+      parameters:
+        - $ref: '#/components/parameters/notificacionId'
+      summary: Obtiene una notificación identificada por `notificaciónId`
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code | Descripción   | Motivo                              |
+        | ------------| --------------| ------------------------------------|
+        | **200**     | OK            | Si la notificación existe           |
+        | **401**     | UNAUTHORIZED  | El usuario no está autorizado       |  
+        | **403**     | FORBIDDEN     | El servidor ha denegado la petición |
+        | **404**     | NOT FOUND     | Si no existe la notificación        |
+      operationId: notificacion_get
+      tags: [ '🔔 Notificación' ]
+      responses:
+        '200':
+          description: Notificación
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notificacion'
+        '401':
+          $ref: '#/components/responses/Response_401'
+        '403':
+          $ref: '#/components/responses/Response_403' 
+        '404':
+          $ref: '#/components/responses/Response_404'
+    delete:
+      parameters:
+        - $ref: '#/components/parameters/notificacionId'
+      summary: Elimina la notificación identificada por `notificaciónId`
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code | Descripción   | Motivo                                      |
+        | ------------| --------------| --------------------------------------------|
+        | **204**     | NO CONTENT    | La notificación existía y ha sido eliminada |
+        | **404**     | NOT FOUND     | Si la notificación no existe                |
+      operationId: notificacion_delete
+      tags: [ '🔔 Notificación' ]
+      responses:
+        '204':
+          description: Plataforma eliminada &lt:Cuerpo de la respuesta vacío&gt;
+        '404':
+          $ref: '#/components/responses/Response_404'
+        
+  /notificaciones/trabajo/{trabajo_id}:
+    options:
+      parameters:
+        - $ref: '#/components/parameters/trabajoId'
+      summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+      description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
+      operationId: notificacion_trabajo_options
+      tags: [ '🔔 Notificación' ]
+      responses:
+        '204':
+          description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+          headers:
+            Allow:
+              $ref: '#/components/headers/AllowCT'
+    get:
+      parameters:
+        - $ref: '#/components/parameters/trabajoId'
+      summary: Obtiene una notificación identificada por `trabajoId`
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code | Descripción   | Motivo                              |
+        | ------------| --------------| ------------------------------------|
+        | **200**     | OK            | Si la notificación existe           |
+        | **401**     | UNAUTHORIZED  | El usuario no está autorizado       |  
+        | **403**     | FORBIDDEN     | El servidor ha denegado la petición |
+        | **404**     | NOT FOUND     | Si no existe la notificación        |
+      operationId: notificacion_trabajo_cget
+      tags: [ '🔔 Notificación' ]
+      responses:
+        '200':
+          description: Lista de notificaciones disponibles
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  notificaciones:
+                    description: array de notificaciones
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Notificacion'
+              examples:
+                notificaciones-trabajo-example:
+                  $ref: '#/components/examples/notificaciones-trabajo-example'
+        '401':
+          $ref: '#/components/responses/Response_401'
+        '403':
+          $ref: '#/components/responses/Response_403' 
+        '404':
+          $ref: '#/components/responses/Response_404'
+
+components:
+  schemas:
+
+    Notificacion:
+      title: ' 🔔 Notificaciones sobre las modificaciones de cambio de estado de los trabajos'
+      description: >
+        Comunicación, cualquiera que sea su denominación, realizada por un Taller por la que manifiesta cualquier modificación sobre el trabajo de un vehículo en considerarse obligado por un tratado multilateral concluido por un contrato.
+      type: object
+      properties:
+        notificacion:
+          type: object
+          required: [id, id_trabajo, fecha_emision]
+          properties:
+            id:
+              $ref: '#/components/schemas/Id_Notificacion'
+            id_trabajo:
+              $ref: '#/components/schemas/Id_Trabajo'
+            estado:
+              $ref: '#/components/schemas/Estados_Trabajos'
+            detalle:
+              description: Texto con información adicional de la notificación
+              type: string
+            fecha_emision:
+              $ref: '#/components/schemas/Fecha_Emision'
+            links:
+              description: Enlaces de relación de la Aeronave
+              readOnly: true
+              type: object
+              properties:
+                parent:
+                  $ref: '#/components/schemas/Link'
+                self:
+                  $ref: '#/components/schemas/Link'
+      example: { "notificacion": { 
+                      "id":"1234-1234-12",
+                      "id_trabajo": "1234-1234",
+                      "estado" : Creado,
+                      "detalle" : "",
+                      "fecha_emision" : "2023-04-05 12:00:58",
+                      "links": {
+                        "parent": {
+                            "href":"https://example.com/api/v1/notificaciones",
+                            "rel": "notificacion_post notificacion_cget"
+                        },
+                        "self": {
+                            "href":"https://example.com/api/v1/notificaciones/1234-1234-12",
+                            "rel": "notificacion_get" 
+                        }
+                      }
+                    }
+                }
+              
+
+    Id_Notificacion:
+      title: Identificador único de notificación
+      type: string
+      example: '1234-1234-12'
+      pattern: "^[0-9]{4}-[0-9]{4}-[0-9]{2}$"
+
+    Id_Trabajo:
+      type: string
+      example: '1234-1234'
+      pattern: "^[0-9]{4}-[0-9]{4}$"
+    
+    #VIN:
+    #  title: 'Cochecito con emoji'                                                                                    # CAMBIAR
+    #  description:
+    #  type: string
+    #  pattern: /^[A-HJ-NPR-Z\d]{8}[\dX][A-HJ-NPR-Z\d]{2}\d{6}$/i
+    
+    Estados_Trabajos:
+      description: |
+        Estado del trabajo:
+        * 'Creado':       Se ha dado de alta un trabajo para un vehículo en el taller.
+        * 'Planificado':  El trabajo ha sido presupuestado y está pendiente de iniciar.
+        * 'Iniciado':     El trabajo sigue su planificación y es iniciado.
+        * 'Terminado':    El trabajo ha sido finalizado correctamente.
+        * 'Anulado':      El trabajo ha sido anulado debido a una complicación, obligación u otras causas.
+      type: string
+      default: 'Creado'
+      enum: ["Creado", "Planificado", "Iniciado", "Terminado", "Anulado"]
+      x-faker: helpers.arrayElement([ 'Creado', 'Planificado', 'Iniciado', 'Terminado', 'Anulado' ])
+    
+    Fecha_Emision:
+      description: |
+        Se trata de la fecha en la que la notificación ha sido emitida. Formato yyyy-mm-dd HH:MM:SS
+      type: string
+      pattern: "^[0-9]{4}-[0-9]{2}-[0-9]{2}[ \t][0-9]{2}:[0-9]{2}:[0-9]{2}$"
+      example: "2023-04-05 12:00:58"
+
+      
+    HTTP_Problem:
+      type: object
+      externalDocs:
+        url: https://tools.ietf.org/html/rfc7807
+      description: |
+        Problem Details for HTTP APIs
+        [https://tools.ietf.org/html/rfc7807](https://tools.ietf.org/html/rfc7807)
+      properties:
+        type:
+          type: string
+          format: uri
+          description: A URI reference [RFC3986] that identifies the problem type
+        title:
+          type: string
+          description: short human-readable summary of the problem type
+        status:
+          type: number
+          description: HTTP status code
+        detail:
+          type: string
+          description: Human-readable explanation specific to this occurrence of the problem
+        instance:
+          type: string
+          format: uri
+          description: >
+            A URI reference that identifies the specific occurrence of the problem.
+            It may or may not yield further information if dereferenced.
+  
+    Link:
+      description: Enlace de relación
+      title: '🔗 Link'
+      type: object
+      properties:
+        href:
+          description: URL del enlace
+          type: string
+          format: uri
+          x-faker: internet.url
+        rel:
+          description: "Relación del recurso enlazado con el actual. Contiene una lista de tipos
+                    de relaciones separados por espacio."
+          type: string
+          x-faker: lorem.words
+      example:
+        href: https://www.example.com/path/resource
+        rel: relAction1 relAction2    
+
+  headers:
+    ETag:
+      description: "Entity Tag (identificador único proporcionado para validación de caché)"
+      schema:
+        type: string
+        pattern: "[0-9a-f]*"
+        example:
+          33a64df551425fcc
+    AllowCN:
+      description: Lista de métodos HTTP soportados
+      schema:
+        type: string
+      example: GET, POST, OPTIONS
+    AllowN:
+      description: Lista de métodos HTTP soportados
+      schema:
+        type: string
+      example: GET, DELETE, OPTIONS
+    AllowCT:
+      description: Lista de métodos HTTP soportados
+      schema:
+        type: string
+      example: GET, OPTIONS
+    Location:
+      description: '`URI` del nuevo recurso'
+      schema:
+        type: string
+        format: uri
+        x-faker: internet.url
+        example:
+          https://example.com/api/v1/notificaciones/1234-1234-12
+
+
+  requestBodies:
+    notificacionRB:
+      description: Información de la nueva Notificación
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [id_trabajo]
+            properties:
+              id_trabajo:
+                $ref: '#/components/schemas/Id_Trabajo'
+              estado:
+                $ref: '#/components/schemas/Estados_Trabajos'
+              detalle:
+                type: string
+    notificacionUpdate:
+      description: Nuevos atributos de la Notificación
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              estado:
+                $ref: '#/components/schemas/Estados_Trabajos'
+
+
+  responses:
+  # Añadir sólo las responses que vayamos a utilizar.
+    Response_400:
+      description: '`BAD REQUEST` El identificador único ya existe.'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-400:
+              $ref: '#/components/examples/response-http-400'
+    Response_401:
+      description: '`UNAUTHORIZED` Usuario no autorizado.'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-401:
+              $ref: '#/components/examples/response-http-401'
+    Response_403:
+      description: '`FORBIDDEN` El servidor ha denegado la petición.'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-403:
+              $ref: '#/components/examples/response-http-403' 
+    Response_404:
+      description: '`NOT FOUND`: Recurso no disponible'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-404:
+              $ref: '#/components/examples/response-http-404'
+    Response_409:
+      description: '`CONFLICT`: La petición no ha sido completada debido a un conflicto con el servidor.'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-409:
+              $ref: '#/components/examples/response-http-409'
+    Response_412:
+      description: '`PRECONDITION FAILED`: El ETag proporcionado no está actualizado'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-412:
+              $ref: '#/components/examples/response-http-412'
+    Response_422:
+      description: '`UNPROCESSABLE ENTITY` Falta alguno de los atributos obligatorios o son incorrectos.'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-422:
+              $ref: '#/components/examples/response-http-422'   
+
+  parameters:
+    ifMatchParam:
+      name: If-Match
+      in: header
+      description: ETag actual del recurso que se desea modificar
+      required: true
+      schema:
+        type: string
+        pattern: "[0-9a-f]*"
+    orderParam:
+      name: order
+      in: query
+      description: 'Criterio de ordenación: `id` | `id_trabajo`'
+      required: false
+      allowEmptyValue: false
+      schema:
+        type: string
+        enum:
+          - id
+          - id_trabajo
+    orderingParam:
+      name: ordering
+      in: query
+      description: 'Ordenación: `ASC` | `DESC`'
+      required: false
+      allowEmptyValue: false
+      schema:
+        type: string
+        enum:
+          - ASC
+          - DESC
+    pageParam:
+      name: page
+      in: query
+      description: 'Número de página'
+      required: false
+      allowEmptyValue: false
+      schema:
+        type: integer
+        minimum: 1
+        
+    notificacionId:
+      name: notificacion_id
+      in: path
+      description: Identificador único de notificación
+      required: true
+      schema:
+        $ref: '#/components/schemas/Id_Notificacion'
+    trabajoId:
+      name: trabajo_id
+      in: path
+      description: Identificador único de trabajo
+      required: true
+      schema:
+        $ref: '#/components/schemas/Id_Trabajo'
+
+  examples:
+    notificaciones-example:
+      value:
+        notificaciones:
+          - { "notificacion": { "id": "1234-1234-12", "id_trabajo": "1234-1234", "estado" : Creado, "detalle" : "", "fecha_emision" : "2023-04-05 12:00:58",
+                "links": {
+                  "parent": { "href": "https://example.com/api/v1/notificaciones", "rel": "notificacion_post notificacion_cget"},
+                  "self": { "href": "https://example.com/api/v1/notificaciones/1234-1234-12", "rel": "notificacion_get" }
+                }}}
+
+          - { "notificacion": { "id": "1234-1234-01", "id_trabajo": "1234-1234", "estado" : Creado, "detalle" : "", "fecha_emision" : "2023-05-12 21:05:30",
+                "links": {
+                  "parent": { "href": "https://example.com/api/v1/notificaciones", "rel": "notificacion_post notificacion_cget"},
+                  "self": { "href": "https://example.com/api/v1/notificaciones/1234-1234-01", "rel": "notificacion_get" }
+                }}}
+        links: {
+          "prevPage": { "href": "https://example.com/api/v1/noitificaciones?page=6", "rel": "prevPage" },
+          "nextPage": { "href": "https://example.com/api/v1/notificaciones?page=8", "rel": "nextPage" }
+        }
+    notificaciones-trabajo-example:
+      value:
+        notificaciones:
+          - { "notificacion": { "id": "1234-1234-12", "id_trabajo": "1234-1234", "estado" : Creado, "detalle" : "", "fecha_emision" : "2023-04-05 12:00:58",
+                "links": {
+                  "parent": { "href": "https://example.com/api/v1/notificaciones", "rel": "notificacion_post notificacion_cget"},
+                  "self": { "href": "https://example.com/api/v1/notificaciones/1234-1234-12", "rel": "notificacion_get" }
+                }}}
+
+          - { "notificacion": { "id": "1234-1234-01", "id_trabajo": "1234-1234", "estado" : Creado, "detalle" : "", "fecha_emision" : "2023-05-12 21:05:30",
+                "links": {
+                  "parent": { "href": "https://example.com/api/v1/notificaciones", "rel": "notificacion_post notificacion_cget"},
+                  "self": { "href": "https://example.com/api/v1/notificaciones/1234-1234-01", "rel": "notificacion_get" }
+                }}}
+    response-http-400:
+      value:
+        type: https://httpstatuses.com/400
+        title: UNPROCESSABLE ENTITY
+        status: 400
+        detail: El identificador único ya existe.
+        instance: about:blank
+    response-http-401:
+      value: 
+        type: https://httpstatuses.com/401
+        title: UNAUTHORIZED
+        status: 401
+        detail: La solicitud requiere autenticación y el usuario no está autorizado para acceder al recurso.
+        instance: about:blank
+    response-http-403:
+      value: 
+        type: https://httpstatuses.com/403
+        title: FORBIDDEN
+        status: 403
+        detail: La solicitud se ha realizado correctamente, pero el servidor se niega a cumplirla. Esto puede ser debido a que el usuario no tiene los permisos necesarios para acceder al recurso.
+        instance: about:blank   
+    response-http-404:
+      value:
+        type: https://httpstatuses.com/404
+        title: NOT FOUND
+        status: 404
+        detail: El recurso solicitado no está disponible.
+        instance: about:blank
+    response-http-409:
+      value:
+        type: https://httpstatuses.com/409
+        title: NOT FOUND
+        status: 409
+        detail: El recurso no reúne las condiciones requeridas para la operación.
+        instance: about:blank
+    response-http-412:
+      value:
+        type: https://httpstatuses.com/412
+        title: PRECONDITION FAILED
+        status: 412
+        detail: El ETag proporcionado no está actualizado.
+        instance: about:blank
+    response-http-422:
+      value:
+        type: https://httpstatuses.com/422
+        title: UNPROCESSABLE ENTITY
+        status: 422
+        detail: Falta alguno de los atributos obligatorios o contiene un valor no admitido.
+        instance: about:blank
