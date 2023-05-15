@@ -1,0 +1,47 @@
+COMANDOS UTILES DE DOCKER
+
+IMAGENES
+
+# Crear y arrancar contenedor a partir de docker-compose.yaml
+docker compose up
+
+# En la práctica usamos el contenedor: acarrasco2000/aos_2023_notificaciones
+# Construir imagen de Dockerfile
+docker build -t <contenedor> .
+
+# Publicar imagen en docker jub
+docker push <contenedor>
+
+# Arrancar imagen publicando puertos (mejor hacerlo desde docker desktop para ver logs)
+docker container run -d -p 80:80 <contenedor>
+
+NETWORKING
+
+# Ver todos los contenedores
+docker ps
+
+# Ejecutar comando "bash" en el contenedor
+docker exec -it 0ce7cfb9be37 bash
+
+# Instalar paquetes para ver conexiones
+apt update
+apt install net-tools
+apt-get install -y iputils-ping
+apt-get install xinetd telnetd
+
+# Ver todas las conexiones
+netstat -an
+
+# Ver procesos que escuchan en las conexiones
+netstat -tulnp
+
+# Comprobar conectividad a servidores externos
+ping -t 8.8.8.8
+ping -t www.google.com
+
+# Ver la red conectada al contenedor 
+docker inspect <contenedor> -f "{{json .NetworkSettings.Networks }}"
+
+***
+
+COMANDOS UTILES DE KUBERNETES
