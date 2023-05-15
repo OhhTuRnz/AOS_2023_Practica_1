@@ -9,6 +9,10 @@ from sqlalchemy.orm import mapped_column
 from database import Base
 
 
+class Id_Trabajo_Seq(Base):
+    __tablename__ = "id_trabajo_seq"
+    id = Column(Integer, primary_key=True, index=True)
+
 class Trabajo(Base):
     __tablename__ = "trabajos"
     id = Column(String, primary_key=True, index=True)

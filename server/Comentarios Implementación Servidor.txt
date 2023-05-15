@@ -1,0 +1,41 @@
+COMENTARIOS SOBRE LA IMPLEMENTACIÓN DE LA INTERFAZ POR EL SERVIDOR:
+
+* La BBDD se ha iniciado con:
+- La notificación con id "1234-1234" y estado "Iniciado"
+- Dos trabajos con ids: "1234-1234" Y "1234-1235"
+
+* En las excepciones el body solo contiene "detail". El "status" se comunica en la respuesta HTTP.
+
+* Sobre POST notificacion
+- El error 400 (identificador único ya existe) en principio no deberia producirse porque los identificadores se generan automáticamente. Y en caso de existir se devuelve como 422 - Error de integridad, facilitando más información en los detalles. Por ejemplo:
+
+	Para identificador único ya existe
+	{"detail": "Error de integridad: UNIQUE constraint failed: notificaciones.id"}
+
+	Para identificador de trabajo no existe (foreign key)
+	{"detail":"Error de integridad: FOREIGN KEY constraint failed"}
+
+Si hace falta se podría distinguir entre 400 "identificador único ya existe" y 422 (restricción en foreign key) pero la solución sería dependiente de la BBDD pues habría que analizar el texto de error.
+
+- El error 422 (sin atributo requerido) lo genera SQLAlchemy con esta respuesta:
+{
+  "detail": [
+    {
+      "loc": [
+        "body",
+        "id_trabajo"
+      ],
+      "msg": "field required",
+      "type": "value_error.missing"
+    }
+  ]
+}
+
+* Los errores 401 (usuario no autorizado) para las consultas se simulan poniendo la cabecera "usuario" en la solicitud. Por ejemplo:
+
+GET http://127.0.0.1:8000/api/v1/notificaciones
+accept: application/json
+usuario: prueba
+
+* El error 404 (notificacion no existe) en las operaciones DELETE no se genera (no lo hace SQLite al igual que otras BBDD).
+

@@ -10,16 +10,23 @@ accept: application/json
 <> 2023-05-14T181158.200.json
 
 ###
-# curl -X "POST"   "http://127.0.0.1:8000/api/v1/notificaciones"   -H "accept: application/json"   -H "Content-Type: application/json"   -d "{  \"id_trabajo\": '1234-1234',  \"estado\": 'Creado',  \"detalle\": 'Detalles'}"
+
+# curl -X "GET" "http://127.0.0.1:8000/api/v1/notificaciones"  -H "accept: application/json"
+GET http://127.0.0.1:8000/api/v1/notificaciones
+accept: application/json
+usuario: prueba
+
+###
+# curl -X "POST"   "http://127.0.0.1:8000/api/v1/notificaciones"   -H "accept: application/json"   -H "Content-Type: application/json"   -d "{  \"id_trabajo\": \"1234-1234\",  \"estado\": \"Iniciado\",  \"detalle\": \"Detalles\"}"
 POST http://127.0.0.1:8000/api/v1/notificaciones
 accept: application/json
 Content-Type: application/json
 
 {
-  "id_trabajo": '1234-1234',
-  "estado": 'Creado',
-  "detalle": 'Detalles',
-  "fecha_emision" = '2023-04-05 12:00:58'
+  "id_trabajo": "1234-1234",
+  "estado": "Iniciado",
+  "detalle": "Detalles",
+  "fecha_emision": "2023-04-05 12:00:58"
 }
 
 <> 2023-05-14T184814.422.json
@@ -28,6 +35,45 @@ Content-Type: application/json
 <> 2023-05-14T181805.422.json
 <> 2023-05-14T181755.422.json
 <> 2023-05-14T181359.422.json
+
+###
+# curl -X "POST"   "http://127.0.0.1:8000/api/v1/notificaciones"   -H "accept: application/json"   -H "Content-Type: application/json"   -d "{  \"estado\": \"Iniciado\",  \"detalle\": \"Detalles\"}"
+POST http://127.0.0.1:8000/api/v1/notificaciones
+accept: application/json
+Content-Type: application/json
+
+{
+  "estado": "Iniciado",
+  "detalle": "Detalles",
+  "fecha_emision": "2023-04-05 12:00:58"
+}
+
+###
+# curl -X "POST"   "http://127.0.0.1:8000/api/v1/notificaciones"   -H "accept: application/json"   -H "Content-Type: application/json"   -d "{  \"id_trabajo\": \"1234-1234\", \"estado\": \"Iniciado\",  \"detalle\": \"Detalles\"}"
+POST http://127.0.0.1:8000/api/v1/notificaciones
+accept: application/json
+Content-Type: application/json
+
+{
+  "id_trabajo": "1234-1235",
+  "estado": "Iniciado",
+  "detalle": "Detalles",
+  "fecha_emision": "2023-04-05 12:00:58"
+}
+
+###
+
+# curl -X "POST"   "http://127.0.0.1:8000/api/v1/notificaciones"   -H "accept: application/json"   -H "Content-Type: application/json"   -d "{  \"id_trabajo\": \"1234-1235\",  \"estado\": \"Creado\",  \"detalle\": \"Detalles\"}"
+POST http://127.0.0.1:8000/api/v1/notificaciones
+accept: application/json
+Content-Type: application/json
+
+{
+  "id_trabajo": "1234-1236",
+  "estado": "Creado",
+  "detalle": "Detalles",
+  "fecha_emision": "2023-04-05 12:00:58"
+}
 
 ###
 # curl -X "OPTIONS" "http://127.0.0.1:8000/api/v1/notificaciones" -H "accept: */*"
@@ -53,6 +99,12 @@ accept: application/json
 <> 2023-05-14T181400.200.json
 
 ###
+# curl -X "GET" "http://127.0.0.1:8000/api/v1/notificaciones/1234-1234"  -H "accept: application/json"
+GET http://127.0.0.1:8000/api/v1/notificaciones/1234-1234
+accept: application/json
+usuario: prueba
+
+###
 # curl -X "OPTIONS" "http://127.0.0.1:8000/api/v1/notificaciones/1234-1234" -H "accept: */*"
 OPTIONS http://127.0.0.1:8000/api/v1/notificaciones/1234-1234
 accept: */*
@@ -64,8 +116,8 @@ accept: */*
 <> 2023-05-14T181400-1.200.json
 
 ###
-# curl -X "DELETE" "http://127.0.0.1:8000/api/v1/notificaciones/1234-1234-1" -H "accept: */*"
-DELETE http://127.0.0.1:8000/api/v1/notificaciones/1234-1234-1
+# curl -X "DELETE" "http://127.0.0.1:8000/api/v1/notificaciones/0000-0001" -H "accept: */*"
+DELETE http://127.0.0.1:8000/api/v1/notificaciones/0000-0001
 accept: */*
 
 <> 2023-05-14T184814-4.200.json
@@ -73,6 +125,12 @@ accept: */*
 <> 2023-05-14T181956-1.200.json
 <> 2023-05-14T181806-2.200.json
 <> 2023-05-14T181400-2.200.json
+
+###
+# curl -X "DELETE" "http://127.0.0.1:8000/api/v1/notificaciones/1234-1234-1" -H "accept: */*"
+DELETE http://127.0.0.1:8000/api/v1/notificaciones/1234-1234-1
+accept: */*
+
 
 ###
 # curl -X "GET" "http://127.0.0.1:8000/api/v1/notificaciones/trabajo/1234-1234"  -H "accept: application/json"
