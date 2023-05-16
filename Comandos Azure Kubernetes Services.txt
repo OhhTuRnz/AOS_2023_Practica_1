@@ -1,0 +1,133 @@
+GIT
+
+# Obtener copia del repositorio
+git clone <repositorio>
+
+# Commit de todos los cambios
+git add --all
+git commit -m "Texto"
+git push
+
+DOCKER
+
+docker build -t acarrasco2000/aos_2023_notificaciones .
+docker push acarrasco2000/aos_2023_notificaciones
+
+AZURE KUBERNETES SERVICES (AKS)
+
+ACCESO AL PORTAL DE AZURE:
+https://portal.azure.com/
+httos://portal.azure.com/#powershell
+
+Datos:
+ResourceGroupName: aos2023notificaciones (sin el prefijo acarrasco2000)
+ACRname: aos2023notificaciones
+
+# Install Azure Powershell
+#
+# Ver https://learn.microsoft.com/es-es/powershell/azure/azurerm/install-azurerm-ps?view=azurermps-6.13.0
+#
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+Install-Module -Name AzureRM -AllowClobber
+
+# Conectar
+Connect-AzureRmAccount
+
+ResourceGroupName: aos_2023_notificaciones (sin el prefijo acarrasco2000)
+ACRname: aos2023notificaciones
+
+
+USAR POWERSHELL
+
+Tutorial: https://learn.microsoft.com/es-es/azure/aks/tutorial-kubernetes-prepare-acr?tabs=azure-cli
+
+# Paso 1: Creación de un registro de contenedor
+
+# Comprobar version de Azure Powershell (debe ser 5.9.0 o posterior)
+Get-InstalledModule -Name Az
+
+# Crear grupo de recursos
+New-AzResourceGroup -Name aos2023notificaciones -Location eastus
+New-AzContainerRegistry -ResourceGroupName aos2023notificaciones -Name aos2023notificaciones -Sku Basic
+
+# Inicio de sesion
+Connect-AzContainerRegistry -Name aos2023notificaciones
+
+# Direccion del servidor de inicio de registro (usar nombre del grupo sin el prefijo acarrasco2000)
+(Get-AzContainerRegistry -ResourceGroupName aos2023notificaciones -Name aos2023notificaciones).LoginServer
+
+Resp: aos2023notificaciones.azurecr.io
+
+# Etiquetar las imagenes locales de docker con la dirección del servidor de inicio de sesion
+# y realizar push al ACR. Es necesario autenticarse para lo cual instalamos Azure Powershell
+# y nos autenticamos con el cmdlet "Connect-AzContainerRegistry"
+
+local> docker tag mcr.microsoft.com/azuredocs/azure-vote-front:v1 <acrLoginServer>/azure-vote-front:v1
+local> docker images
+local> Connect-AzContainerRegistry
+local> docker push <acrLoginServer>/azure-vote-front:v1
+
+Ej.: docker push aos2023notificaciones.azurecr.io/azure-aos2023notificaciones:v1
+
+# Consultar imagenes en el registro
+Get-AzContainerRegistryManifest -RegistryName <acrName> -RepositoryName azure-vote-front
+Get-AzContainerRegistryTag -RegistryName <acrName> -RepositoryName azure-vote-front
+
+Ej.:
+Get-AzContainerRegistryManifest -RegistryName aos2023notificaciones -RepositoryName azure-aos2023notificaciones
+Get-AzContainerRegistryTag -RegistryName aos2023notificaciones -RepositoryName azure-aos2023notificaciones
+
+
+***
+
+# Paso 2: Implementación de un cluster de Kubernetes
+
+# Creación del cluster kubernetes
+New-AzAksCluster -ResourceGroupName aos2023notificaciones -Name aos2023notificacionesCluster -NodeCount 2 -GenerateSshKey -AcrNameToAttach aos2023notificaciones
+
+Warning: New-AzAksCluster: Could not add 'acrpull' role assignment, please make sure you have right permission.	
+
+# Instalación de la CLI de kubernetes-prepare-acr
+Install-Module Az.Aks
+
+# Conexión a un cluster mediante kubectl
+Import-AzAksCredential -ResourceGroupName aos2023notificaciones -Name aos2023notificacionesCluster
+
+# Comprobar lista de nodos del cluster
+$ kubectl get nodes
+
+# Preparar el fichero de manifesto para kubernetes: azure-aos2023notificaciones.yaml asegurando el contenedor / imagen
+
+containers:
+- name: azure-vote-front
+  image: <acrName>.azurecr.io/azure-vote-front:v1
+
+# Implementar la aplicación con kubectl apply
+kubectl apply -f azure-aos2023notificaciones.yaml
+
+# Comprobar que el proceso front-end está arrancado
+kubectl get service azure-vote-front --watch
+
+***
+
+# Paso 3: Escalado de aplicaciones
+
+En la consola del cluster de Kubernetes:
+
+# Comprobar número y estado de los pods
+kubectl get pods
+# Cambiar el número de pods a 5
+kubectl scale --replicas=5 deployment/azure-vote-front
+kubectl get pods
+
+En AzurePowershell:
+# Comprobar versión del cluster AKS
+(Get-AzAksCluster -ResourceGroupName aos2023notificaciones -Name aos2023notificacionesCluster).KubernetesVersion
+
+Resp: 1.25.6
+
+# Escalado automatico con kubectl
+kubectl autoscale deployment azure-vote-front --cpu-percent=50 --min=3 --max=10
+
+# Escalado manual del número de nodos
+Get-AzAksCluster -ResourceGroupName acarrasco2000/aos_2023_notificaciones -Name aos2023notificacionesCluster | Set-AzAksCluster -NodeCount 3
