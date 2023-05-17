@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: azure-aos2023notificaciones
+  name: aos2023notificaciones
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: azure-aos2023notificaciones
+      app: aos2023notificaciones
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -15,13 +15,13 @@ spec:
   template:
     metadata:
       labels:
-        app: azure-aos2023notificaciones
+        app: aos2023notificaciones
     spec:
       nodeSelector:
         "beta.kubernetes.io/os": linux
       containers:
-      - name: azure-aos2023notificaciones
-        image: aos2023Notificaciones.azurecr.io/azure-aos2023notificaciones:v1
+      - name: aos2023notificaciones
+        image: aos2023notificaciones.azurecr.io/azure-aos2023notificaciones:v1
         ports:
         - containerPort: 80
         resources:
@@ -36,10 +36,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: azure-aos2023notificaciones
+  name: aos2023notificaciones
 spec:
   type: LoadBalancer
   ports:
   - port: 80
   selector:
-    app: azure-aos2023notificaciones
+    app: aos2023notificaciones
