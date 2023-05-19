@@ -2,3 +2,7 @@ fastapi==0.95.1
 uvicorn==0.22.0
 SQLAlchemy==2.0.13
 pydantic==1.10.7
+python.dotenv==1.0.0
+requests==2.30.0
+cryptohash==1.0.5
+Authlib==1.2.0

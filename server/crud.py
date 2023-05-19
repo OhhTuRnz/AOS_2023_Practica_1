@@ -13,13 +13,22 @@ def get_notificaciones(db: Session, skip: int = 0, limit: int = 100):
     return result
 
 def create_notificacion(db: Session, notificacion: schemas.Notificacion, id: str):
-    if notificacion.estado.lower() == "iniciado":
-        notificacion.estado = "Iniciado"
+    # Comprueba que el valor de estado es uno de los predefinidos
+    if not notificacion.estado in ["Creado", "Planificado", "Iniciado", "Anulado", "Terminado"]:
+        raise HTTPException(status_code=409,
+                            detail="CONFLICT: La petición no ha sido completada debido a un conflicto con el servidor.")
+
+    # Comprueba que exista alguna notificación para ese mismo trabajo con estado "Creado"
+    result = get_notificaciones_by_id_trabajo_estado(db, notificacion.id_trabajo, "Creado")
+    if notificacion.estado.lower() == "creado":
+        if len(result) > 0:
+            raise HTTPException(status_code=409,
+                                detail="CONFLICT: La petición no ha sido completada debido a un conflicto con el servidor.")
+        notificacion.estado = "Creado"
     else:
-        # Comprueba que exista alguna notificación para ese mismo trabajo con estado "Iniciado"
-        result = get_notificaciones_by_id_trabajo_estado(db, notificacion.id_trabajo, "Iniciado")
         if len(result) == 0:
-            raise HTTPException(status_code=409, detail="El recurso no reúne las condiciones requeridas para la operación.")
+            raise HTTPException(status_code=409, detail="CONFLICT: La petición no ha sido completada debido a un conflicto con el servidor.")
+
     try:
         id_notificacion = get_next_id_notificacion(db)
         # Añade identificador de la notificación
