@@ -12,16 +12,16 @@ git push
 docker compose up
 
 # Construir imagen de Dockerfile
-docker build -t acarrasco2000/aos_2023_notificaciones .
+docker build -t acarrasco2000/aos2023notificaciones:v1 .
 
 # Publicar imagen en docker hub
-docker push acarrasco2000/aos_2023_notificaciones
+docker push acarrasco2000/aos2023notificaciones:v1
 
 # Arrancar imagen publicando puertos (mejor hacerlo desde docker desktop para ver logs)
 docker container run -d -p 80:80 <contenedor>
 
 # Ver la red conectada al contenedor 
-docker inspect acarrasco2000/aos_2023_notificaciones -f "{{json .NetworkSettings.Networks }}"
+docker inspect acarrasco2000/aos2023notificaciones -f "{{json .NetworkSettings.Networks }}"
 
 # Ver todos los contenedores
 docker ps
@@ -95,6 +95,13 @@ Resp: aos2023notificaciones.azurecr.io
 ### PASO 1.2 - Publicar contenedor en registro ACR de Azure ###
 ###
 ### Estos comandos deben ser ejecutados desde el Azure Powershell local (no desde https://portal.azure.com/#cloudshell)
+### después de autenticarse con:
+###
+### Connect-AzAccount
+###
+### y conectarse al registro con:
+###
+### Connect-AzContainerRegistry -Name aos2023notificaciones
 
 # Etiquetar las imagenes locales de docker con la dirección del servidor de inicio de sesion
 docker tag acarrasco2000/aos2023notificaciones:v1 aos2023notificaciones.azurecr.io/azure-aos2023notificaciones:v1
@@ -109,9 +116,11 @@ Get-AzContainerRegistryTag -RegistryName aos2023notificaciones -RepositoryName a
 
 ### PASO 2 - Implementación de un cluster de Kubernetes formado por 2 nodos
 
-# Creación del cluster kubernetes
+# Creación del cluster kubernetes (genera clave)
 New-AzAksCluster -ResourceGroupName aos2023notificaciones -Name aos2023notificacionesCluster -NodeCount 2 -GenerateSshKey -AcrNameToAttach aos2023notificaciones
-	
+# Creación del cluster kubernetes (sin generar clave)
+New-AzAksCluster -ResourceGroupName aos2023notificaciones -Name aos2023notificacionesCluster -NodeCount 2 -AcrNameToAttach aos2023notificaciones
+
 # Instalación de la CLI de kubernetes-prepare-acr
 Install-Module Az.Aks
 
@@ -120,6 +129,20 @@ Import-AzAksCredential -ResourceGroupName aos2023notificaciones -Name aos2023not
 
 # Comprobar lista de nodos del cluster
 $ kubectl get nodes
+
+### Desde portal.azure.com/#cloudshell
+
+# Detener el cluster
+az aks stop --name aos2023notificacionesCluster --resource-group aos2023notificaciones
+
+# Comprobar que el estado del cluster powerState es Stopped
+az aks show --name aos2023notificacionesCluster --resource-group aos2023notificaciones
+
+# Arrancar el cluster
+az aks start --name aos2023notificacionesCluster --resource-group aos2023notificaciones
+
+# Comprobar que el estado del cluster powerState es Running
+az aks show --name aos2023notificacionesCluster --resource-group aos2023notificaciones
 
 ### PASO 3 - Desplegar e iniciar la aplicación con kubectl apply
 #
@@ -138,6 +161,8 @@ $ kubectl apply -f azure-aos2023notificaciones.yaml
 
 # Comprobar que el servicio está arrancado. Este comando proporciona la dirección IP externa del servicio. 
 $ kubectl get service aos2023notificaciones --watch
+
+Resp: La dirección IP externa es 4.157.200.188
 
 ### PASO 4 - Escalado de aplicaciones
 #

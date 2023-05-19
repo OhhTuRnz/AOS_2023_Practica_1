@@ -1,7 +1,8 @@
-COMENTARIOS SOBRE LA IMPLEMENTACIÓN DE LA INTERFAZ POR EL SERVIDOR:
+COMENTARIOS SOBRE LA IMPLEMENTACIÓN DE LA INTERFAZ POR EL SERVIDOR
+==================================================================
 
 * La BBDD se ha iniciado con:
-- La notificación con id "1234-1234" y estado "Iniciado"
+- La notificación con id "1234-1234" y estado "Creado"
 - Dos trabajos con ids: "1234-1234" Y "1234-1235"
 
 * En las excepciones el body solo contiene "detail". El "status" se comunica en la respuesta HTTP.
@@ -31,11 +32,29 @@ Si hace falta se podría distinguir entre 400 "identificador único ya existe" y
   ]
 }
 
-* Los errores 401 (usuario no autorizado) para las consultas se simulan poniendo la cabecera "usuario" en la solicitud. Por ejemplo:
+* Se usan tokens jwt para autorizar las operaciones. El token jwt debe incluirse en la cabecera "authorization" como sigue:
 
-GET http://127.0.0.1:8000/api/v1/notificaciones
-accept: application/json
-usuario: prueba
+Authorization: Bearer <token>
+
+En caso de incluirse el token debe coincidir con al variable "jwt_notificaciones" del fichero de configuración .env o de lo contrario la petición se rechaza con el error 401 - UNAUTHORIZED. Las peticiones sin esta cabecera son siempre autorizadas.
+
+- En las peticiones al API de trabajos se incluye un token jwt en la cabecera "authorization" como sigue:
+
+Authorization: Bearer <token>
+
+El valor del token se obtiene de la variable jwt_trabajos del fichero de configuración .env.
 
 * El error 404 (notificacion no existe) en las operaciones DELETE no se genera (no lo hace SQLite al igual que otras BBDD).
 
+* En el fichero de configuración .env se deben definir las siguientes variables:
+
+# URL de la API de trabajos
+URL_trabajos = "http://4.157.200.188:4014"
+
+# Token jwt para la API de trabajos
+jwt_trabajos = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImEzMmZkZDRiMTQ2Njc3NzE5YWIyMzcyODYxYmRlZDg5In0.eyJpc3MiOiJBT1MgMjAyMyAtIEFQSSBOb3RpZmljYWNpb25lcyIsImF1ZCI6ImFsZWphbmRyby5jYXJyYXNjby5hcmFnb25AYWx1bW5vcy51cG0uZXMiLCJzdWIiOiI5Mzc3NzE3YmVmNWE0OGMyODliYWEyZDI0MjM2N2NhNSIsImV4cCI6MTY4NDUyNDA2MywiaWF0IjoxNjg0NTIzNzYzfQ.TmP_jb4WF_mxl-lAauAFDCKLi-w2agpToTKpL5UbGMwuyn4RlVZdCM3EdNl-RZ1Yl7rfYl5N6KLb01hz1ThJVg"
+
+# Token jwt para la API de notificaciones
+jwt_notificaciones = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImEzMmZkZDRiMTQ2Njc3NzE5YWIyMzcyODYxYmRlZDg5In0.eyJpc3MiOiJBT1MgMjAyMyAtIEFQSSBOb3RpZmljYWNpb25lcyIsImF1ZCI6ImFsZWphbmRyby5jYXJyYXNjby5hcmFnb25AYWx1bW5vcy51cG0uZXMiLCJzdWIiOiI5Mzc3NzE3YmVmNWE0OGMyODliYWEyZDI0MjM2N2NhNSIsImV4cCI6MTY4NDUyNDA2MywiaWF0IjoxNjg0NTIzNzYzfQ.TmP_jb4WF_mxl-lAauAFDCKLi-w2agpToTKpL5UbGMwuyn4RlVZdCM3EdNl-RZ1Yl7rfYl5N6KLb01hz1ThJVg"
+
+* El servidor incluye etag en la cabecera de las respuestas a las peticiones HTTP GET y POST y éste se calcula como la firma MD5 del resultado. El cliente puede incluir estos etags en las cabeceras de las peticiones (así como "If-Math" o "If-None-Match") aunque el servidor los ignora.
