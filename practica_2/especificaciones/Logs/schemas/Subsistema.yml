@@ -1,0 +1,14 @@
+Subsistema:
+      description: |
+        Subsistema que lanza el evento:
+        * `1`: Gestión de clientes
+        * `2`: Gestión de los vehículos
+        * `3`: Gestión de la planificación diaria de los trabajos del taller
+        * `4`: Envío de notificaciones
+        * `5`: Gestión y emisión de facturas
+        * `6`: Gestión del inventario completo de recambios
+        * `7`: Gestión de los logs
+      type: integer
+      enum: [ 1, 2, 3, 4, 5, 6, 7 ]
+      # https://v6.fakerjs.dev/guide/
+      x-faker: helpers.arrayElement([ 1, 2, 3, 4, 5, 6, 7 ])

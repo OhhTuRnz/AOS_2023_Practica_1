@@ -1,0 +1,35 @@
+* Logs
+    - Evento registrado de cualquier subsistema
+    - Propiedades
+        - id:
+        - tamaño:
+        - prioridad: (enum)
+          - 0: Prioridad muy alta
+          - 1: Prioridad alta
+          - 2: Prioridad media
+          - 3: Prioridad baja
+        - subistema: (enum)
+          - 1: Gestión de clientes
+          - 2: Gestión de los vehículos
+          - 3: Gestión de la planificación diaria de los trabajos del taller
+          - 4: Envío de notificaciones
+          - 5: estión y emisión de facturas
+          - 6: Gestión del inventario completo de recambios
+          - 7: Gestión de los logs
+        - fecha:
+        - usuario:
+        
+      
+
+Operaciones:
+    - CRUD Logs
+    
+
+Paths:
+    - /api/v1/plataformas
+        - GET
+        - CGET
+        - POST
+        - PUT
+        - OPTIONS
+        - DELETE

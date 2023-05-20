@@ -24,3 +24,8 @@ class Notificacion(Base):
     estado = Column(String)
     detalle = Column(String)
     fecha_emision = Column(String)
+
+class Usuario(Base):
+    __tablename__ = "usuarios"
+    nombre = Column(String, primary_key=True, index=True)
+    password = Column(String)

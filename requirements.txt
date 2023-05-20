@@ -6,3 +6,6 @@ python.dotenv==1.0.0
 requests==2.30.0
 cryptohash==1.0.5
 Authlib==1.2.0
+PyJWT==2.7.0
+python-multipart==0.0.6
+bcrypt==4.0.1

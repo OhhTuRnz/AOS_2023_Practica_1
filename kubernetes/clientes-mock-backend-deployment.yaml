@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\temp\git\AOS_2023_Practica_1\kompose-windows-amd64.exe convert -f ../practica_2/docker-compose.yml
+    kompose.version: 1.28.0 (c4137012e)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: clientes-mock-backend
+  name: clientes-mock-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: clientes-mock-backend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\temp\git\AOS_2023_Practica_1\kompose-windows-amd64.exe convert -f ../practica_2/docker-compose.yml
+        kompose.version: 1.28.0 (c4137012e)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/practica-2-default: "true"
+        io.kompose.service: clientes-mock-backend
+    spec:
+      containers:
+        - args:
+            - mock
+            - --cors
+            - -h
+            - 0.0.0.0
+            - /aos/openapi.yml
+          image: stoplight/prism:4
+          name: aos2023-clientes-mock
+          ports:
+            - containerPort: 4010
+          resources: {}
+          volumeMounts:
+            - mountPath: /aos
+              name: clientes-mock-backend-claim0
+              readOnly: true
+      restartPolicy: Always
+      volumes:
+        - name: clientes-mock-backend-claim0
+          persistentVolumeClaim:
+            claimName: clientes-mock-backend-claim0
+            readOnly: true
+status: {}

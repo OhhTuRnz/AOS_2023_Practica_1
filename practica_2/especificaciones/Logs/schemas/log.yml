@@ -1,0 +1,37 @@
+Log:
+      title: 'log'
+      description: >
+        Es el encargado de la gestión de los logs del resto de subsistemas del taller. Su principal objetivo es permitir el registro de eventos que ocurran en los otros subsistemas y que se deseen registrar para su posterior consulta, generación de informes, estadísticas, etc.
+      type: object
+      properties:
+        log:
+          type: object
+          required: [ id, tipo_evento ]
+          properties:
+              id:
+                $ref: '#/components/schemas/Id_Log'
+              
+              prioridad:
+                $ref: '#/components/schemas/Prioridad'
+                
+              descripcion_evento:
+                description: Tipo del evento
+                type: string
+              
+              fecha:
+                description: Momento en el que se inserto el evento
+                type: string
+                
+              usuario:
+                description: Usuario que lanza el evento
+                type: string
+              
+              susbsistema:
+                $ref: '#/components/schemas/Subsistema'
+            
+              
+      example: { "log": {
+                     "id":"P01-003-C","descripcion_evento": "Revision vehiculo", "subsistema": 1, "prioridad": 2, "fecha": "01-01-2001", "usuario":"Miguel Galisteo" 
+                     
+                  }
+                }

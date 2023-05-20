@@ -8,6 +8,13 @@ from sqlalchemy import select
 from sqlalchemy.sql import text
 from fastapi import HTTPException
 
+def get_usuario(db: Session, nombre: str):
+    try:
+        row = db.query(models.Usuario).filter(models.Usuario.nombre == nombre).one()
+    except exc.NoResultFound:
+        row = None
+    return row
+
 def get_notificaciones(db: Session, skip: int = 0, limit: int = 100):
     result = db.query(models.Notificacion).offset(skip).limit(limit).all()
     return result

@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: C:\temp\git\AOS_2023_Practica_1\kompose-windows-amd64.exe convert -f ../practica_2/docker-compose.yml
+    kompose.version: 1.28.0 (c4137012e)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: recambios-mock-backend
+  name: recambios_mock_backend
+spec:
+  ports:
+    - name: "4014"
+      port: 4014
+      targetPort: 4014
+  selector:
+    io.kompose.service: recambios-mock-backend
+status:
+  loadBalancer: {}

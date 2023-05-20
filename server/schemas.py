@@ -47,3 +47,19 @@ class NotificacionResp (BaseModel):
 class NotificacionesResp (BaseModel):
     notificaciones: List[NotificacionResp]
     links: LinkPrevNextPag
+
+class TokenSchema (BaseModel):
+    access_token: str
+    refresh_token: str
+    token_type: str
+
+class TokenPayload (BaseModel):
+    iss: str
+    aud: str
+    sub: str
+    exp: int
+    iat: int
+
+class Usuario (BaseModel):
+    username: str
+    password: str

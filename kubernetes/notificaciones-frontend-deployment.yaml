@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\temp\git\AOS_2023_Practica_1\kompose-windows-amd64.exe convert -f ../practica_2/docker-compose.yml
+    kompose.version: 1.28.0 (c4137012e)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: notificaciones-frontend
+  name: notificaciones-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: notificaciones-frontend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\temp\git\AOS_2023_Practica_1\kompose-windows-amd64.exe convert -f ../practica_2/docker-compose.yml
+        kompose.version: 1.28.0 (c4137012e)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/practica-2-default: "true"
+        io.kompose.service: notificaciones-frontend
+    spec:
+      containers:
+        - env:
+            - name: SWAGGER_JSON
+              value: /aos/openapi.yaml
+          image: swaggerapi/swagger-ui:v5.0.0-alpha.5
+          name: aos2023-notificaciones-ui
+          ports:
+            - containerPort: 8003
+          resources: {}
+          volumeMounts:
+            - mountPath: /aos
+              name: notificaciones-frontend-claim0
+              readOnly: true
+      restartPolicy: Always
+      volumes:
+        - name: notificaciones-frontend-claim0
+          persistentVolumeClaim:
+            claimName: notificaciones-frontend-claim0
+            readOnly: true
+status: {}

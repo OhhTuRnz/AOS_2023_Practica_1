@@ -1,0 +1,531 @@
+openapi: 3.0.3
+
+info:
+  version: 1.0.0
+  title: Eventos
+  description: >
+    ## Sistema encargado de la gestión de los logs de los distintos subsistemas del taller. Su principal objetivo es permitir el registro de eventos que ocurran en los otros subsistemas y que se deseen registrar para su posterior consulta, generación de informes, estadísticas, etc..
+  license:
+    name: MIT
+    url: 'https://opensource.org/licenses/MIT'
+  
+
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/RPELAEZE/nuevoLogs/1.0.0
+  - url: http://127.0.0.1:80/api/v1
+
+tags:
+  - name: 'Log'
+    description: Log
+  
+
+paths:
+
+  /logs:
+    get:
+      summary: Obtiene todas los logs
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code | Descripción | Motivo                             |
+        | ------------| ------------| -----------------------------------|
+        | **200**     | OK          | Listado de eventos             |
+        | **404**     | NOT FOUND   | No hay ningun evento          |
+      operationId: log_cget
+      tags: [ 'Log' ]
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/orderParam'
+        - $ref: '#/components/parameters/orderingParam'
+      responses:
+        '200':
+          description: Lista de eventos
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  logs:
+                    description: array de logs
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Log'
+                  links:
+                    description: Enlaces de paginación
+                    readOnly: true
+                    type: object
+                    
+                      
+              examples:
+               logs-example:
+                  $ref: '#/components/examples/logs-example'
+        '404':
+          $ref: '#/components/responses/Response_404'
+    options:
+      summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+      description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
+      operationId: log_coptions
+      tags: [ 'Log' ]
+      responses:
+        '204':
+          description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+    post:
+      summary: Añade un nuevo evento
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code | Descripción          | Motivo                                    |
+        | ------------| ---------------------| ------------------------------------------|
+        | **201**     | CREATED              | El evento ha sido creada              |
+        | **400**     | BAD REQUEST          | El identificador único ya existe          |
+        | **422**     | UNPROCESSABLE ENTITY | Falta alguno de los atributos obligatorios|
+        |             |                      | o el valor no está permitido              |
+      tags: [ 'Log' ]
+      operationId: plataforma_post
+      requestBody:
+        $ref: '#/components/requestBodies/logRB'
+      responses:
+        '201':
+          description: Nuevo Evento creado
+          headers:
+            Location:
+              $ref: '#/components/headers/Location'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Log'
+        '400':
+          $ref: '#/components/responses/Response_400'
+        '422':
+          $ref: '#/components/responses/Response_422'
+
+  /logs/{log_id}:
+    parameters:
+      - $ref: '#/components/parameters/logId'
+    options:
+      summary: Proporciona la lista de los métodos HTTP soportados por esta ruta.
+      description: Devuelve una cabecera `Allow` con la lista de métodos HTTP soportados (separados por comas).
+      operationId: log_options
+      tags: [ 'Log' ]
+      responses:
+        '204':
+          description: 'cabecera `Allow` &lt;El cuerpo de la respuesta está vacío&gt;'
+          headers:
+            Allow:
+              $ref: '#/components/headers/Allow'
+    get:
+      summary: Obtiene una plataforma identificada por `logId`
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code | Descripción | Motivo                             |
+        | ------------| ------------| -----------------------------------|
+        | **200**     | OK          | Si el evento existe            |
+        | **404**     | NOT FOUND   | Si no existe el evento         |
+      operationId: log_get
+      tags: [ 'Log' ]
+      responses:
+        '200':
+          description: Log
+          headers:
+            ETag:
+              $ref: '#/components/headers/ETag'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Log'
+        '404':
+          $ref: '#/components/responses/Response_404'
+    delete:
+      summary: Elimina el evento identificada por `logId`
+      description: |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        
+        | Status Code      | Descripción | Motivo                                    |
+        | ---------------- | ------------| ------------------------------------------|
+        | **204**          | NO CONTENT  | El evento existía y ha sido eliminado |
+        | **404**          | NOT FOUND   | Si el evento no existe                |
+      operationId: log_delete
+      tags: [ 'Log' ]
+      responses:
+        '204':
+          description: Evento eliminada &lt;Cuerpo de la respuesta vacío&gt;
+        '404':
+          $ref: '#/components/responses/Response_404'
+    put:
+      tags: [ 'Log' ]
+      summary: Modifica el evento identificado por `logId`.
+      description:  |
+        La siguiente tabla define los códigos de estado que puede devolver este endpoint
+        | Status Code | Descripción         | Motivo                                        |
+        | ------------| --------------------| ----------------------------------------------|
+        | **209**     | CONTENT RETURNED    | El evento existía y ha sido actualizado   |
+        | **404**     | NOT FOUND           | Si el evento no existe                    |
+        | **412**     | PRECONDITION FAILED | Si el ETag proporcionado no está actualizado  |
+        | **422**     | UNPROCESSABLE ENTITY| Valor no permitido en alguno de los attributos|
+      operationId: log_put
+      
+      parameters:
+        # https://www.rfc-editor.org/rfc/rfc7232.html#page-13
+        - $ref: '#/components/parameters/ifMatchParam'
+      requestBody:
+        $ref: '#/components/requestBodies/logUpdate'
+      responses:
+        '209':
+          description: '`CONTENT RETURNED`: El evento ha sido actualizada'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Log'
+        '404':
+          $ref: '#/components/responses/Response_404'
+        '412':
+          $ref: '#/components/responses/Response_412'
+        '422':
+          $ref: '#/components/responses/Response_422'
+
+  
+
+  
+
+  
+
+components:
+  schemas:
+    Log:
+      title: 'log'
+      description: >
+       Evento registrado de cualquier subsistema
+      type: object
+      properties:
+        log:
+          type: object
+          required: [ id, tipo_evento ]
+          properties:
+              id:
+                $ref: '#/components/schemas/Id_Log'
+              
+              prioridad:
+                $ref: '#/components/schemas/Prioridad'
+                
+              descripcion_evento:
+                description: Tipo del evento
+                type: string
+              
+              fecha:
+                description: Momento en el que se inserto el evento
+                type: string
+                
+              usuario:
+                description: Usuario que lanza el evento
+                type: string
+              
+              susbsistema:
+                $ref: '#/components/schemas/Subsistema'
+            
+              
+      example: { "log": {
+                     "id":"P01-003-C","descripcion_evento": "Revision vehiculo", "subsistema": 1, "prioridad": 2, "fecha": "01-01-2001", "usuario":"Miguel Galisteo" 
+                     
+                  }
+                }
+
+    
+
+    
+
+    Id_Log:
+      title: Identificador único del evento
+      type: string
+      pattern: "^[A-Z]{1}[0-9]{2}-[0-9]{3}-[A-Z]$"
+      example: "P01-003-C"
+      # https://v6.fakerjs.dev/guide/
+      x-faker: helpers.regexpStyleStringParse('P[10-99]-[100-999]-X')
+
+    
+
+    Prioridad:
+      description: |
+        Prioridad del evento:
+        * `0`: Prioridad muy alta
+        * `1`: Prioridad alta
+        * `3`: Prioridad baja
+        * `2`: Prioridad media
+      type: integer
+      default: 2
+      enum: [ 0, 1, 3, 2 ]
+      # https://v6.fakerjs.dev/guide/
+      x-faker: helpers.arrayElement([ 0, 1, 3, 2 ])
+      
+      
+    Subsistema:
+      description: |
+        Subsistema que lanza el evento:
+        * `1`: Gestión de clientes
+        * `2`: Gestión de los vehículos
+        * `3`: Gestión de la planificación diaria de los trabajos del taller
+        * `4`: Envío de notificaciones
+        * `5`: Gestión y emisión de facturas
+        * `6`: Gestión del inventario completo de recambios
+        * `7`: Gestión de los logs
+      type: integer
+      enum: [ 1, 2, 3, 4, 5, 6, 7 ]
+      # https://v6.fakerjs.dev/guide/
+      x-faker: helpers.arrayElement([ 1, 2, 3, 4, 5, 6, 7 ])
+      
+
+    HTTP_Problem:
+      type: object
+      externalDocs:
+        url: https://tools.ietf.org/html/rfc7807
+      description: |
+        Problem Details for HTTP APIs
+        [https://tools.ietf.org/html/rfc7807](https://tools.ietf.org/html/rfc7807)
+      properties:
+        type:
+          type: string
+          format: uri
+          description: A URI reference [RFC3986] that identifies the problem type
+        title:
+          type: string
+          description: short human-readable summary of the problem type
+        status:
+          type: number
+          description: HTTP status code
+        detail:
+          type: string
+          description: Human-readable explanation specific to this occurrence of the problem
+        instance:
+          type: string
+          format: uri
+          description: >
+            A URI reference that identifies the specific occurrence of the problem.
+            It may or may not yield further information if dereferenced.
+    
+
+  headers:
+    ETag:
+      description: "Entity Tag (identificador único proporcionado para validación de caché)"
+      schema:
+        type: string
+        pattern: "[0-9a-f]*"
+        example:
+          33a64df551425fcc
+    Allow:
+      description: Lista de métodos HTTP soportados
+      schema:
+        type: string
+      example: GET, DELETE, PUT, OPTIONS
+    Location:
+      description: '`URI` del nuevo recurso'
+      schema:
+        type: string
+        format: uri
+        x-faker: internet.url
+        example:
+          https://example.com/api/v1/logs/P01-003-C
+
+  requestBodies:
+    logRB:
+      description: Información del nuevo evento
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [ id, fecha, subsistema]
+            properties:
+              id:
+                $ref: '#/components/schemas/Id_Log'
+              
+              prioridad:
+                $ref: '#/components/schemas/Prioridad'
+                
+              descripcion_evento:
+                description: Tipo del evento
+                type: string
+              
+              fecha:
+                description: Momento en el que se inserto el evento
+                type: string
+                
+              usuario:
+                description: Usuario que lanza el evento
+                type: string
+              
+              susbsistema:
+                $ref: '#/components/schemas/Subsistema'
+          
+          example: { "descripcion_evento": "Revision vehiculo", "subsistema": 1, "prioridad": 2, "fecha": "01-01-2001", "usuario":"Miguel Galisteo" }      
+    
+    logUpdate:
+      description: Nuevos atributos del evento
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              
+              prioridad:
+                $ref: '#/components/schemas/Prioridad'
+              descripcion_evento:
+                type: string
+              
+              
+          example: { "descripcion_evento": "Revision vehiculo", "prioridad": 0 }
+    
+
+  responses:
+    Response_400:
+      description: '`BAD REQUEST` El identificador único ya existe.'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-400:
+              $ref: '#/components/examples/response-http-400'
+    Response_404:
+      description: '`NOT FOUND`: recurso no disponible'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-404:
+              $ref: '#/components/examples/response-http-404'
+    Response_409:
+      description: '`CONFLICT`: el recurso no reúne las condiciones adecuadas'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-404:
+              $ref: '#/components/examples/response-http-409'
+    Response_412:
+      description: '`PRECONDITION FAILED`: El ETag proporcionado no está actualizado'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-412:
+              $ref: '#/components/examples/response-http-412'
+    Response_422:
+      description: '`UNPROCESSABLE ENTITY` Falta alguno de los atributos obligatorios o son incorrectos.'
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/HTTP_Problem'
+          examples:
+            response-http-422:
+              $ref: '#/components/examples/response-http-422'
+
+  parameters:
+    logId:
+      name: log_id
+      in: path
+      description: Identificador único del evento
+      required: true
+      schema:
+        $ref: '#/components/schemas/Id_Log'
+    
+    ifMatchParam:
+      name: If-Match
+      in: header
+      description: ETag actual del recurso que se desea modificar
+      required: true
+      schema:
+        type: string
+        pattern: "[0-9a-f]*"
+    orderParam:
+      name: order
+      in: query
+      description: 'Criterio de ordenación: `id`'
+      required: false
+      allowEmptyValue: false
+      schema:
+        type: string
+        enum:
+          - id
+          
+    orderingParam:
+      name: ordering
+      in: query
+      description: 'Ordenación: `ASC` | `DESC`'
+      required: false
+      allowEmptyValue: false
+      schema:
+        type: string
+        enum:
+          - ASC
+          - DESC
+    pageParam:
+      name: page
+      in: query
+      description: 'Número de página'
+      required: false
+      allowEmptyValue: false
+      schema:
+        type: integer
+        minimum: 1
+
+  examples:
+    logs-example:
+      value:
+        logs:
+          - { "log": { "id": "P01-003-C", "descripcion_evento": "Alta cliente", "subsistema": 1, "prioridad": 1, "fecha": "01-01-2022", "usuario":"Raúl Peláez"}}
+          - { "log": { "id": "P02-039-C", "descripcion_evento": "Revision vehiculo", "subsistema": 2, "prioridad": 2, "fecha": "01-01-2022", "usuario":"Miguel Galisteo"}}
+          - { "log": { "id": "P03-035-A", "descripcion_evento": "Emisión factura", "subsistema": 5, "prioridad": 0, "fecha": "01-01-2022", "usuario":"Miguel Galisteo"}}
+        links: {
+          "prevPage": { "href": "https://example.com/api/v1/logs?page=2", "rel": "prevPage" },
+          "nextPage": { "href": "https://example.com/api/v1/logs?page=4", "rel": "nextPage" }
+        }
+
+    
+
+    response-http-400:
+      value:
+        type: https://httpstatuses.com/400
+        title: UNPROCESSABLE ENTITY
+        status: 400
+        detail: El identificador único ya existe
+        instance: about:blank
+    response-http-404:
+      value:
+        type: https://httpstatuses.com/404
+        title: NOT FOUND
+        status: 404
+        detail: El recurso solicitado no está disponible.
+        instance: about:blank
+    response-http-409:
+      value:
+        type: https://httpstatuses.com/409
+        title: NOT FOUND
+        status: 409
+        detail: El recurso no reúne las condiciones requeridas para la operación.
+        instance: about:blank
+    response-http-412:
+      value:
+        type: https://httpstatuses.com/412
+        title: PRECONDITION FAILED
+        status: 412
+        detail: El ETag proporcionado no está actualizado
+        instance: about:blank
+    response-http-422:
+      value:
+        type: https://httpstatuses.com/422
+        title: UNPROCESSABLE ENTITY
+        status: 422
+        detail: Falta alguno de los atributos obligatorios o contiene un valor no admitido
+        instance: about:blank
