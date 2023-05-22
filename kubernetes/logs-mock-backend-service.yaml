@@ -2,18 +2,17 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    kompose.cmd: C:\temp\git\AOS_2023_Practica_1\kompose-windows-amd64.exe convert -f ../practica_2/docker-compose.yml
+    kompose.cmd: C:\tmp\git\AOS_2023_Practica_1\kompose-windows-amd64.exe convert -f ../practica_2/docker-compose.yml
     kompose.version: 1.28.0 (c4137012e)
   creationTimestamp: null
   labels:
     io.kompose.service: logs-mock-backend
   name: logs-mock-backend
 spec:
+  type: LoadBalancer
   ports:
     - name: "4011"
       port: 4011
       targetPort: 4010
   selector:
     io.kompose.service: logs-mock-backend
-status:
-  loadBalancer: {}

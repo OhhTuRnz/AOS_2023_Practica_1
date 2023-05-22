@@ -38,6 +38,7 @@ apt update
 apt install net-tools
 apt-get install -y iputils-ping
 apt-get install xinetd telnetd
+apt-get install dnsutils
 
 # Ver todas las conexiones
 netstat -an
@@ -144,6 +145,34 @@ az aks start --name aos2023notificacionesCluster --resource-group aos2023notific
 # Comprobar que el estado del cluster powerState es Running
 az aks show --name aos2023notificacionesCluster --resource-group aos2023notificaciones
 
+# Crear un volumen con Azure Disks en AKS para almacenamiento persistente
+# See: https://learn.microsoft.com/es-es/azure/aks/azure-csi-disk-storage-provision
+
+# Crear una notificación de volumen persistente con el siguiente fichero:
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+    name: azure-managed-disk
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: managed-csi
+      storage: 5Gi
+
+kubectl apply -f azure-pvc.yaml
+
+Resp: persistentvolumeclaim/azure-managed-disk created
+
+A partir de este momenot el volumen "azure-managed-disk" puede ser usado en los ficheros de despliegue. Por ejemplo:
+
+      volumeMounts:
+        - mountPath: "/mnt/azure"
+          name: volume
+  volumes:
+    - name: volume
+      persistentVolumeClaim:
+        claimName: azure-managed-disk
+
 ### PASO 3 - Desplegar e iniciar la aplicación con kubectl apply
 #
 # El fichero se llama azure-aos2023notificaciones.yaml y se genera a partir de la app vote-app de Microsoft.
@@ -198,3 +227,16 @@ kubectl get svc
 
 # Borrar servicios
 kubectl delete scv <service>
+
+# Consultar los logs de pod
+kubectl logs -f <pod>
+
+# Ejecutar comando "sh" en pod (en lugar de sh se puede ejecutar cualquier otro comando)
+kubectl exec --stdin --tty <pod> -- sh
+
+# Buscar la dirección IP de un servicio
+nslookup <servicio>.<namespace>.svc.cluster.local
+
+Por ejemplo:
+nslookup trabajos-mock-backend.svc.cluster.local
+nslookup trabajos-mock-backend.svc.cluster.local

@@ -2,18 +2,17 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    kompose.cmd: C:\temp\git\AOS_2023_Practica_1\kompose-windows-amd64.exe convert -f ../practica_2/docker-compose.yml
+    kompose.cmd: C:\tmp\git\AOS_2023_Practica_1\kompose-windows-amd64.exe convert -f ../practica_2/docker-compose.yml
     kompose.version: 1.28.0 (c4137012e)
   creationTimestamp: null
   labels:
     io.kompose.service: notificaciones-frontend
   name: notificaciones-frontend
 spec:
+  type: LoadBalancer
   ports:
     - name: "8003"
       port: 8003
       targetPort: 8080
   selector:
     io.kompose.service: notificaciones-frontend
-status:
-  loadBalancer: {}

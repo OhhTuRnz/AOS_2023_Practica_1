@@ -68,7 +68,7 @@ services:
       container_name: aos2023-notificaciones
       command: uvicorn main:app --host 0.0.0.0 --port 4013
       ports:
-        - "4013:4013"
+        - "4013:80"
       volumes:
         - ./especificaciones/Notificaciones:/aos:ro
 

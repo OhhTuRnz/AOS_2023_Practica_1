@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: C:\temp\git\AOS_2023_Practica_1\kompose-windows-amd64.exe convert -f ../practica_2/docker-compose.yml
+    kompose.cmd: C:\tmp\git\AOS_2023_Practica_1\kompose-windows-amd64.exe convert -f ../practica_2/docker-compose.yml
     kompose.version: 1.28.0 (c4137012e)
   creationTimestamp: null
   labels:
@@ -18,7 +18,7 @@ spec:
   template:
     metadata:
       annotations:
-        kompose.cmd: C:\temp\git\AOS_2023_Practica_1\kompose-windows-amd64.exe convert -f ../practica_2/docker-compose.yml
+        kompose.cmd: C:\tmp\git\AOS_2023_Practica_1\kompose-windows-amd64.exe convert -f ../practica_2/docker-compose.yml
         kompose.version: 1.28.0 (c4137012e)
       creationTimestamp: null
       labels:
@@ -31,7 +31,7 @@ spec:
             - --cors
             - -h
             - 0.0.0.0
-            - /aos/openapi.yaml
+            - /aos/especificaciones/Vehiculos/openapi.yaml
           image: stoplight/prism:4
           name: aos2023-vehiculos-mock
           ports:
@@ -39,12 +39,10 @@ spec:
           resources: {}
           volumeMounts:
             - mountPath: /aos
-              name: vehiculos-mock-backend-claim0
-              readOnly: true
+              name: volume
       restartPolicy: Always
       volumes:
-        - name: vehiculos-mock-backend-claim0
+        - name: volume
           persistentVolumeClaim:
-            claimName: vehiculos-mock-backend-claim0
-            readOnly: true
+            claimName: azure-managed-disk    
 status: {}

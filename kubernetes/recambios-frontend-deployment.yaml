@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: C:\temp\git\AOS_2023_Practica_1\kompose-windows-amd64.exe convert -f ../practica_2/docker-compose.yml
+    kompose.cmd: C:\tmp\git\AOS_2023_Practica_1\kompose-windows-amd64.exe convert -f ../practica_2/docker-compose.yml
     kompose.version: 1.28.0 (c4137012e)
   creationTimestamp: null
   labels:
@@ -18,7 +18,7 @@ spec:
   template:
     metadata:
       annotations:
-        kompose.cmd: C:\temp\git\AOS_2023_Practica_1\kompose-windows-amd64.exe convert -f ../practica_2/docker-compose.yml
+        kompose.cmd: C:\tmp\git\AOS_2023_Practica_1\kompose-windows-amd64.exe convert -f ../practica_2/docker-compose.yml
         kompose.version: 1.28.0 (c4137012e)
       creationTimestamp: null
       labels:
@@ -28,7 +28,7 @@ spec:
       containers:
         - env:
             - name: SWAGGER-JSON
-              value: /aos/openapi.yaml
+              value: /aos/especificaciones/Recambios/openapi.yaml
           image: swaggerapi/swagger-ui:latest
           name: aos2023-recambios-ui
           ports:
@@ -36,12 +36,10 @@ spec:
           resources: {}
           volumeMounts:
             - mountPath: /aos
-              name: recambios-frontend-claim0
-              readOnly: true
+              name: volume
       restartPolicy: Always
       volumes:
-        - name: recambios-frontend-claim0
+        - name: volume
           persistentVolumeClaim:
-            claimName: recambios-frontend-claim0
-            readOnly: true
+            claimName: azure-managed-disk
 status: {}
