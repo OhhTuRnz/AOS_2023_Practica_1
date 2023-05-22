@@ -6,14 +6,14 @@ metadata:
     kompose.version: 1.28.0 (c4137012e)
   creationTimestamp: null
   labels:
-    io.kompose.service: facturas-mock-backend
-  name: facturas_mock_backend
+    io.kompose.service: vehiculos-mock-backend
+  name: vehiculos-mock-backend
 spec:
   ports:
-    - name: "4012"
-      port: 4012
-      targetPort: 4012
+    - name: "4016"
+      port: 4016
+      targetPort: 4010
   selector:
-    io.kompose.service: facturas-mock-backend
+    io.kompose.service: vehiculos-mock-backend
 status:
   loadBalancer: {}

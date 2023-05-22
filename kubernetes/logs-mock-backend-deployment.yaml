@@ -35,7 +35,7 @@ spec:
           image: stoplight/prism:4
           name: aos2023-logs-mock
           ports:
-            - containerPort: 4011
+            - containerPort: 4010
           resources: {}
           volumeMounts:
             - mountPath: /aos

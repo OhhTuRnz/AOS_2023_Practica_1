@@ -6,16 +6,16 @@ git push
 
 ### DOCKER
 ###
-### En la práctica usamos el contenedor: acarrasco2000/aos_2023_notificaciones
+### En la práctica usamos el contenedor: acarrasco2000/aos2023_notificaciones
 
 # Crear y arrancar contenedor a partir de docker-compose.yaml
 docker compose up
 
 # Construir imagen de Dockerfile
-docker build -t acarrasco2000/aos2023notificaciones:v1 .
+docker build -t acarrasco2000/aos2023_notificaciones:v1 .
 
 # Publicar imagen en docker hub
-docker push acarrasco2000/aos2023notificaciones:v1
+docker push acarrasco2000/aos2023_notificaciones:v1
 
 # Arrancar imagen publicando puertos (mejor hacerlo desde docker desktop para ver logs)
 docker container run -d -p 80:80 <contenedor>
@@ -104,11 +104,11 @@ Resp: aos2023notificaciones.azurecr.io
 ### Connect-AzContainerRegistry -Name aos2023notificaciones
 
 # Etiquetar las imagenes locales de docker con la dirección del servidor de inicio de sesion
-docker tag acarrasco2000/aos2023notificaciones:v1 aos2023notificaciones.azurecr.io/azure-aos2023notificaciones:v1
+docker tag acarrasco2000/aos2023_notificaciones:v1 aos2023notificaciones.azurecr.io/azure-aos2023_notificaciones:v1
 # Consultar las imagenes
 docker images
 # Publicar imagen en el registro ACR de Azure
-docker push aos2023notificaciones.azurecr.io/azure-aos2023notificaciones:v1
+docker push aos2023notificaciones.azurecr.io/azure-aos2023_notificaciones:v1
 
 # Consultar imagenes en el registro
 Get-AzContainerRegistryManifest -RegistryName aos2023notificaciones -RepositoryName azure-aos2023notificaciones
@@ -135,7 +135,7 @@ $ kubectl get nodes
 # Detener el cluster
 az aks stop --name aos2023notificacionesCluster --resource-group aos2023notificaciones
 
-# Comprobar que el estado del cluster powerState es Stopped
+# Comprobar que el estado del cluster powerState es Stopped (hacer grep State)
 az aks show --name aos2023notificacionesCluster --resource-group aos2023notificaciones
 
 # Arrancar el cluster
@@ -155,12 +155,16 @@ az aks show --name aos2023notificacionesCluster --resource-group aos2023notifica
 #  - Lo imagen del contenedor es la publicada en el registro ACR de Azure es decir aos2023notificaciones.azurecr.io/azure-aos2023notificaciones
 #
 # Los siguientes comandos deben ejecutarse estando conectado al cluster (por ejemplo, accediendo a https://portal.azure.com/#cloudshell)
+#
+# Los ficheros de kubernetes lo generamos con la herramienta kompose en Azure powershell y directorio kubernetes
+../kompose-windows-amd64 convert -f ../practica_2/docker-compose.yml
 
 # Implementar la aplicación con kubectl apply
-$ kubectl apply -f azure-aos2023notificaciones.yaml
+$ kubectl apply -f azure-aos2023notificaciones
+$ kubectl apply -f .
 
 # Comprobar que el servicio está arrancado. Este comando proporciona la dirección IP externa del servicio. 
-$ kubectl get service aos2023notificaciones --watch
+$ kubectl get service aos2023-notificaciones --watch
 
 Resp: La dirección IP externa es 4.157.200.188
 

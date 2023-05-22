@@ -27,12 +27,12 @@ spec:
     spec:
       containers:
         - env:
-            - name: SWAGGER_JSON
+            - name: SWAGGER-JSON
               value: /aos/openapi.yml
           image: swaggerapi/swagger-ui:latest
           name: aos2023-logs-ui
           ports:
-            - containerPort: 8001
+            - containerPort: 8080
           resources: {}
           volumeMounts:
             - mountPath: /aos

@@ -2,139 +2,135 @@ version: "3.9"
 
 services:
 
-    # En los comandos de prism mock se puede indicar el puerto con la opción "-p". Por defecto es 4010.
-    # ports: define el mapeo de puerto externo a interno. Para swagger-ui el puerto interno es el 8080.
-
-    clientes-mock-backend:
+    clientes_mock_backend:
       image: stoplight/prism:4
-      container_name: aos2023-clientes-mock
+      container_name: aos2023_clientes_mock
       command: mock --cors -h 0.0.0.0 "/aos/openapi.yml"
       ports:
         - "4010:4010"
       volumes:
         - ./especificaciones/Clientes:/aos:ro
 
-    clientes-frontend:
+    clientes_frontend:
       image: swaggerapi/swagger-ui:latest
-      container_name: aos2023-clientes-ui
+      container_name: aos2023_clientes_ui
       ports:
-        - "8000:8080"
+        - "8000:8000"
       environment:
-        SWAGGER-JSON: /aos/openapi.yml
+        SWAGGER_JSON: /aos/openapi.yml
       volumes:
         - ./especificaciones/Clientes:/aos:ro
 
-    logs-mock-backend:
+    logs_mock_backend:
       image: stoplight/prism:4
-      container_name: aos2023-logs-mock
+      container_name: aos2023_logs_mock
       command: mock --cors -h 0.0.0.0 "/aos/openapi.yml"
       ports:
-        - "4011:4010"
+        - "4011:4011"
       volumes:
         - ./especificaciones/Logs:/aos:ro
 
-    logs-frontend:
+    logs_frontend:
       image: swaggerapi/swagger-ui:latest
-      container_name: aos2023-logs-ui
+      container_name: aos2023_logs_ui
       ports:
-        - "8001:8080"
+        - "8001:8001"
       environment:
-        SWAGGER-JSON: /aos/openapi.yml
+        SWAGGER_JSON: /aos/openapi.yml
       volumes:
         - ./especificaciones/Logs:/aos:ro
 
-    facturas-mock-backend:
+    facturas_mock_backend:
       image: stoplight/prism:4
-      container_name: aos2023-facturas-mock
+      container_name: aos2023_facturas_mock
       command: mock --cors -h 0.0.0.0 "/aos/openapi.yaml"
       ports:
-        - "4012:4010"
+        - "4012:4012"
       volumes:
         - ./especificaciones/Facturas:/aos:ro
 
-    facturas-frontend:
+    facturas_frontend:
       image: swaggerapi/swagger-ui:latest
-      container_name: aos2023-facturas-ui
+      container_name: aos2023_facturas_ui
       ports:
-        - "8002:8080"
+        - "8002:8002"
       environment:
-        SWAGGER-JSON: /aos/openapi.yaml
+        SWAGGER_JSON: /aos/openapi.yaml
       volumes:
         - ./especificaciones/Facturas:/aos:ro
 
-    notificaciones-backend:
-#      image: acarrasco2000/aos2023-notificaciones:v1
-      image: aos2023notificaciones.azurecr.io/azure-aos2023-notificaciones:v1
-      container_name: aos2023-notificaciones
-      command: uvicorn main:app --host 0.0.0.0 --port 4013
+    notificaciones_backend:
+      image: aos2023notificaciones.azurecr.io/azure-aos2023notificaciones:v1
+      container_name: aos2023_notificaciones
+      command: mock --cors -h 0.0.0.0 "/aos/openapi.yaml"
       ports:
         - "4013:4013"
       volumes:
-        - ./especificaciones/Notificaciones:/aos:ro
+        - ./openapi:/aos:ro
 
-    notificaciones-frontend:
+    notificaciones_frontend:
       image: swaggerapi/swagger-ui:v5.0.0-alpha.5
-      container_name: aos2023-notificaciones-ui
+      container_name: aos2023_notificaciones_ui
       ports:
-        - "8003:8080"
+        - "8003:8003"
       environment:
-          SWAGGER-JSON: /aos/openapi.yaml
+          SWAGGER_JSON: /aos/openapi.yaml
       volumes:
         - ./especificaciones/Notificaciones:/aos:ro
 
-    recambios-mock-backend:
+    recambios_mock_backend:
       image: stoplight/prism:4
-      container_name: aos2023-recambios-mock
+      container_name: aos2023_recambios_mock
       command: mock --cors -h 0.0.0.0 "/aos/openapi.yaml"
       ports:
-        - "4014:4010"
+        - "4014:4014"
       volumes:
         - ./especificaciones/Recambios:/aos:ro
 
-    recambios-frontend:
+    recambios_frontend:
       image: swaggerapi/swagger-ui:latest
-      container_name: aos2023-recambios-ui
+      container_name: aos2023_recambios_ui
       ports:
-        - "8004:8080"
+        - "8004:8004"
       environment:
-        SWAGGER-JSON: /aos/openapi.yaml
+        SWAGGER_JSON: /aos/openapi.yaml
       volumes:
         - ./especificaciones/Recambios:/aos:ro
 
-    trabajos-mock-backend:
+    trabajos_mock_backend:
       image: stoplight/prism:4
-      container_name: aos2023-trabajos-mock
+      container_name: aos2023_trabajos_mock
       command: mock --cors -h 0.0.0.0 "/aos/openapi.yaml"
       ports:
-        - "4015:4010"
+        - "4015:4015"
       volumes:
         - ./especificaciones/Trabajos:/aos:ro
 
-    trabajos-frontend:
+    trabajos_frontend:
       image: swaggerapi/swagger-ui:latest
-      container_name: aos2023-trabajos-ui
+      container_name: aos2023_trabajos_ui
       ports:
-        - "8005:8080"
+        - "8005:8005"
       environment:
-        SWAGGER-JSON: /aos/openapi.yaml
+        SWAGGER_JSON: /aos/openapi.yaml
       volumes:
         - ./especificaciones/Trabajos:/aos:ro
 
-    vehiculos-mock-backend:
+    vehiculos_mock_backend:
       image: stoplight/prism:4
-      container_name: aos2023-vehiculos-mock
+      container_name: aos2023_vehiculos_mock
       command: mock --cors -h 0.0.0.0 "/aos/openapi.yaml"
       ports:
-        - "4016:4010"
+        - "4016:4016"
       volumes:
         - ./especificaciones/Vehiculos:/aos:ro
 
-    vehiculos-frontend:
+    vehiculos_frontend:
       image: swaggerapi/swagger-ui:latest
-      container_name: aos2023-vehiculos-ui
+      container_name: aos2023_vehiculos_ui
       ports:
-        - "8006:8080"
+        - "8006:8086"
       environment:
-        SWAGGER-JSON: /aos/openapi.yaml
+        SWAGGER_JSON: /aos/openapi.yaml
       volumes:
         - ./especificaciones/Vehiculos:/aos:ro

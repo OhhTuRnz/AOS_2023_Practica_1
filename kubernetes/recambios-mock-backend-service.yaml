@@ -6,14 +6,14 @@ metadata:
     kompose.version: 1.28.0 (c4137012e)
   creationTimestamp: null
   labels:
-    io.kompose.service: trabajos-mock-backend
-  name: trabajos_mock_backend
+    io.kompose.service: recambios-mock-backend
+  name: recambios-mock-backend
 spec:
   ports:
-    - name: "4015"
-      port: 4015
-      targetPort: 4015
+    - name: "4014"
+      port: 4014
+      targetPort: 4010
   selector:
-    io.kompose.service: trabajos-mock-backend
+    io.kompose.service: recambios-mock-backend
 status:
   loadBalancer: {}

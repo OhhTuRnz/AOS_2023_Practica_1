@@ -6,14 +6,14 @@ metadata:
     kompose.version: 1.28.0 (c4137012e)
   creationTimestamp: null
   labels:
-    io.kompose.service: facturas-frontend
-  name: facturas_frontend
+    io.kompose.service: clientes-frontend
+  name: clientes-frontend
 spec:
   ports:
-    - name: "8002"
-      port: 8002
-      targetPort: 8002
+    - name: "8000"
+      port: 8000
+      targetPort: 8080
   selector:
-    io.kompose.service: facturas-frontend
+    io.kompose.service: clientes-frontend
 status:
   loadBalancer: {}

@@ -58,9 +58,17 @@ def get_current_user(db: Session, request: Request) -> str:
         if datetime.fromtimestamp(token_data.exp) < datetime.now():
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Token expired",
+                detail="Signature has expired",
                 headers={"WWW-Authenticate": "Bearer"},
             )
+
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Signature has expired",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
     except Exception as exc:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,

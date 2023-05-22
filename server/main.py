@@ -101,7 +101,7 @@ def get_notificaciones_pagina(notificaciones, pag, url, size):
     result = schemas.NotificacionesResp(notificaciones=subconjunto, links=links)
     return result
 
-@app.get("/api/v1/notificaciones", response_model=schemas.NotificacionesResp)
+@app.get("/notificaciones", response_model=schemas.NotificacionesResp)
 def get_notificaciones(request: Request, response: Response, db: Session = Depends(get_db), skip: int = 0, limit: int = 100):
     global notificaciones
 
@@ -109,7 +109,7 @@ def get_notificaciones(request: Request, response: Response, db: Session = Depen
     usuario = get_current_user(db, request)
 
     url = str(request.url)
-    urlBase = url.rsplit("/api/v1/notificaciones", 1)[0] + "/api/v1/notificaciones"
+    urlBase = url.rsplit("/notificaciones", 1)[0] + "/notificaciones"
     parameters = parse_qs(urlparse(url).query)
     if "page" in parameters.keys():
         try:
@@ -126,7 +126,7 @@ def get_notificaciones(request: Request, response: Response, db: Session = Depen
     response.headers['etag'] = md5(result.json())
     return result
 
-@app.post("/api/v1/notificaciones", response_model=schemas.NotificacionResp)
+@app.post("/notificaciones", response_model=schemas.NotificacionResp)
 def create_notificacion(request: Request, response: Response, notificacion: schemas.NotificacionCreate, db: Session = Depends(get_db)):
     # Valida credenciales del usuario recibidas en la cabecera HTTP "Authorization: Bearer"
     usuario = get_current_user(db, request)
@@ -140,37 +140,37 @@ def create_notificacion(request: Request, response: Response, notificacion: sche
     except Exception as exc:
         print ("Error consultando el API de trabajos")
 
-    urlBase = str(request.url).rsplit("/api/v1/notificaciones", 1)[0] + "/api/v1/notificaciones"
+    urlBase = str(request.url).rsplit("/notificaciones", 1)[0] + "/notificaciones"
     response.status_code = 201
     result = addParentSelf(crud.create_notificacion(db, notificacion, id=notificacion.id_trabajo), urlBase)
     # Añade etag: Firma MD5 de la respuesta
     response.headers['etag'] = md5(result.json())
     return result
 
-@app.options("/api/v1/notificaciones")
+@app.options("/notificaciones")
 def options_notificacion(response: Response):
     response.status_code = 204
     response.headers['allow'] = 'GET, POST, OPTIONS'
     return None
 
-@app.get("/api/v1/notificaciones/{notificacion_id}")
+@app.get("/notificaciones/{notificacion_id}")
 def get_notificacion_by_id(request: Request, response: Response, notificacion_id: str, db: Session = Depends(get_db)):
     # Valida credenciales del usuario recibidas en la cabecera HTTP "Authorization: Bearer"
     usuario = get_current_user(db, request)
 
-    urlBase = str(request.url).rsplit("/api/v1/notificaciones", 1)[0] + "/api/v1/notificaciones"
+    urlBase = str(request.url).rsplit("/notificaciones", 1)[0] + "/notificaciones"
     result = addParentSelf(crud.get_notificacion_by_id(db, id=notificacion_id), urlBase)
     # Añade etag: Firma MD5 de la respuesta
     response.headers['etag'] = md5(result.json())
     return result
 
-@app.options("/api/v1/notificaciones/{notificacion_id}")
+@app.options("/notificaciones/{notificacion_id}")
 def options_notificacion_id(response: Response):
     response.status_code = 204
     response.headers['allow'] = 'GET, DELETE, OPTIONS'
     return None
 
-@app.delete("/api/v1/notificaciones/{id_notificacion}")
+@app.delete("/notificaciones/{id_notificacion}")
 def delete_notificacion(request: Request, response: Response, id_notificacion: str, db: Session = Depends(get_db)):
     # Valida credenciales del usuario recibidas en la cabecera HTTP "Authorization: Bearer"
     usuario = get_current_user(db, request)
@@ -180,12 +180,12 @@ def delete_notificacion(request: Request, response: Response, id_notificacion: s
 
 """ Esta operación la implementa otro grupo """
 """
-@app.get("/api/v1/notificaciones/trabajo/{id_trabajo}")
+@app.get("/notificaciones/trabajo/{id_trabajo}")
 def get_notificaciones_by_id_trabajo(response: Response, id_trabajo: str, db: Session = Depends(get_db)):
     return crud.get_notificaciones_by_id_trabajo(db, id_trabajo=id_trabajo)
 """
 
-@app.options("/api/v1/notificaciones/trabajo/{id_trabajo}")
+@app.options("/notificaciones/trabajo/{id_trabajo}")
 def options_notificacion_trabajo(response: Response):
     response.status_code = 204
     response.headers['allow'] = 'GET, OPTIONS'

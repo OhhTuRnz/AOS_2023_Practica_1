@@ -6,14 +6,14 @@ metadata:
     kompose.version: 1.28.0 (c4137012e)
   creationTimestamp: null
   labels:
-    io.kompose.service: vehiculos-frontend
-  name: vehiculos_frontend
+    io.kompose.service: recambios-frontend
+  name: recambios-frontend
 spec:
   ports:
-    - name: "8006"
-      port: 8006
-      targetPort: 8086
+    - name: "8004"
+      port: 8004
+      targetPort: 8080
   selector:
-    io.kompose.service: vehiculos-frontend
+    io.kompose.service: recambios-frontend
 status:
   loadBalancer: {}

@@ -21,7 +21,7 @@ spec:
         "beta.kubernetes.io/os": linux
       containers:
       - name: aos2023notificaciones
-        image: aos2023notificaciones.azurecr.io/azure-aos2023notificaciones:v1
+        image: aos2023notificaciones.azurecr.io/azure-aos2023_notificaciones:v1
         ports:
         - containerPort: 80
         resources:

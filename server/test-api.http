@@ -1,24 +1,24 @@
-# curl -I -X "GET" "http://127.0.0.1:8000/api/v1/notificaciones"  -H "accept: application/json"
-GET http://127.0.0.1:8000/api/v1/notificaciones
+# curl -I -X "GET" "http://127.0.0.1:8000/notificaciones"  -H "accept: application/json"
+GET http://127.0.0.1:8000/notificaciones
 accept: application/json
 
 ###
 
-# curl -I -X "GET" "http://127.0.0.1:8000/api/v1/notificaciones"  -H "accept: application/json" -H "authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBT1MgMjAyMyAtIEFQSSBOb3RpZmljYWNpb25lcyIsImF1ZCI6IkFPUyBVUE0iLCJzdWIiOiJhbGVqYW5kcm8uY2FycmFzY28uYXJhZ29uQGFsdW1ub3MudXBtLmVzIiwiZXhwIjoxNjg0NjkzMjk0Ljc1Mjg1NTgsImlhdCI6MTY4NDYwNjg5NC43NTI4NTU4fQ.sLJl9YFbGOLTOLkcA939DgFGqsqJmQvRU69Tvn5Xsco"
-GET http://127.0.0.1:8000/api/v1/notificaciones
+# curl -I -X "GET" "http://127.0.0.1:8000/notificaciones"  -H "accept: application/json" -H "authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBT1MgMjAyMyAtIEFQSSBOb3RpZmljYWNpb25lcyIsImF1ZCI6IkFPUyBVUE0iLCJzdWIiOiJhbGVqYW5kcm8uY2FycmFzY28uYXJhZ29uQGFsdW1ub3MudXBtLmVzIiwiZXhwIjoxNjg0Nzk2Mjg0LjI3NDEzODcsImlhdCI6MTY4NDcwOTg4NC4yNzQxMzg3fQ.DDeuCBmSIZESF85bDKpKDixnmTcaETApk27h9Vd547k
+GET http://127.0.0.1:8000/notificaciones
 accept: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBT1MgMjAyMyAtIEFQSSBOb3RpZmljYWNpb25lcyIsImF1ZCI6IkFPUyBVUE0iLCJzdWIiOiJhbGVqYW5kcm8uY2FycmFzY28uYXJhZ29uQGFsdW1ub3MudXBtLmVzIiwiZXhwIjoxNjg0NjkzMjk0Ljc1Mjg1NTgsImlhdCI6MTY4NDYwNjg5NC43NTI4NTU4fQ.sLJl9YFbGOLTOLkcA939DgFGqsqJmQvRU69Tvn5Xsco
 
 ###
 
-# curl -I -X "GET" "http://127.0.0.1:8000/api/v1/notificaciones"  -H "accept: application/json" -H "authorization: Bearer 1"
-GET http://127.0.0.1:8000/api/v1/notificaciones
+# curl -I -X "GET" "http://127.0.0.1:8000/notificaciones"  -H "accept: application/json" -H "authorization: Bearer 1"
+GET http://127.0.0.1:8000/notificaciones
 accept: application/json
 Authorization: Bearer 1
 
 ###
-# curl -X "POST"   "http://127.0.0.1:8000/api/v1/notificaciones"   -H "accept: application/json"   -H "Content-Type: application/json"   -d "{  \"id_trabajo\": \"1\",  \"estado\": \"Creado\",  \"detalle\": \"Detalles\"}"
-POST http://127.0.0.1:8000/api/v1/notificaciones
+# curl -X "POST"   "http://127.0.0.1:8000/notificaciones"   -H "accept: application/json"   -H "Content-Type: application/json"   -d "{  \"id_trabajo\": \"1\",  \"estado\": \"Creado\",  \"detalle\": \"Detalles\"}"
+POST http://127.0.0.1:8000/notificaciones
 accept: application/json
 Content-Type: application/json
 
@@ -30,8 +30,8 @@ Content-Type: application/json
 }
 
 ###
-# curl -I -X "POST"   "http://127.0.0.1:8000/api/v1/notificaciones"   -H "accept: application/json"   -H "Content-Type: application/json"   -d "{  \"estado\": \"Creado\",  \"detalle\": \"Detalles\"}"
-POST http://127.0.0.1:8000/api/v1/notificaciones
+# curl -I -X "POST"   "http://127.0.0.1:8000/notificaciones"   -H "accept: application/json"   -H "Content-Type: application/json"   -d "{  \"estado\": \"Creado\",  \"detalle\": \"Detalles\"}"
+POST http://127.0.0.1:8000/notificaciones
 accept: application/json
 Content-Type: application/json
 
@@ -42,8 +42,8 @@ Content-Type: application/json
 }
 
 ###
-# curl -I -X "POST"   "http://127.0.0.1:8000/api/v1/notificaciones"   -H "accept: application/json"   -H "Content-Type: application/json"   -d "{  \"id_trabajo\": \"1\", \"estado\": \"Planificado\",  \"detalle\": \"Detalles\"}"
-POST http://127.0.0.1:8000/api/v1/notificaciones
+# curl -I -X "POST"   "http://127.0.0.1:8000/notificaciones"   -H "accept: application/json"   -H "Content-Type: application/json"   -d "{  \"id_trabajo\": \"1\", \"estado\": \"Planificado\",  \"detalle\": \"Detalles\"}"
+POST http://127.0.0.1:8000/notificaciones
 accept: application/json
 Content-Type: application/json
 
@@ -56,8 +56,8 @@ Content-Type: application/json
 
 ###
 
-# curl -I -X "POST"   "http://127.0.0.1:8000/api/v1/notificaciones"   -H "accept: application/json"   -H "Content-Type: application/json"   -d "{  \"id_trabajo\": \"1234-1235\",  \"estado\": \"Iniciado\",  \"detalle\": \"Detalles\"}"
-POST http://127.0.0.1:8000/api/v1/notificaciones
+# curl -I -X "POST"   "http://127.0.0.1:8000/notificaciones"   -H "accept: application/json"   -H "Content-Type: application/json"   -d "{  \"id_trabajo\": \"1234-1235\",  \"estado\": \"Iniciado\",  \"detalle\": \"Detalles\"}"
+POST http://127.0.0.1:8000/notificaciones
 accept: application/json
 Content-Type: application/json
 
@@ -69,32 +69,32 @@ Content-Type: application/json
 }
 
 ###
-# curl -I -X "OPTIONS" "http://127.0.0.1:8000/api/v1/notificaciones" -H "accept: */*"
-OPTIONS http://127.0.0.1:8000/api/v1/notificaciones
+# curl -I -X "OPTIONS" "http://127.0.0.1:8000/notificaciones" -H "accept: */*"
+OPTIONS http://127.0.0.1:8000/notificaciones
 accept: */*
 
 ###
-# curl -I -X "GET" "http://127.0.0.1:8000/api/v1/notificaciones/1234-1234"  -H "accept: application/json"
-GET http://127.0.0.1:8000/api/v1/notificaciones/1234-1234
+# curl -I -X "GET" "http://127.0.0.1:8000/notificaciones/1234-1234"  -H "accept: application/json"
+GET http://127.0.0.1:8000/notificaciones/1234-1234
 accept: application/json
 
 ###
-# curl -I -X "GET" "http://127.0.0.1:8000/api/v1/notificaciones/1234-1234"  -H "accept: application/json" -H "authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBT1MgMjAyMyAtIEFQSSBOb3RpZmljYWNpb25lcyIsImF1ZCI6IkFPUyBVUE0iLCJzdWIiOiJhbGVqYW5kcm8uY2FycmFzY28uYXJhZ29uQGFsdW1ub3MudXBtLmVzIiwiZXhwIjoxNjg0NjkzMjk0Ljc1Mjg1NTgsImlhdCI6MTY4NDYwNjg5NC43NTI4NTU4fQ.sLJl9YFbGOLTOLkcA939DgFGqsqJmQvRU69Tvn5Xsco"
-GET http://127.0.0.1:8000/api/v1/notificaciones/1234-1234
+# curl -I -X "GET" "http://127.0.0.1:8000/notificaciones/1234-1234"  -H "accept: application/json" -H "authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBT1MgMjAyMyAtIEFQSSBOb3RpZmljYWNpb25lcyIsImF1ZCI6IkFPUyBVUE0iLCJzdWIiOiJhbGVqYW5kcm8uY2FycmFzY28uYXJhZ29uQGFsdW1ub3MudXBtLmVzIiwiZXhwIjoxNjg0Nzk2Mjg0LjI3NDEzODcsImlhdCI6MTY4NDcwOTg4NC4yNzQxMzg3fQ.DDeuCBmSIZESF85bDKpKDixnmTcaETApk27h9Vd547k
+GET http://127.0.0.1:8000/notificaciones/1234-1234
 accept: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBT1MgMjAyMyAtIEFQSSBOb3RpZmljYWNpb25lcyIsImF1ZCI6IkFPUyBVUE0iLCJzdWIiOiJhbGVqYW5kcm8uY2FycmFzY28uYXJhZ29uQGFsdW1ub3MudXBtLmVzIiwiZXhwIjoxNjg0NjkzMjk0Ljc1Mjg1NTgsImlhdCI6MTY4NDYwNjg5NC43NTI4NTU4fQ.sLJl9YFbGOLTOLkcA939DgFGqsqJmQvRU69Tvn5Xsco
 
 ###
-# curl -I -X "OPTIONS" "http://127.0.0.1:8000/api/v1/notificaciones/1234-1234" -H "accept: */*"
-OPTIONS http://127.0.0.1:8000/api/v1/notificaciones/1234-1234
+# curl -I -X "OPTIONS" "http://127.0.0.1:8000/notificaciones/1234-1234" -H "accept: */*"
+OPTIONS http://127.0.0.1:8000/notificaciones/1234-1234
 accept: */*
 
 ###
-# curl -I -X "DELETE" "http://127.0.0.1:8000/api/v1/notificaciones/0000-0001" -H "accept: */*"
-DELETE http://127.0.0.1:8000/api/v1/notificaciones/0000-0001
+# curl -I -X "DELETE" "http://127.0.0.1:8000/notificaciones/0000-0001" -H "accept: */*"
+DELETE http://127.0.0.1:8000/notificaciones/0000-0001
 accept: */*
 
 ###
-# curl -I -X "DELETE" "http://127.0.0.1:8000/api/v1/notificaciones/1234-1234-1" -H "accept: */*"
-DELETE http://127.0.0.1:8000/api/v1/notificaciones/0000-0002
+# curl -I -X "DELETE" "http://127.0.0.1:8000/notificaciones/1234-1234-1" -H "accept: */*"
+DELETE http://127.0.0.1:8000/notificaciones/0000-0002
 accept: */*

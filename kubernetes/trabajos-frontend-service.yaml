@@ -6,14 +6,14 @@ metadata:
     kompose.version: 1.28.0 (c4137012e)
   creationTimestamp: null
   labels:
-    io.kompose.service: notificaciones-backend
-  name: notificaciones_backend
+    io.kompose.service: trabajos-frontend
+  name: trabajos-frontend
 spec:
   ports:
-    - name: "4013"
-      port: 4013
-      targetPort: 4013
+    - name: "8005"
+      port: 8005
+      targetPort: 8080
   selector:
-    io.kompose.service: notificaciones-backend
+    io.kompose.service: trabajos-frontend
 status:
   loadBalancer: {}

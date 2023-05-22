@@ -27,12 +27,13 @@ spec:
     spec:
       containers:
         - args:
-            - mock
-            - --cors
-            - -h
+            - uvicorn
+            - main:app
+            - --host
             - 0.0.0.0
-            - /aos/openapi.yaml
-          image: aos2023notificaciones.azurecr.io/azure-aos2023notificaciones:v1
+            - --port
+            - "4013"
+          image: aos2023notificaciones.azurecr.io/azure-aos2023-notificaciones:v1
           name: aos2023-notificaciones
           ports:
             - containerPort: 4013
