@@ -9,7 +9,7 @@ metadata:
     io.kompose.service: vehiculos-mock-backend
   name: vehiculos-mock-backend
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - name: "4016"
       port: 4016

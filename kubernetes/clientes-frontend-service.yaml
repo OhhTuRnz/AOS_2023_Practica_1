@@ -9,7 +9,7 @@ metadata:
     io.kompose.service: clientes-frontend
   name: clientes-frontend
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - name: "8000"
       port: 8000

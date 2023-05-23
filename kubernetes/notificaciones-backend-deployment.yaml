@@ -33,7 +33,10 @@ spec:
             - 0.0.0.0
             - --port
             - "4013"
-          image: aos2023notificaciones.azurecr.io/azure-aos2023-notificaciones:v1
+          env:
+            - name: URL_TRABAJOS
+              value: http://trabajos-mock-backend:4015
+          image: aos2023notificaciones.azurecr.io/azure-aos2023notificaciones:v1
           name: aos2023-notificaciones
           ports:
             - containerPort: 4013

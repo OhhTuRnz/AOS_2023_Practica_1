@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
         - env:
-            - name: SWAGGER-JSON
+            - name: SWAGGER_JSON
               value: /aos/especificaciones/Vehiculos/openapi.yaml
           image: swaggerapi/swagger-ui:latest
           name: aos2023-vehiculos-ui

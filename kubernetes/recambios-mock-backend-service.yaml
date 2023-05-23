@@ -9,7 +9,7 @@ metadata:
     io.kompose.service: recambios-mock-backend
   name: recambios-mock-backend
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - name: "4014"
       port: 4014

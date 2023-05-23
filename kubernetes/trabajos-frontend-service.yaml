@@ -9,7 +9,7 @@ metadata:
     io.kompose.service: trabajos-frontend
   name: trabajos-frontend
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - name: "8005"
       port: 8005

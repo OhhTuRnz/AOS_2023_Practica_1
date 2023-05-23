@@ -9,7 +9,7 @@ metadata:
     io.kompose.service: trabajos-mock-backend
   name: trabajos-mock-backend
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - name: "4015"
       port: 4015

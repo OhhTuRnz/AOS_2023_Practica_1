@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
         - env:
-            - name: SWAGGER-JSON
+            - name: SWAGGER_JSON
               value: /aos/especificaciones/Logs/openapi.yml
           image: swaggerapi/swagger-ui:latest
           name: aos2023-logs-ui

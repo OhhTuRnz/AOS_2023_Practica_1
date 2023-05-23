@@ -9,7 +9,7 @@ metadata:
     io.kompose.service: clientes-mock-backend
   name: clientes-mock-backend
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - name: "4010"
       port: 4010

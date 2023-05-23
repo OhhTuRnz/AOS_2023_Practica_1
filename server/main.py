@@ -24,6 +24,12 @@ load_dotenv()
 models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
+if "URL_TRABAJOS" in os.environ:
+    URL_TRABAJOS = os.environ["URL_TRABAJOS"]
+else:
+    URL_TRABAJOS = "http://localhost:4010"
+print ("URL_TRABAJOS: " + URL_TRABAJOS)
+
 # Dependency
 def get_db():
     db = SessionLocal()
@@ -61,8 +67,10 @@ def login(request: Request, db: Session = Depends(get_db), form_data: OAuth2Pass
 
 def http_get_trabajo(id_trabajo):
     try:
-        URL = os.environ["URL_trabajos"] + "/trabajos/" + id_trabajo
-        headers = {"authorization": "Bearer " + os.environ["URL_trabajos"]}
+        URL = URL_TRABAJOS + "/trabajos/" + id_trabajo
+        # La autorización debería incluir un token JWT facilitado por la interfaz Trabajos
+        # Por el momento no lo usamos
+        # headers = {"authorization": "Bearer "}
         print("Consulta trabajo con: " + URL)
         result = requests.get(URL, headers=headers)
         id_trabajo = str(json.loads(requests.get(URL).text)['idTrabajo'])

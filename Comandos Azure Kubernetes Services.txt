@@ -39,6 +39,9 @@ apt install net-tools
 apt-get install -y iputils-ping
 apt-get install xinetd telnetd
 apt-get install dnsutils
+apt-get install traceroute
+apt-get install curl
+apt-get install netcat
 
 # Ver todas las conexiones
 netstat -an
@@ -49,6 +52,12 @@ netstat -tulnp
 # Comprobar conectividad a servidores externos
 ping -t 8.8.8.8
 ping -t www.google.com
+
+# Comprobar puerto remoto está abierto
+nc -z -v microsoft.com 443
+
+# Comprobar código de respuesta HTTP
+curl -Iv https://microsoft.com
 
 
 ### AZURE KUBERNETES SERVICES
@@ -106,14 +115,22 @@ Resp: aos2023notificaciones.azurecr.io
 
 # Etiquetar las imagenes locales de docker con la dirección del servidor de inicio de sesion
 docker tag acarrasco2000/aos2023_notificaciones:v1 aos2023notificaciones.azurecr.io/azure-aos2023_notificaciones:v1
+
 # Consultar las imagenes
 docker images
-# Publicar imagen en el registro ACR de Azure
-docker push aos2023notificaciones.azurecr.io/azure-aos2023_notificaciones:v1
 
-# Consultar imagenes en el registro
+# Publicar imagen en el registro ACR de Azure
+docker push aos2023notificaciones.azurecr.io/azure-aos2023notificaciones:v1
+
+# Consultar imagen
 Get-AzContainerRegistryManifest -RegistryName aos2023notificaciones -RepositoryName azure-aos2023notificaciones
 Get-AzContainerRegistryTag -RegistryName aos2023notificaciones -RepositoryName azure-aos2023notificaciones
+
+# Consultar todas las imagenes imagenes en el registro
+az acr repository list --name aos2023notificaciones --output table
+
+# Si se desea borrar la imagen del registro (hace falta indicar el tag). Incluir siempre : dejando en blanco el tag si no existe
+az acr repository delete --name aos2023notificaciones --image azure-aos2023notificaciones:v1
 
 ### PASO 2 - Implementación de un cluster de Kubernetes formado por 2 nodos
 
@@ -130,6 +147,9 @@ Import-AzAksCredential -ResourceGroupName aos2023notificaciones -Name aos2023not
 
 # Comprobar lista de nodos del cluster
 $ kubectl get nodes
+
+# Comprobar outbound type for AKS cluster (debe ser LoadBalancer)
+az aks show --name aos2023notificacionesCluster --resource-group aos2023notificaciones --query "networkProfile.outboundType" 
 
 ### Desde portal.azure.com/#cloudshell
 
@@ -234,9 +254,48 @@ kubectl logs -f <pod>
 # Ejecutar comando "sh" en pod (en lugar de sh se puede ejecutar cualquier otro comando)
 kubectl exec --stdin --tty <pod> -- sh
 
-# Buscar la dirección IP de un servicio
+
+#
+# Configuración DNS
+#
+
+# Consulta nodos del cluster
+kubectl get nodes -o wide
+
+# Conectarse a un nodo del cluster creando un POD de prueba. El POD debe ser borrado al terminar la prueba
+kubectl run -it --rm aks-ssh --namespace default --image=debian:stable
+
+# Consultar fichero de configuración para la resolución de nombres DNS
+cat /etc/resolv.conf
+
+# Resolver entrada DNS
+host -a <nombre>
+
+# Buscar la dirección IP de un servicio (default es el namespace de defecto)
+# Ejemplo: nslookup trabajos-mock-backend.svc.cluster.local
 nslookup <servicio>.<namespace>.svc.cluster.local
 
-Por ejemplo:
-nslookup trabajos-mock-backend.svc.cluster.local
-nslookup trabajos-mock-backend.svc.cluster.local
+#
+# Configuración de Subred del cluster
+#
+# Se obtiene primero el resource group creado por AKS para desplegar los recursos gestionados por el propio cluster (empieza pòr mc_...)
+az aks show --name aos2023notificacionesCluster --resource-group aos2023notificaciones --query "nodeResourceGroup"
+
+Resp: "MC_aos2023notificaciones_aos2023notificacionesCluster_eastus"
+
+# Ahí es donde se configura las políticas NSG (conexiones entrantes y salientes), subred (Vnet), etc. En nuestro cluster:
+#
+# - Subred asignada es 10.224.0.0/12
+# - Se permite todo el tráfico saliente y sólo se permite el tráfico entrante a los puertos de los balanceadores
+# - Disponemos de dos direcciones de IP públicas (20.75.167.190 y 20.75.166.172). Para limitar el consumo configuramos los servicios de tipo "ClusterIP" (balanceador interno) excepto para el backend e UI de notificaciones que son de tipo "LoadBalancer" (balanceador externo)
+#
+# Las políticas de red (network policies) también se pueden consultar por comando:
+kubectl get networkpolicy --all-namespaces
+
+Resp:
+NAMESPACE     NAME                 POD-SELECTOR                                 AGE
+default       practica-2-default   io.kompose.network/practica-2-default=true   36h
+kube-system   konnectivity-agent   app=konnectivity-agent                       7d5h
+
+# Consultar detalles de network policy
+kubectl describe networkpolicy  

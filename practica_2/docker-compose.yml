@@ -20,7 +20,7 @@ services:
       ports:
         - "8000:8080"
       environment:
-        SWAGGER-JSON: /aos/openapi.yml
+        SWAGGER_JSON: /aos/openapi.yml
       volumes:
         - ./especificaciones/Clientes:/aos:ro
 
@@ -39,7 +39,7 @@ services:
       ports:
         - "8001:8080"
       environment:
-        SWAGGER-JSON: /aos/openapi.yml
+        SWAGGER_JSON: /aos/openapi.yml
       volumes:
         - ./especificaciones/Logs:/aos:ro
 
@@ -58,17 +58,19 @@ services:
       ports:
         - "8002:8080"
       environment:
-        SWAGGER-JSON: /aos/openapi.yaml
+        SWAGGER_JSON: /aos/openapi.yaml
       volumes:
         - ./especificaciones/Facturas:/aos:ro
 
     notificaciones-backend:
 #      image: acarrasco2000/aos2023-notificaciones:v1
-      image: aos2023notificaciones.azurecr.io/azure-aos2023-notificaciones:v1
+      image: aos2023notificaciones.azurecr.io/azure-aos2023notificaciones:v1
       container_name: aos2023-notificaciones
       command: uvicorn main:app --host 0.0.0.0 --port 4013
       ports:
-        - "4013:80"
+        - "4013:4013"
+      environment:
+        URL_TRABAJOS: http://localhost:4015
       volumes:
         - ./especificaciones/Notificaciones:/aos:ro
 
@@ -78,7 +80,7 @@ services:
       ports:
         - "8003:8080"
       environment:
-          SWAGGER-JSON: /aos/openapi.yaml
+          SWAGGER_JSON: /aos/openapi.yaml
       volumes:
         - ./especificaciones/Notificaciones:/aos:ro
 
@@ -97,7 +99,7 @@ services:
       ports:
         - "8004:8080"
       environment:
-        SWAGGER-JSON: /aos/openapi.yaml
+        SWAGGER_JSON: /aos/openapi.yaml
       volumes:
         - ./especificaciones/Recambios:/aos:ro
 
@@ -116,7 +118,7 @@ services:
       ports:
         - "8005:8080"
       environment:
-        SWAGGER-JSON: /aos/openapi.yaml
+        SWAGGER_JSON: /aos/openapi.yaml
       volumes:
         - ./especificaciones/Trabajos:/aos:ro
 
@@ -135,6 +137,6 @@ services:
       ports:
         - "8006:8080"
       environment:
-        SWAGGER-JSON: /aos/openapi.yaml
+        SWAGGER_JSON: /aos/openapi.yaml
       volumes:
         - ./especificaciones/Vehiculos:/aos:ro

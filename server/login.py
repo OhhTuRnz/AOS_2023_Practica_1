@@ -15,6 +15,3 @@ def login():
     return response_data["token_type"], response_data["access_token"], response_data["refresh_token"]
 
 type, access, refresh = login()
-print ("Token type: " + type)
-print ("Access token: " + access)
-print ("Refresh token: " + refresh)

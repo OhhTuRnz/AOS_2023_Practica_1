@@ -9,7 +9,7 @@ metadata:
     io.kompose.service: facturas-mock-backend
   name: facturas-mock-backend
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - name: "4012"
       port: 4012

@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
         - env:
-            - name: SWAGGER-JSON
+            - name: SWAGGER_JSON
               value: /aos/especificaciones/Notificaciones/openapi.yaml
           image: swaggerapi/swagger-ui:v5.0.0-alpha.5
           name: aos2023-notificaciones-ui

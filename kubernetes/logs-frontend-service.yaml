@@ -9,7 +9,7 @@ metadata:
     io.kompose.service: logs-frontend
   name: logs-frontend
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - name: "8001"
       port: 8001

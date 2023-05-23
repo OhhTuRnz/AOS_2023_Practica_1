@@ -9,7 +9,7 @@ metadata:
     io.kompose.service: recambios-frontend
   name: recambios-frontend
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - name: "8004"
       port: 8004

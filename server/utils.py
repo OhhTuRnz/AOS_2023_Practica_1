@@ -16,6 +16,8 @@ from schemas import TokenPayload
 from datetime import datetime
 from dotenv import load_dotenv
 
+from time import strftime, localtime
+
 load_dotenv()
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 30  # 30 minutes
@@ -30,9 +32,13 @@ def get_hashed_password(password: str) -> str:
 
 def verify_password(password: str, hashed_pass: str) -> bool:
     return password_context.verify(password, hashed_pass)
+
 def generate_jwt(subject, access) -> str:
     iat = time.time()
-    exp = iat + ACCESS_TOKEN_EXPIRE_MINUTES if access else iat + REFRESH_TOKEN_EXPIRE_MINUTES
+    if access:
+        exp = iat + ACCESS_TOKEN_EXPIRE_MINUTES * 60
+    else:
+        exp = iat + REFRESH_TOKEN_EXPIRE_MINUTES * 60
     header = {'alg': 'RS256'}
     payload = {
         "iss": "AOS 2023 - API Notificaciones",  # Issuer
@@ -42,7 +48,12 @@ def generate_jwt(subject, access) -> str:
         "iat": iat  # Issued at time
     }
     encoded = jwt.encode(payload, JWT_SECRET_KEY, algorithm="HS256")
-    print (encoded)
+    if access:
+        print ("Access Token: " + encoded)
+        print ("Access Token expira el " + strftime("%Y-%m-%d %H:%M:%S", localtime(payload['exp'])))
+    else:
+        print ("Refresh Token: " + encoded)
+        print("Refresh Token expira el " + strftime("%Y-%m-%d %H:%M:%S", localtime(payload['exp'])))
     return encoded
 
 def get_current_user(db: Session, request: Request) -> str:
@@ -70,6 +81,8 @@ def get_current_user(db: Session, request: Request) -> str:
         )
 
     except Exception as exc:
+        payload = jwt.decode(token, options={"verify_signature": False})
+        print ("Token expiro el: " + strftime("%Y-%m-%d %H:%M:%S"), localtime(payload['exp']))
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Could not validate credentials",

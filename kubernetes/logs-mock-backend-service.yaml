@@ -9,7 +9,7 @@ metadata:
     io.kompose.service: logs-mock-backend
   name: logs-mock-backend
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - name: "4011"
       port: 4011
