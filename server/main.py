@@ -119,17 +119,26 @@ def get_notificaciones(request: Request, response: Response, db: Session = Depen
     url = str(request.url)
     urlBase = url.rsplit("/notificaciones", 1)[0] + "/notificaciones"
     parameters = parse_qs(urlparse(url).query)
+    pag = 1
+    order = None
+    ordering = None
     if "page" in parameters.keys():
         try:
             pag = int(parameters["page"][0])
         except Exception as e:
             pag = 1
-    else:
-        notificaciones = crud.get_notificaciones(db)
-        notificaciones = [addParentSelf(notificacion, urlBase) for notificacion in notificaciones]
-        pag = 1
+    if "order" in parameters.keys():
+        order = parameters["order"][0].lower()
+    if "ordering" in parameters.keys():
+        ordering = parameters["ordering"][0].upper()
+
+    # Default page size is 100
+    page_size = 100
+    notificaciones = crud.get_notificaciones(db, order, ordering, (pag-1)*page_size, page_size)
+    notificaciones = [addParentSelf(notificacion, urlBase) for notificacion in notificaciones]
+
     url = url.rsplit("?", 1)[0]
-    result = get_notificaciones_pagina(notificaciones, pag, url, 50) # Page size es 50
+    result = get_notificaciones_pagina(notificaciones, pag, url, page_size)
     # Añade etag: Firma MD5 de la respuesta
     response.headers['etag'] = md5(result.json())
     return result

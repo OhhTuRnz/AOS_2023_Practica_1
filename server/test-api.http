@@ -4,6 +4,30 @@ accept: application/json
 
 ###
 
+# curl -I -X "GET" "http://127.0.0.1:8000/notificaciones?page=1&order=id&ordering=ASC"  -H "accept: application/json"
+GET http://127.0.0.1:8000/notificaciones?page=1&order=id&ordering=ASC
+accept: application/json
+
+###
+
+# curl -I -X "GET" "http://127.0.0.1:8000/notificaciones?page=1&order=id&ordering=ASC"  -H "accept: application/json"
+GET http://127.0.0.1:8000/notificaciones?page=1&order=id&ordering=ASC
+accept: application/json
+
+###
+
+# curl -I -X "GET" "http://127.0.0.1:8000/notificaciones?page=1&order=id_trabajo&ordering=ASC"  -H "accept: application/json"
+GET http://127.0.0.1:8000/notificaciones?page=1&order=id_trabajo&ordering=ASC
+accept: application/json
+
+###
+
+# curl -I -X "GET" "http://127.0.0.1:8000/notificaciones?page=1&order=id_trabajo&ordering=DESC"  -H "accept: application/json"
+GET http://127.0.0.1:8000/notificaciones?page=1&order=id_trabajo&ordering=DESC
+accept: application/json
+
+###
+
 # curl -I -X "GET" "http://127.0.0.1:8000/notificaciones"  -H "accept: application/json" -H "authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBT1MgMjAyMyAtIEFQSSBOb3RpZmljYWNpb25lcyIsImF1ZCI6IkFPUyBVUE0iLCJzdWIiOiJhbGVqYW5kcm8uY2FycmFzY28uYXJhZ29uQGFsdW1ub3MudXBtLmVzIiwiZXhwIjoxNjg0Nzk2Mjg0LjI3NDEzODcsImlhdCI6MTY4NDcwOTg4NC4yNzQxMzg3fQ.DDeuCBmSIZESF85bDKpKDixnmTcaETApk27h9Vd547k
 GET http://127.0.0.1:8000/notificaciones
 accept: application/json
