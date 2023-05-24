@@ -67,11 +67,12 @@ def login(request: Request, db: Session = Depends(get_db), form_data: OAuth2Pass
 
 def http_get_trabajo(id_trabajo):
     try:
+        print("Consulta trabajo con: " + URL)
         URL = URL_TRABAJOS + "/trabajos/" + id_trabajo
         # La autorización debería incluir un token JWT facilitado por la interfaz Trabajos
         # Por el momento no lo usamos
         # headers = {"authorization": "Bearer "}
-        print("Consulta trabajo con: " + URL)
+        headers = {}
         result = requests.get(URL, headers=headers)
         id_trabajo = str(json.loads(requests.get(URL).text)['idTrabajo'])
     except Exception as e:

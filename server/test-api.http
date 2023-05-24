@@ -28,10 +28,10 @@ accept: application/json
 
 ###
 
-# curl -I -X "GET" "http://127.0.0.1:8000/notificaciones"  -H "accept: application/json" -H "authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBT1MgMjAyMyAtIEFQSSBOb3RpZmljYWNpb25lcyIsImF1ZCI6IkFPUyBVUE0iLCJzdWIiOiJhbGVqYW5kcm8uY2FycmFzY28uYXJhZ29uQGFsdW1ub3MudXBtLmVzIiwiZXhwIjoxNjg0Nzk2Mjg0LjI3NDEzODcsImlhdCI6MTY4NDcwOTg4NC4yNzQxMzg3fQ.DDeuCBmSIZESF85bDKpKDixnmTcaETApk27h9Vd547k
+# curl -I -X "GET" "http://127.0.0.1:8000/notificaciones"  -H "accept: application/json" -H "authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBT1MgMjAyMyAtIEFQSSBOb3RpZmljYWNpb25lcyIsImF1ZCI6IkFPUyBVUE0iLCJzdWIiOiJhbGVqYW5kcm8uY2FycmFzY28uYXJhZ29uQGFsdW1ub3MudXBtLmVzIiwiZXhwIjoxNjkwMTMyMjc3LjI0NTQwNjIsImlhdCI6MTY4NDk0ODI3Ny4yNDU0MDYyfQ.AxIHGOn0RuSpJz5ALxJF3TxhfwNt8A30_jrFblRxZH8
 GET http://127.0.0.1:8000/notificaciones
 accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBT1MgMjAyMyAtIEFQSSBOb3RpZmljYWNpb25lcyIsImF1ZCI6IkFPUyBVUE0iLCJzdWIiOiJhbGVqYW5kcm8uY2FycmFzY28uYXJhZ29uQGFsdW1ub3MudXBtLmVzIiwiZXhwIjoxNjg0NjkzMjk0Ljc1Mjg1NTgsImlhdCI6MTY4NDYwNjg5NC43NTI4NTU4fQ.sLJl9YFbGOLTOLkcA939DgFGqsqJmQvRU69Tvn5Xsco
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBT1MgMjAyMyAtIEFQSSBOb3RpZmljYWNpb25lcyIsImF1ZCI6IkFPUyBVUE0iLCJzdWIiOiJhbGVqYW5kcm8uY2FycmFzY28uYXJhZ29uQGFsdW1ub3MudXBtLmVzIiwiZXhwIjoxNjkwMTMyMjc3LjI0NTQwNjIsImlhdCI6MTY4NDk0ODI3Ny4yNDU0MDYyfQ.AxIHGOn0RuSpJz5ALxJF3TxhfwNt8A30_jrFblRxZH8
 
 ###
 
@@ -54,6 +54,7 @@ Content-Type: application/json
 }
 
 ###
+
 # curl -I -X "POST"   "http://127.0.0.1:8000/notificaciones"   -H "accept: application/json"   -H "Content-Type: application/json"   -d "{  \"estado\": \"Creado\",  \"detalle\": \"Detalles\"}"
 POST http://127.0.0.1:8000/notificaciones
 accept: application/json
@@ -103,10 +104,10 @@ GET http://127.0.0.1:8000/notificaciones/1234-1234
 accept: application/json
 
 ###
-# curl -I -X "GET" "http://127.0.0.1:8000/notificaciones/1234-1234"  -H "accept: application/json" -H "authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBT1MgMjAyMyAtIEFQSSBOb3RpZmljYWNpb25lcyIsImF1ZCI6IkFPUyBVUE0iLCJzdWIiOiJhbGVqYW5kcm8uY2FycmFzY28uYXJhZ29uQGFsdW1ub3MudXBtLmVzIiwiZXhwIjoxNjg0Nzk2Mjg0LjI3NDEzODcsImlhdCI6MTY4NDcwOTg4NC4yNzQxMzg3fQ.DDeuCBmSIZESF85bDKpKDixnmTcaETApk27h9Vd547k
+# curl -I -X "GET" "http://127.0.0.1:8000/notificaciones/1234-1234"  -H "accept: application/json" -H "authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBT1MgMjAyMyAtIEFQSSBOb3RpZmljYWNpb25lcyIsImF1ZCI6IkFPUyBVUE0iLCJzdWIiOiJhbGVqYW5kcm8uY2FycmFzY28uYXJhZ29uQGFsdW1ub3MudXBtLmVzIiwiZXhwIjoxNjkwMTMyMjc3LjI0NTQwNjIsImlhdCI6MTY4NDk0ODI3Ny4yNDU0MDYyfQ.AxIHGOn0RuSpJz5ALxJF3TxhfwNt8A30_jrFblRxZH8
 GET http://127.0.0.1:8000/notificaciones/1234-1234
 accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBT1MgMjAyMyAtIEFQSSBOb3RpZmljYWNpb25lcyIsImF1ZCI6IkFPUyBVUE0iLCJzdWIiOiJhbGVqYW5kcm8uY2FycmFzY28uYXJhZ29uQGFsdW1ub3MudXBtLmVzIiwiZXhwIjoxNjg0NjkzMjk0Ljc1Mjg1NTgsImlhdCI6MTY4NDYwNjg5NC43NTI4NTU4fQ.sLJl9YFbGOLTOLkcA939DgFGqsqJmQvRU69Tvn5Xsco
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBT1MgMjAyMyAtIEFQSSBOb3RpZmljYWNpb25lcyIsImF1ZCI6IkFPUyBVUE0iLCJzdWIiOiJhbGVqYW5kcm8uY2FycmFzY28uYXJhZ29uQGFsdW1ub3MudXBtLmVzIiwiZXhwIjoxNjkwMTMyMjc3LjI0NTQwNjIsImlhdCI6MTY4NDk0ODI3Ny4yNDU0MDYyfQ.AxIHGOn0RuSpJz5ALxJF3TxhfwNt8A30_jrFblRxZH8
 
 ###
 # curl -I -X "OPTIONS" "http://127.0.0.1:8000/notificaciones/1234-1234" -H "accept: */*"
