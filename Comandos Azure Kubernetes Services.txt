@@ -114,7 +114,7 @@ Resp: aos2023notificaciones.azurecr.io
 ### Connect-AzContainerRegistry -Name aos2023notificaciones
 
 # Etiquetar las imagenes locales de docker con la dirección del servidor de inicio de sesion
-docker tag acarrasco2000/aos2023_notificaciones:v1 aos2023notificaciones.azurecr.io/azure-aos2023_notificaciones:v1
+docker tag acarrasco2000/aos2023_notificaciones:v1 aos2023notificaciones.azurecr.io/azure-aos2023notificaciones:v1
 
 # Consultar las imagenes
 docker images

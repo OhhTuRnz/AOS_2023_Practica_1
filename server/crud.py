@@ -16,25 +16,22 @@ def get_usuario(db: Session, nombre: str):
     return row
 
 def get_notificaciones(db: Session, order, ordering, skip: int = 0, limit: int = 100):
-    match order:
-        case "id":
-            match ordering:
-                case "ASC":
-                    result = db.query(models.Notificacion).order_by(models.Notificacion.id.asc()).offset(skip).limit(limit).all()
-                case "DESC":
-                    result = db.query(models.Notificacion).order_by(models.Notificacion.id.desc()).offset(skip).limit(limit).all()
-                case _:
-                    result = db.query(models.Notificacion).order_by(models.Notificacion.id).offset(skip).limit(limit).all()
-        case "id_trabajo":
-            match ordering:
-                case "ASC":
-                    result = db.query(models.Notificacion).order_by(models.Notificacion.id_trabajo.asc()).offset(skip).limit(limit).all()
-                case "DESC":
-                    result = db.query(models.Notificacion).order_by(models.Notificacion.id_trabajo.desc()).offset(skip).limit(limit).all()
-                case _:
-                    result = db.query(models.Notificacion).order_by(models.Notificacion.id_trabajo).offset(skip).limit(limit).all()
-        case _:
-            result = db.query(models.Notificacion).offset(skip).limit(limit).all()
+    if order == "id":
+        if ordering == "ASC":
+            result = db.query(models.Notificacion).order_by(models.Notificacion.id.asc()).offset(skip).limit(limit).all()
+        elif ordering == "DESC":
+            result = db.query(models.Notificacion).order_by(models.Notificacion.id.desc()).offset(skip).limit(limit).all()
+        else:
+            result = db.query(models.Notificacion).order_by(models.Notificacion.id).offset(skip).limit(limit).all()
+    elif order == "id_trabajo":
+        if ordering == "ASC":
+            result = db.query(models.Notificacion).order_by(models.Notificacion.id_trabajo.asc()).offset(skip).limit(limit).all()
+        elif ordering == "DESC":
+            result = db.query(models.Notificacion).order_by(models.Notificacion.id_trabajo.desc()).offset(skip).limit(limit).all()
+        else:
+            result = db.query(models.Notificacion).order_by(models.Notificacion.id_trabajo).offset(skip).limit(limit).all()
+    else:
+        result = db.query(models.Notificacion).offset(skip).limit(limit).all()
     return result
 
 def create_notificacion(db: Session, notificacion: schemas.Notificacion, id: str):
