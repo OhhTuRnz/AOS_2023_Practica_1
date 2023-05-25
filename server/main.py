@@ -17,12 +17,24 @@ from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from cryptohash import sha256, md5
 from utils import generate_jwt, verify_password, get_current_user, get_hashed_password
 
+from fastapi.middleware.cors import CORSMiddleware
+
 # Load environment variable file
 load_dotenv()
 
 # Init FastAPI
 models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
+
+# Añade soporte para CORS
+origins = ["*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 if "URL_TRABAJOS" in os.environ:
     URL_TRABAJOS = os.environ["URL_TRABAJOS"]
@@ -67,16 +79,17 @@ def login(request: Request, db: Session = Depends(get_db), form_data: OAuth2Pass
 
 def http_get_trabajo(id_trabajo):
     try:
-        print("Consulta trabajo con: " + URL)
         URL = URL_TRABAJOS + "/trabajos/" + id_trabajo
-        # La autorización debería incluir un token JWT facilitado por la interfaz Trabajos
-        # Por el momento no lo usamos
+        print("Consulta trabajo con: " + URL)
+
+        # Ignoramos el envío de token JWT de autorización a la interfaz de Trabajos
         # headers = {"authorization": "Bearer "}
         headers = {}
         result = requests.get(URL, headers=headers)
+
         id_trabajo = str(json.loads(requests.get(URL).text)['idTrabajo'])
     except Exception as e:
-        print (e)
+        print ("Exception en consulta: " + e)
     return id_trabajo
 
 def addParentSelf(notificacion, urlBase):
@@ -118,7 +131,6 @@ def get_notificaciones(request: Request, response: Response, db: Session = Depen
     usuario = get_current_user(db, request)
 
     url = str(request.url)
-    urlBase = url.rsplit("/notificaciones", 1)[0] + "/notificaciones"
     parameters = parse_qs(urlparse(url).query)
     pag = 1
     order = None
@@ -135,11 +147,13 @@ def get_notificaciones(request: Request, response: Response, db: Session = Depen
 
     # Default page size is 100
     page_size = 100
+    urlBase = url.rsplit("/notificaciones", 1)[0] + "/notificaciones"
     notificaciones = crud.get_notificaciones(db, order, ordering, (pag-1)*page_size, page_size)
     notificaciones = [addParentSelf(notificacion, urlBase) for notificacion in notificaciones]
 
     url = url.rsplit("?", 1)[0]
     result = get_notificaciones_pagina(notificaciones, pag, url, page_size)
+
     # Añade etag: Firma MD5 de la respuesta
     response.headers['etag'] = md5(result.json())
     return result
@@ -166,7 +180,7 @@ def create_notificacion(request: Request, response: Response, notificacion: sche
     return result
 
 @app.options("/notificaciones")
-def options_notificacion(response: Response):
+def options_notificacion(request: Request, response: Response):
     response.status_code = 204
     response.headers['allow'] = 'GET, POST, OPTIONS'
     return None
@@ -183,7 +197,7 @@ def get_notificacion_by_id(request: Request, response: Response, notificacion_id
     return result
 
 @app.options("/notificaciones/{notificacion_id}")
-def options_notificacion_id(response: Response):
+def options_notificacion_id(request: Request, response: Response):
     response.status_code = 204
     response.headers['allow'] = 'GET, DELETE, OPTIONS'
     return None
@@ -194,7 +208,8 @@ def delete_notificacion(request: Request, response: Response, id_notificacion: s
     usuario = get_current_user(db, request)
 
     response.status_code = 204
-    return crud.delete_notificacion(db, id_notificacion)
+    result = crud.delete_notificacion(db, id_notificacion)
+    return result
 
 """ Esta operación la implementa otro grupo """
 """
@@ -210,4 +225,4 @@ def options_notificacion_trabajo(response: Response):
     return None
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=4010)

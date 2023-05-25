@@ -103,9 +103,11 @@ def get_next_id_notificacion(db: Session):
     sql = text('INSERT INTO id_trabajo_seq values (null)')
     row = db.execute(sql)
     rowid = row.lastrowid
-    lowid = rowid % 10000
-    highid = int(rowid/10000)
-    id_notificacion = "{:04d}-{:04d}".format(highid, lowid)
+    lowid = rowid % 1000000
+    midid = int(rowid/10000)
+    highid = int(midid/10000)
+    midid -= highid
+    id_notificacion = "{:04d}-{:04d}-{:02d}".format(highid, midid, lowid)
     sql = text('DELETE FROM id_trabajo_seq WHERE id = \"' + str(rowid-1) + '"')
     db.execute(sql)
     return id_notificacion

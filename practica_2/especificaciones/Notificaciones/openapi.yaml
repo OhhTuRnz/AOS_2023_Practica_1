@@ -14,24 +14,26 @@ info:
     email: aosgrupo5@aos.es
 
 servers:
-- url: '{schema}://{server}:{port}/{basePath}'
-  description: Servidor para peticiones locales
-  variables:
-    schema:
-      description: Esquema
-      default: http
-      enum:
-        - http
-        - https
-    server:
-      description: Nombre del servidor
-      default: 127.0.0.1
-    port:
-      description: Puerto expuesto
-      default: '80'
-    basePath:
-      description: Ruta base
-      default: api/v1
+  - url: '{schema}://{server}:{port}/{basePath}'
+#  - url: '{schema}://{server}:{port}/{basePath}'
+    description: Servidor para peticiones locales
+    variables:
+      schema:
+        description: Esquema
+        default: http
+        enum:
+          - http
+          - https
+      server:
+        description: Nombre del servidor
+        default: 127.0.0.1
+      port:
+        description: Puerto expuesto
+        default: '80'
+      basePath:
+        description: Ruta base
+        default: ""
+  #      default: api/v1
 
 tags:
   - name: '🔔 Notificación'
