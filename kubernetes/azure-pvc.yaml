@@ -5,7 +5,12 @@ metadata:
 spec:
   accessModes:
   - ReadWriteOnce
+#  storageClassName: standard
   storageClassName: managed-csi
   resources:
     requests:
       storage: 5Gi
+  dataSource:
+    name: aos-snapshot
+    kind: VolumeSnapshot
+    apiGroup: snapshot.storage.k8s.io

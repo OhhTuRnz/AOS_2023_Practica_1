@@ -59,6 +59,9 @@ nc -z -v microsoft.com 443
 # Comprobar código de respuesta HTTP
 curl -Iv https://microsoft.com
 
+# Iniciar un pod de prueba en el cluster (debe ser borrado tras usarlo)
+kubectl run -it --rm aks-ssh --namespace default --image=debian:stable
+
 
 ### AZURE KUBERNETES SERVICES
 ###
@@ -121,6 +124,17 @@ docker images
 
 # Publicar imagen en el registro ACR de Azure
 docker push aos2023notificaciones.azurecr.io/azure-aos2023notificaciones:v1
+
+#
+# NOTA: Para asegurar que la imagen es usada por el servicio se recomienda:
+#
+# Borrar la imagen antigua del repositorio ACR
+# Borrar todos los servicios y despliegues en el cluster
+# Rearrancar el cluster
+# Realizar el despliegue del servicio en el cluster y comprobar que los PODS que usan la imagen borrada de ACR dan un error de "pull" de la imagen
+# Publicar la imagen en el registro ACR de AZURE
+#
+# Tras el último paso los PODS con error de "pull" se iniciarán con la nueva imagen.
 
 # Consultar imagen
 Get-AzContainerRegistryManifest -RegistryName aos2023notificaciones -RepositoryName azure-aos2023notificaciones
@@ -299,3 +313,48 @@ kube-system   konnectivity-agent   app=konnectivity-agent                       
 
 # Consultar detalles de network policy
 kubectl describe networkpolicy  
+
+
+#
+# Operaciones con PVC - Persistent Volumes
+#
+# Ver https://learn.microsoft.com/en-us/azure/aks/azure-csi-disk-storage-provision#statically-provision-a-volume
+#
+
+# Crear disco PVC (Ver fichero azure-pvc.yaml)
+kubectl apply -f azure-pvc.yaml
+
+# Consulta de PVC
+kubectl get pvc
+
+# Consulta estado de PVC
+kubectl get pv
+
+# Borrador de PVC
+kubectl delete pvc <pvc>
+
+# Borrar disco PVC
+kubectl delete azure-managed-disk
+
+# Crear un snapshot del volumen (Ver fichero yaml en https://docs.digitalocean.com/products/kubernetes/how-to/create-snapshots/). Se puede usar como datasource en la creación de discos
+kubectl create -f aos-snapshot.yaml
+
+# Consulta de snapshots
+kubectl get volumesnapshot
+
+# Borrado de snaphot
+kubectl delete volumesnapshot aos-snapshot
+
+# Patch de pv para eliminar dangling "claimRef" que provoca que provoca que el PV se quede en estado Pending de forma indefinida
+kubectl get pv pv-azuredisk -o jsonpath="{.spec.claimRef}"
+kubectl patch pv pv-azuredisk --patch-file patch.yaml
+
+{
+ "spec": {
+    "claimRef": null
+  }
+}
+
+# Copiar ficheros/directorios a volumen persistente.
+kubectl cp <origen> <destino>
+
