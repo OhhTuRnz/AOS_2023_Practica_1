@@ -78,26 +78,29 @@ Install-Module -Name AzureRM -AllowClobber
 
 # En la práctica vamos a usar estos nombres de grupo de recursos y registro ACR en Azure
 #
-# ResourceGroupName: aos_2023_notificaciones (sin el prefijo acarrasco2000)
+# ResourceGroupName: aos2023notificaciones (sin el prefijo acarrasco2000)
 # ACRname: aos2023notificaciones
+#
+# NOTA: Para la suscripción de pago los nombres de grupo de recursos, registro ACR y cluster terminan con el sufijo "_p" excepto para el registro ACR que termina en "p" 
+# (el nombre solo puede tener alfanumericos en este caso)
 #
 # Los siguientes son comandos de Azure Powershell publican un servicio en AKS siguiendo el tutorial:
 # https://learn.microsoft.com/es-es/azure/aks/tutorial-kubernetes-prepare-acr?tabs=azure-cli
 #
 # Estos comandos se pueden ejecutar desde el Azure Powershell instalado o accediendo a https:/portal.azure.com/#cloudshell
 
-### PASO 1.1 - Creación de un registro de contenedor ###
+### PASO 1.1 - Creación de un registro de contenedor (ACR) ###
 
 # Comprobar version de Azure Powershell (debe ser 5.9.0 o posterior)
 Get-InstalledModule -Name Az
 
-# Crear grupo de recursos
+# Crear grupo de recursos (Para borrarlo usa Remove-AzResourceGroup -Name <name>). Locations: eastus, westeurope
 New-AzResourceGroup -Name aos2023notificaciones -Location eastus
 
 # Crea registro ACR
 New-AzContainerRegistry -ResourceGroupName aos2023notificaciones -Name aos2023notificaciones -Sku Basic
 
-# Inicio de sesion
+# Inicio de sesion con el registro
 Connect-AzContainerRegistry -Name aos2023notificaciones
 
 # Direccion del servidor de inicio de registro (usar nombre del grupo sin el prefijo acarrasco2000)
@@ -110,7 +113,10 @@ Resp: aos2023notificaciones.azurecr.io
 ### Estos comandos deben ser ejecutados desde el Azure Powershell local (no desde https://portal.azure.com/#cloudshell)
 ### después de autenticarse con:
 ###
-### Connect-AzAccount
+### Connect-AzAccount (o Connect-AzAccount -UseDeviceAuthentication)
+###
+### Set-AzContext (cambiar de suscripción - usar el subscriptionId como context)
+### Update-AzConfig -DefaultSubscriptionForLogin 00000000-0000-0000-0000-000000000000 (Para cambiar el contexto)
 ###
 ### y conectarse al registro con:
 ###
@@ -126,13 +132,13 @@ docker images
 docker push aos2023notificaciones.azurecr.io/azure-aos2023notificaciones:v1
 
 #
-# NOTA: Para asegurar que la imagen es usada por el servicio se recomienda:
+# NOTA: Para asegurar que la nueva imagen es usada por el servicio se recomienda:
 #
-# Borrar la imagen antigua del repositorio ACR
-# Borrar todos los servicios y despliegues en el cluster
-# Rearrancar el cluster
-# Realizar el despliegue del servicio en el cluster y comprobar que los PODS que usan la imagen borrada de ACR dan un error de "pull" de la imagen
-# Publicar la imagen en el registro ACR de AZURE
+# - Borrar la imagen antigua del repositorio ACR
+# - Borrar todos los servicios y despliegues en el cluster
+# - Rearrancar el cluster
+# - Realizar el despliegue del servicio en el cluster y comprobar que los PODS que usan la imagen borrada de ACR dan un error de "pull" de la imagen
+# - Publicar la imagen en el registro ACR de AZURE
 #
 # Tras el último paso los PODS con error de "pull" se iniciarán con la nueva imagen.
 
@@ -150,6 +156,7 @@ az acr repository delete --name aos2023notificaciones --image azure-aos2023notif
 
 # Creación del cluster kubernetes (genera clave)
 New-AzAksCluster -ResourceGroupName aos2023notificaciones -Name aos2023notificacionesCluster -NodeCount 2 -GenerateSshKey -AcrNameToAttach aos2023notificaciones
+
 # Creación del cluster kubernetes (sin generar clave)
 New-AzAksCluster -ResourceGroupName aos2023notificaciones -Name aos2023notificacionesCluster -NodeCount 2 -AcrNameToAttach aos2023notificaciones
 
@@ -179,25 +186,30 @@ az aks start --name aos2023notificacionesCluster --resource-group aos2023notific
 # Comprobar que el estado del cluster powerState es Running
 az aks show --name aos2023notificacionesCluster --resource-group aos2023notificaciones
 
-# Crear un volumen con Azure Disks en AKS para almacenamiento persistente
-# See: https://learn.microsoft.com/es-es/azure/aks/azure-csi-disk-storage-provision
-
-# Crear una notificación de volumen persistente con el siguiente fichero:
+# Crear un volumen con Azure Files en AKS para almacenamiento persistente
+# Ver: Ver https://learn.microsoft.com/es-es/azure/aks/concepts-storage
+#
+# Crear una notificación de volumen persistente (PVC) con el siguiente fichero:
+#
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-    name: azure-managed-disk
+    name: disco-notificaciones
 spec:
-  accessModes:
-  - ReadWriteOnce
-  storageClassName: managed-csi
+  storageClassName: azurefile-csi
+  accessModes: ["ReadWriteMany"]
+  resources:
+    requests:
       storage: 5Gi
+  dataSource:
+    name: disco-notificaciones-snapshot
+    kind: VolumeSnapshot
+    apiGroup: snapshot.storage.k8s.io
+	
+kubectl apply -f disco-notificaciones.yaml
 
-kubectl apply -f azure-pvc.yaml
-
-Resp: persistentvolumeclaim/azure-managed-disk created
-
-A partir de este momenot el volumen "azure-managed-disk" puede ser usado en los ficheros de despliegue. Por ejemplo:
+# El volumen se crea usando el snapshot "disco-notificaciones-snapshot" con los datos iniciales (fichero de base de datos de SQLite para la backend y especificaciones para la UI)
+# A partir de este momento el volumen puede ser por los despliegues. Por ejemplo:
 
       volumeMounts:
         - mountPath: "/mnt/azure"
@@ -206,6 +218,11 @@ A partir de este momenot el volumen "azure-managed-disk" puede ser usado en los 
     - name: volume
       persistentVolumeClaim:
         claimName: azure-managed-disk
+
+# Se crea un volumen similar de menor tamaño (1Gi) para los mockups y que contiene únicamente las especificaciones.
+kubectl apply -f disco-mockup.yaml
+
+# NOTA: La creación de la notificación PVC crea al mismo tiempo el volumen (PV)
 
 ### PASO 3 - Desplegar e iniciar la aplicación con kubectl apply
 #
@@ -314,11 +331,11 @@ kube-system   konnectivity-agent   app=konnectivity-agent                       
 # Consultar detalles de network policy
 kubectl describe networkpolicy  
 
-
 #
-# Operaciones con PVC - Persistent Volumes
+# Operaciones con volumenes: notificaciones (PVC) y discos (PV).
+# En realidad usamos Azure Files (sistemas de ficheros) y no discos, pues solo necesitamos compartir ficheros entre los PODs.
 #
-# Ver https://learn.microsoft.com/en-us/azure/aks/azure-csi-disk-storage-provision#statically-provision-a-volume
+# Ver https://learn.microsoft.com/es-es/azure/aks/concepts-storage
 #
 
 # Crear disco PVC (Ver fichero azure-pvc.yaml)
@@ -330,31 +347,42 @@ kubectl get pvc
 # Consulta estado de PVC
 kubectl get pv
 
-# Borrador de PVC
+# Borrar PVC
+# NOTA: Por defecto, los volúmenes PV se crean con política de reclamación "DELETE", es decir, al borrar el PVC también se elimina el volumen PV.
 kubectl delete pvc <pvc>
 
-# Borrar disco PVC
-kubectl delete azure-managed-disk
+# Si deseamos mantener el volumen PV entonces habría que cambiar la política de reclamación a "RETAIN". Esto se puede hacer ejecutando el siguiente comando desde bash (no powershell):
+kubectl patch pv <pv_name> -p '{"spec":{"persistentVolumeReclaimPolicy":"Retain"}}'
 
 # Crear un snapshot del volumen (Ver fichero yaml en https://docs.digitalocean.com/products/kubernetes/how-to/create-snapshots/). Se puede usar como datasource en la creación de discos
-kubectl create -f aos-snapshot.yaml
+kubectl create -f disco-notificaciones-snapshot.yaml
+
+# El contenido del fichero yaml es:
+
+apiVersion: snapshot.storage.k8s.io/v1
+kind: VolumeSnapshot
+metadata:
+  name: disco-notificaciones-snapshot
+spec:
+  source:
+    persistentVolumeClaimName: disco-notificacionees
 
 # Consulta de snapshots
 kubectl get volumesnapshot
 
 # Borrado de snaphot
-kubectl delete volumesnapshot aos-snapshot
-
-# Patch de pv para eliminar dangling "claimRef" que provoca que provoca que el PV se quede en estado Pending de forma indefinida
-kubectl get pv pv-azuredisk -o jsonpath="{.spec.claimRef}"
-kubectl patch pv pv-azuredisk --patch-file patch.yaml
-
-{
- "spec": {
-    "claimRef": null
-  }
-}
+kubectl delete volumesnapshot disco-notificaciones-snapshot
 
 # Copiar ficheros/directorios a volumen persistente.
 kubectl cp <origen> <destino>
 
+#
+# Usar otra cuenta de AZURE
+#
+# Si se desea usar otra cuenta de Azure hace falta registrarse a los siguientes proveedores:
+#
+# Microsoft.Compute
+# Microsoft.ContainerRegistry
+# Microsoft.Network
+# Microsoft.Storage
+# Microsoft.Web

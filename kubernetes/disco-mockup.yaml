@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+    name: disco-mockup
+spec:
+  storageClassName: azurefile-csi
+  accessModes: ["ReadWriteMany"]
+  resources:
+    requests:
+      storage: 1Gi
