@@ -125,7 +125,7 @@ DELETE http://127.0.0.1:4010/notificaciones/0000-0002
 accept: */*
 
 ###
-# curl -X "POST" "http://127.0.0.1:4010/login" -H "accept: */*" -H "Content-Type: application/x-www-form-urlencoded" -d "username=alejandro.carrasco.aragon@alumnos.upm.es&password=secret"
+# curl -X "POST" "http://127.0.0.1:4010/login" -H "accept: */*" -H "Content-Type: application/x-www-form-urlencoded" -d "username=demo&password=secret"
 POST http://127.0.0.1:4010/login
 Content-Type: application/x-www-form-urlencoded
 accept: application/json
