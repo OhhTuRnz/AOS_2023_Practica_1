@@ -17,13 +17,21 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBT1MgMjAyM
 ```
 Los tokens JWT pueden generase con el comando:
 ```sh
-curl -X POST http://<servidor>:<puerto>/login ....
+curl -X "POST" "http://<servidor>:<puerto>/login" -H "accept: */*" -H "Content-Type: application/x-www-form-urlencoded" -d "username=demo&password=secret"
 ```
-Este comando envia una petición HTTP de tipo POST al servidor incluyendo en el cuerpo un documento JSON que es un formulario con el nombre del usuario y su contraseña, y el servidor devuelve en la respuesta:
+donde `http:<servidor>:<puerto>` es la URL base del servidor de Notificaciones (`http://localhost:4013`) en el despliegue local. Este comando envía una petición POST que incluye en el "body" un formulario post de OAuth 2.0 con el usuario y la contraseña del usuario demo, devolviendo en la respuesta:
 - Un token JWT de acceso con una caducidad de 7 minutos
 - Un token JWT de refresco con una caducidad de 7 días
 
-El usuario que aparece en el ejemplo ha sido preregistrado en la aplicación y puede ser usado para generar nuevos tokens JWT.
+Este es un ejemplo del documento JSON incluido en la respuesta a esta petición:
+```sh
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBT1MgMjAyMyAtIEFQSSBOb3RpZmljYWNpb25lcyIsImF1ZCI6IkFPUyBVUE0iLCJzdWIiOiJhbGVqYW5kcm8uY2FycmFzY28uYXJhZ29uQGFsdW1ub3MudXBtLmVzIiwiZXhwIjoxNjg1MjA5NDY5LjI4Mzg4NTcsImlhdCI6MTY4NTIwNzY2OS4yODM4ODU3fQ.bGK9RSOCaw76sv6sRYZdznMCBfN7AJdshBmyzJzVoYE",
+  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJBT1MgMjAyMyAtIEFQSSBOb3RpZmljYWNpb25lcyIsImF1ZCI6IkFPUyBVUE0iLCJzdWIiOiJhbGVqYW5kcm8uY2FycmFzY28uYXJhZ29uQGFsdW1ub3MudXBtLmVzIiwiZXhwIjoxNjg1ODEyNDY5LjI4Mzg4NTcsImlhdCI6MTY4NTIwNzY2OS4yODM4ODU3fQ.7m6oUqkbp1Fth3BLwCblikXoj9GF136Ge_VSbXAIA4I",
+  "token_type": "bearer"
+}
+```
+Más detalles sobre el marco de autenticación OAuth 2.0 se pueden consultar [aquí][OAuth 2.0].
 
 Para facilitar la integración con los otros equipos la autorización con tokens JWT es opcional, es decir, el servicio no rechaza peticiones que no lo incluyan. En un entorno real se debería requerir siempre esta autorización.
 
@@ -45,7 +53,7 @@ donde <Dockerfile> es el fichero `Dockerfile` del proyecto que se puede consulta
 
 La imagen incluye el código del servidor (directorio /app/server) y el fichero SQLite con la base de datos (fichero /app/server/sql_app.db) con los siguientes datos iniciales:
 - Notificaciones con identificadores "1234-1234-12" y "1234-1234-13"
-- Usuario con nombre "alejandro.carrasco.aragon@alumnos.upm.es" y hash de su contraseña ('secret')
+- Usuario con nombre "demo" y hash de su contraseña ('secret')
 
 Para arrancar la aplicación podemos usar el comando:
 ```sh
@@ -126,13 +134,17 @@ Tras estos pasos previos el servicio puede ser desplegado ejecutando el comando 
 - **practica-2-default-networkpolicy.yaml**: Política de red para permitir que los PODs puedan recibir tráfico entrante desde cualquier origen.
 
 Estos los resultados tras ejecutar el comando `kubectl apply -f .` en la carpeta `kubernetes`:
-- **Creación de los recursos**: comando `kubectl apply -f .`
+
+**Creación de los recursos**: comando `kubectl apply -f .`
 <img src="../kubernetes/pantallas/Recursos-Creación.png"/>
-- **Consulta de volúmenes**: comando `kubectl get pvc`
+
+**Consulta de volúmenes**: comando `kubectl get pvc`
 <img src="../kubernetes/pantallas/Disco.png"/>
-- **Consulta de PODs**: comando `kubectl get pod`
+
+**Consulta de PODs**: comando `kubectl get pod`
 <img src="../kubernetes/pantallas/POD.png"/>
-- **Consulta de servicios**: comando `kubectl get svc`
+
+**Consulta de servicios**: comando `kubectl get svc`
 <img src="../kubernetes/pantallas/Servicios.png"/>
 
 Podemos observar que el servicio de Notificaciones está escuchando en la dirección `http://40.76.168.63:4013/` que usa dirección IP pública. El portal Azure nos muestra estas cargas de trabajo del cluster AKS:
@@ -156,3 +168,4 @@ Tamhién podemos aumentar a 2 el número de PODs para el servicio de notificacio
    [local]: <https://github.com/OhhTuRnz/AOS_2023_Practica_1/blob/main/practica_2/docker-compose.yml>
    [limites-SKU]: <https://learn.microsoft.com/en-us/azure/container-registry/container-registry-skus>
    [AKS]: <https://learn.microsoft.com/es-es/azure/aks/tutorial-kubernetes-prepare-acr?tabs=azure-cl>
+   [OAuth 2.0]: <https://oauth.net/2/>

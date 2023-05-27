@@ -6,19 +6,19 @@ git push
 
 ### DOCKER
 ###
-### En la práctica usamos el contenedor: acarrasco2000/aos2023_notificaciones
+### En la práctica usamos el contenedor: acarrasco2000/aos2023-notificaciones
 
 # Crear y arrancar contenedor a partir de docker-compose.yaml
 docker compose up
 
 # Construir imagen de Dockerfile
-docker build -t acarrasco2000/aos2023_notificaciones:v1 .
+docker build -t acarrasco2000/aos2023-notificaciones:v1 .
 
 # Publicar imagen en docker hub
-docker push acarrasco2000/aos2023_notificaciones:v1
+docker push acarrasco2000/aos2023-notificaciones:v1
 
 # Arrancar imagen publicando puertos (mejor hacerlo desde docker desktop para ver logs)
-docker container run -d -p 80:80 <contenedor>
+docker container run -d -p 80:4010 <contenedor>
 
 # Ver la red conectada al contenedor 
 docker inspect acarrasco2000/aos2023notificaciones -f "{{json .NetworkSettings.Networks }}"
@@ -123,7 +123,7 @@ Resp: aos2023notificaciones.azurecr.io
 ### Connect-AzContainerRegistry -Name aos2023notificaciones
 
 # Etiquetar las imagenes locales de docker con la dirección del servidor de inicio de sesion
-docker tag acarrasco2000/aos2023_notificaciones:v1 aos2023notificaciones.azurecr.io/azure-aos2023notificaciones:v1
+docker tag acarrasco2000/aos2023-notificaciones:v1 aos2023notificaciones.azurecr.io/azure-aos2023notificaciones:v1
 
 # Consultar las imagenes
 docker images
