@@ -4,7 +4,7 @@ from main import app
 client = TestClient(app)
 
 def login():
-    response = client.post("/login", data={"username": "alejandro.carrasco.aragon@alumnos.upm.es", "password": "secret"},
+    response = client.post("/login", data={"username": "demo", "password": "secret"},
                            headers={"content-type": "application/x-www-form-urlencoded"})
     assert response.status_code == 200
     response_data = response.json()
