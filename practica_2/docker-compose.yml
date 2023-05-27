@@ -63,24 +63,13 @@ services:
         - ./especificaciones/Facturas:/aos:ro
 
     notificaciones-backend:
-#      image: acarrasco2000/aos2023-notificaciones:v1
-      image: aos2023notificaciones.azurecr.io/azure-aos2023notificaciones:v1
+      image: acarrasco2000/aos2023-notificaciones:v1
       container_name: aos2023-notificaciones
       command: uvicorn main:app --host 0.0.0.0 --port 4013
       ports:
         - "4013:4013"
       environment:
         URL_TRABAJOS: http://localhost:4015
-      volumes:
-        - ./especificaciones/Notificaciones:/aos:ro
-
-    notificaciones-frontend:
-      image: swaggerapi/swagger-ui:v5.0.0-alpha.5
-      container_name: aos2023-notificaciones-ui
-      ports:
-        - "8003:8080"
-      environment:
-          SWAGGER_JSON: /aos/openapi.yaml
       volumes:
         - ./especificaciones/Notificaciones:/aos:ro
 

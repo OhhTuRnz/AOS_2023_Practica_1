@@ -1,5 +1,5 @@
 # 
-FROM python:3.9
+FROM python:3.10
 
 # 
 WORKDIR /app/server/
@@ -15,6 +15,3 @@ COPY ./server /app/server
 
 # 
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
-
-#
-EXPOSE 80
