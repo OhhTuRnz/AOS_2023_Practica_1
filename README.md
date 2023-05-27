@@ -72,3 +72,7 @@ La especificación está disponible en **localhost:8000** o **127.0.0.1:8000.**
 Como diría Alberto:
 > Nunca useis el tag latest de cualquier imagen porque si sacan
 > una nueva versión sin retrocompatibilidad la has cagado.
+
+# Infraestructura y Despliegue de los Servicios
+
+La información sobre el despliegue de los servicios del Taller sobre la infraestructura de Azure Kubernetes Services se encuentra en el fichero [README.md](https://github.com/OhhTuRnz/AOS_2023_Practica_1/blob/main/practica_2/README.md) del directorio `practica_2`del proyecto.

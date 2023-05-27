@@ -1,6 +1,6 @@
-# Práctica 2. Diseño y despliegue del servicio de Notificaciones
+# Práctica 2 - Infraestructura y Despliegue de los servicios con AKS
 
-## Consideraciones de diseño
+## Consideraciones generales
 
 El servicio de Notificaciones es un servidor HTTP que implementa la interfaz especificada en OpenAPI en la parte 1 de la práctica y que se puede consultar [aquí][ifz]. Se ha implementado en Python 3.10 usando FastAPI, la libreria SQLAlchemy ORM (Object-Relational Mapper) y SQLite (se ha seguido el tutorial [SQL (Relational) Databases][tutorial]. En concreto:
 
