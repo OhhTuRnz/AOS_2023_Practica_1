@@ -27,15 +27,19 @@ El usuario que aparece en el ejemplo ha sido preregistrado en la aplicación y p
 
 Para facilitar la integración con los otros equipos la autorización con tokens JWT es opcional, es decir, el servicio no rechaza peticiones que no lo incluyan. En un entorno real se debería requerir siempre esta autorización.
 
-Las respuestas HTTP del servidor incluyen cabeceras **etag** que pueden ser usadas por los clientes en las peticiones HTTP subsiguientes. La etiqueta **etag** generada es la firma MD5 del documento JSON devuelto en la respuesta.
+Las respuestas HTTP del servidor incluyen cabeceras `etag` que pueden ser usadas por los clientes en las peticiones HTTP subsiguientes. La etiqueta `etag` generada es la firma MD5 del documento JSON devuelto en la respuesta.
 
 Finalmente, el servidor soporta CORS (Cross-Origin Resource Sharing), una recomendación del consorcio W3C que define un mecanismo de seguridad que pueden aplicar los clientes de una interfaz Web (típicamente navegadores) para bloquear el acceso a recursos incluidos en las respuestas que no han sido autorizados por el servidor. Esta política sólo aplica si el recurso está alojado en un origen distinto al de la petición, es decir, distinto protocolo, dominio o puerto.
 
 ## Imagen
 
-La imagen de la aplicación se encuentra disponible en el siguiente [enlace a DockerHub][imagen] y se ha generado con el comando:
+La imagen de la aplicación se encuentra disponible en el siguiente [enlace a DockerHub][imagen] y usa la etiqueta `v1`. Si se prefiere se puede descargar con el comando:
 ```sh
-docker build -t acarrasco2000/aos2023_notificaciones:v1 -f <Dockerfile>
+docker pull acarrasco2000/aos2023-notificaciones:v1
+```
+La imagen se ha generado con el comando:
+```sh
+docker build -t acarrasco2000/aos2023-notificaciones:v1 -f <Dockerfile>
 ```
 donde <Dockerfile> es el fichero `Dockerfile` del proyecto que se puede consultar [aquí][docker].
 
@@ -45,9 +49,16 @@ La imagen incluye el código del servidor (directorio /app/server) y el fichero 
 
 Para arrancar la aplicación podemos usar el comando:
 ```sh
-docker run --name <nombre> acarrasco2000/aos2023_notificaciones:v1
+docker run --name <nombre> -p 80:4010 acarrasco2000/aos2023-notificaciones:v1
 ```
-El servidor escucha en el host "0.0.0.0" y puerto 80 del contenedor Docker. Se puede usar la opción "-p" del comando anterior para seleccionar host o puerto distintos en la máquina local.
+
+tras lo cual se puede acceder en la dirección `http://localhost:80` (en la opción -p se puede elegir un puerto en la máquina local distinto a 80). FastAPI genera automáticamente la documentación de la interfaz en OpenAI proporcionando una UI similar a la de Swagger y que puede accederse con la dirección `http://localhost:80/docs`.
+
+**NOTA**: Las direcciones base de los servicios del resto del Taller pueden cambiarse a través de las variables de entorno `URL_<Ifz>` donde `Ifz` es el nombre de la interfaz en mayúsculas. Por ejemplo, la dirección base del servicio de Trabajos se puede cambiar con:
+
+```sh
+URL_TRABAJOS=http://localhost:9000
+```
 
 ## Despliegue de servicios mediante Docker Compose
 
@@ -63,8 +74,7 @@ Cada interfaz consta de dos tipos de contenedores que usan la especificación en
 - **Front-end**: UI de la interfaz del servicio implementada con SwaggerUI.
 - **Back-end**: Mock-up del servicio implementado con Spotlight.
 
-Para el servicio Notificaciones se han definido dos contenedores:
-- **Front-end**: UI de la interfaz del servicio implementada con SwaggerUI.
+Para el servicio Notificaciones se han definido un contenedor:
 - **Back-end**: Servidor de Notificaciones que usa la [imagen][imagen] publicada en DockerHub como se indicó previamente.
 
 Las definiciones de estos contenedores aparecen en el fichero `practica_2/docker-compose.yml` del proyecto y se pueden consultar [aquí][local].
@@ -73,22 +83,21 @@ Para validar la integración del servidor de Notificaciones con el resto de serv
 
 | Servicio | Descripción | Dirección |
 |----------|----------|----------|
-| clientes-frontend | UI de la interfaz Clientes   | `localhost:8000`|
-| clientes-mock-backend | Mock-up del servicio Clientes   | `localhost:4010`|
-| logs-frontend | UI de la interfaz Logs   | `localhost:8001`|
-| logs-mock-backend | Mock-up del servicio Logs   | `localhost:4011`|
-| facturas-frontend | UI de la interfaz Facturas   | `localhost:8002`|
-| facturas-mock-backend | Mock-up del servicio Facturas   | `localhost:4012`|
-| notificaciones-frontend | UI de la interfaz Notificaciones   | `localhost:8003`|
-| notificaciones-backend | Servicio Facturas   | `localhost:4013`|
-| recambios-frontend | UI de la interfaz Recambios   | `localhost:8004`|
-| recambios-backend | Mock-up del servicio Recambios   | `localhost:4014`|
-| talleres-frontend | UI de la interfaz Talleres   | `localhost:8005`|
-| talleres-backend | Mock-up del servicio Talleres   | `localhost:4015`|
-| vehiculos-frontend | UI de la interfaz Vehículos   | `localhost:8006`|
-| vehiculos-backend | Mock-up del servicio Vehículos   | `localhost:4016`|
+| clientes-frontend | UI de la interfaz Clientes   | [http://localhost:8000](http://localhost:8000)|
+| clientes-mock-backend | Mock-up del servicio Clientes   | [http://localhost:4010](http://localhost:4010/clientes)|
+| logs-frontend | UI de la interfaz Logs   | [http://localhost:8001](http://localhost:8001)|
+| logs-mock-backend | Mock-up del servicio Logs   | [http://localhost:4011](http://localhost:4011/logs)|
+| facturas-frontend | UI de la interfaz Facturas   | [http://localhost:8002](http://localhost:8002)|
+| facturas-mock-backend | Mock-up del servicio Facturas   | [http://localhost:4012](http://localhost:4012/facturas)|
+| notificaciones-backend | Servicio Facturas   | [http://localhost:4013](http://localhost:4013/docs)|
+| recambios-frontend | UI de la interfaz Recambios   | [http://localhost:8004](http://localhost:8004)|
+| recambios-backend | Mock-up del servicio Recambios   | [http://localhost:4014](http://localhost:4014/recambios)|
+| trabajos-frontend | UI de la interfaz Trabajos   | [http://localhost:8005](http://localhost:8005)|
+| trabajos-backend | Mock-up del servicio Trabajos   | [http://localhost:4015](http://localhost:4015/trabajos)|
+| vehiculos-frontend | UI de la interfaz Vehículos   | [http://localhost:8006](http://localhost:8006)|
+| vehiculos-backend | Mock-up del servicio Vehículos   | [http://localhost:4016](http://localhost:4016/vehiculos)|
 
-**NOTA**: FastAPI envía siempre en minúsculas todas las cabeceras de las respuestas HTTP y esto puede provocar que la UI de SwaggerUI no las presente. Se recomienda usar los comandos `curl`con la opción `-i, --include` para confirmar las cabeceras en la respuesta HTTP.
+**NOTA**: FastAPI envía siempre en minúsculas todas las cabeceras de las respuestas HTTP y es posible que las UIs de las interfaces no muestre todas ellas. Se recomienda usar los comandos `curl`con la opción `-i, --include` para confirmar las cabeceras incluidas en la respuesta HTTP.
 
 ## Despliegue de servicios con Azure Kubernetes Services (AKS)
 
@@ -102,7 +111,7 @@ New-AzContainerRegistry -ResourceGroupName aos2023notificaciones -Name aos2023no
 ```
 - **Publicación de la imagen**: Desde la máquina local publicamos la imagen del servicio de Notificaciones en el registro ACR previamente creado. Los comandos usados:
 ```sh
-docker tag acarrasco2000/aos2023_notificaciones:v1 aos2023notificaciones.azurecr.io/azure-aos2023notificaciones:v1
+docker tag acarrasco2000/aos2023-notificaciones:v1 aos2023notificaciones.azurecr.io/azure-aos2023notificaciones:v1
 docker push aos2023notificaciones.azurecr.io/azure-aos2023notificaciones:v1
 ```
 - **Creación de un cluster AKS**. El cluster se crea con dos nodos y se asocia al registro ACR anteriormente creado. Se ha usado el comando:
@@ -110,7 +119,7 @@ docker push aos2023notificaciones.azurecr.io/azure-aos2023notificaciones:v1
 New-AzAksCluster -ResourceGroupName aos2023notificaciones -Name aos2023notificacionesCluster -NodeCount 2 -AcrNameToAttach aos2023notificaciones
 ```
 Tras estos pasos previos el servicio puede ser desplegado ejecutando el comando `kubectl apply -f .`en la carpeta `kubernetes`. Dicha carpeta contiene los siguientes ficheros kubernetes:
-- **Ficheros son el sufijo `-service.yaml`**: Definiciones de los balanceadores de carga que exponen los servicios ejecutados en uno o varios PODs. Existe un fichero por cada servicio y se usan balanceadores de tipo `LoadBalance`, que exponen una dirección IP pública del cluster, y `ClusterIP`, que exponen una dirección IP privada del cluster. Por limitaciones de la suscripción Azure para estudiantes sólo el servicio de Notificaciones usa balanceadores de tipo `LoadBalance`, necesitándose dos direcciones IP públicas una para el servicio y otra para la UI de la especificación de la interfaz.
+- **Ficheros son el sufijo `-service.yaml`**: Definiciones de los balanceadores de carga que exponen los servicios ejecutados en uno o varios PODs. Existe un fichero por cada servicio y se usan balanceadores de tipo `LoadBalance`, que exponen una dirección IP pública del cluster, y `ClusterIP`, que exponen una dirección IP privada del cluster. Por limitaciones de la suscripción Azure para estudiantes sólo el servicio de Notificaciones usa balanceadores de tipo `LoadBalance` y el resto de servicios usan balanceadores de tipo `ClusterIP`.
 - **Ficheros con el sufijo `-deployment.yaml`**: Definiciones de los PODs de los servicios. El número inicial de réplicas es 1 aunque éste pueder ser escalado con los servicios AKS.
 - **disco-notificaciones.yaml**: Notificación PVC (Persistent Volume Claim) para un disco de 5GB con clase de almacenamiento `azurefile-csi` (Azure Files)` que es montado por los PODs del servicio de Notificaciones. Este disco se usa para compartir el fichero SQLite con la base de datos del servicio.
 - **disco-mockup.yaml**: Notificación PVC (Persistent Volume Claim) para un disco de 1GB con clase de almacenamiento `azurefile-csi` (Azure Files)` que es montado por los mock-ups del resto de servicios. En este disco se guardan las especificaciones en OpenAPI de las interfaces.
@@ -126,7 +135,7 @@ Estos los resultados tras ejecutar el comando `kubectl apply -f .` en la carpeta
 - **Consulta de servicios**: comando `kubectl get svc`
 <img src="../kubernetes/pantallas/Servicios.png"/>
 
-Podemos observar que la UI de la interfaz de Notificaciones está escuchando en la dirección IP pública `http://20.31.200.197:8003/` mientras que el servicio de Notificaciones está escuchando en la dirección IP pública `http://20.23.22.43:4013/`. El portal Azure nos muestra estas cargas de trabajo del cluster AKS:
+Podemos observar que el servicio de Notificaciones está escuchando en la dirección `http://40.76.168.63:4013/` que usa dirección IP pública. El portal Azure nos muestra estas cargas de trabajo del cluster AKS:
 
 <img src="../kubernetes/pantallas/Cargas de Trabajo.png"/>
 
@@ -134,12 +143,15 @@ Tras verificar el estado correcto de los recursos creados podemos acceder a la d
 
 <img src="../kubernetes/pantallas/UI GET.png"/>
 
+Tamhién podemos aumentar a 2 el número de PODs para el servicio de notificaciones:
+
+<img src="../kubernetes/pantallas/Escalado POD.png"/>
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
    [tutorial]: <https://fastapi.tiangolo.com/es/tutorial/sql-databases>
    [ifz]: <https://github.com/OhhTuRnz/AOS_2023_Practica_1/blob/main/openapi/openapi.yaml>
-   [imagen]: <https://hub.docker.com/r/acarrasco2000/aos2023_notificaciones>
+   [imagen]: <https://hub.docker.com/r/acarrasco2000/aos2023-notificaciones/tags>
    [docker]: <https://github.com/OhhTuRnz/AOS_2023_Practica_1/blob/main/Dockerfile>
    [local]: <https://github.com/OhhTuRnz/AOS_2023_Practica_1/blob/main/practica_2/docker-compose.yml>
    [limites-SKU]: <https://learn.microsoft.com/en-us/azure/container-registry/container-registry-skus>

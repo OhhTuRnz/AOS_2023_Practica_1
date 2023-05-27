@@ -65,9 +65,9 @@ services:
     notificaciones-backend:
       image: acarrasco2000/aos2023-notificaciones:v1
       container_name: aos2023-notificaciones
-      command: uvicorn main:app --host 0.0.0.0 --port 4013
+      command: uvicorn main:app --host 0.0.0.0 --port 4010
       ports:
-        - "4013:4013"
+        - "4013:4010"
       environment:
         URL_TRABAJOS: http://localhost:4015
       volumes:
