@@ -22,6 +22,9 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from sqlalchemy.orm import sessionmaker
 
+import shutil
+import os.path
+
 # Load environment variable file
 load_dotenv()
 
@@ -29,13 +32,21 @@ if "SQLALCHEMY_DATABASE_URI" in os.environ:
     SQLALCHEMY_DATABASE_URI = os.environ["SQLALCHEMY_DATABASE_URI"]
 else:
     SQLALCHEMY_DATABASE_URI = "sqlite:///./notificaciones.db"
+print ("Cadena de conexión a la base de datos: " + SQLALCHEMY_DATABASE_URI)
+
+# Inicia el fichero de base de datos si no existe
+dbFilename = SQLALCHEMY_DATABASE_URI.rsplit("sqlite:///", 1)[1]
+if (os.path.isfile(dbFilename)):
+    print ("Fichero existe")
+else:
+    os.makedirs(os.path.dirname(dbFilename), exist_ok=True)
+    shutil.copy("notificaciones.db", dbFilename)
+
 # Inicia sesión con la bse de datos
 engine = create_engine(SQLALCHEMY_DATABASE_URI)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 # Crea modelos
 models.Base.metadata.create_all(bind=engine)
-# Carga datos iniciales
-crud.load_db(SessionLocal())
 
 # Init FastAPI
 app = FastAPI()

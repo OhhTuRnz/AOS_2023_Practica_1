@@ -43,7 +43,8 @@ def load_db(db: Session):
 
         db.commit()
     except Exception as e:
-            print ("Error iniciando la base de datos")
+        db.rollback()
+        print ("Error iniciando la base de datos")
     return
 
 def get_usuario(db: Session, nombre: str):
