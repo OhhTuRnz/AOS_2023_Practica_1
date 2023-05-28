@@ -365,7 +365,7 @@ metadata:
   name: disco-notificaciones-snapshot
 spec:
   source:
-    persistentVolumeClaimName: disco-notificacionees
+    persistentVolumeClaimName: disco-notificaciones
 
 # Consulta de snapshots
 kubectl get volumesnapshot
