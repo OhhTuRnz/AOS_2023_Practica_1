@@ -1,6 +1,6 @@
-# Práctica 2 - Infraestructura y Despliegue de los servicios con AKS
+# Entrega Práctica 2 - Equipo 5 - Subsistema de notificaciones - AOS 2023 
 
-## Consideraciones generales
+## Consideraciones generales del servicio de notificaciones
 
 El servicio de Notificaciones es un servidor HTTP que implementa la interfaz especificada en OpenAPI en la parte 1 de la práctica y que se puede consultar [aquí][ifz]. Se ha implementado en Python 3.10 usando FastAPI, la libreria SQLAlchemy ORM (Object-Relational Mapper) y SQLite (se ha seguido el tutorial [SQL (Relational) Databases][tutorial]. En concreto:
 
@@ -8,7 +8,7 @@ El servicio de Notificaciones es un servidor HTTP que implementa la interfaz esp
 - SQLAlquemy ORM es una librería que implementa el patrón ORM (Object-Relational Mapper) con el que se consigue convertir (o mapear) automáticamente los objetos Python de la aplicación en estructuras de una base de datos relacional (SQL).
 - SQLite es una base de datos relacional sencilla que usa un único fichero para el almacenamiento persistente de los datos.
 
-El esquema de la base de datos es muy sencillo pues consta de dos tablas: **Notificaciones** para guardar la información sobre notificaciones y **Usuarios** para la generación de tokens JWT. Se incluye también una secuencia para la generación automática de identificadores para las nuevas notificaciones.
+El esquema de la base de datos es muy sencillo pues consta de dos tablas: **Notificaciones** para guardar la información sobre notificaciones y **Usuarios** para validar las credenciales de los usuarios durante la generación de tokens JWT. Incluye también una secuencia para la generación automática de identificadores para las nuevas notificaciones.
 
 El servidor HTTP puede recibir peticiones que incluyan tokens JWT. Estas peticiones se autorizan si el token JWT es válido y se ha generado para un usuario registrado en la base de datos, rechazándose en caso contrario. El token JWT debe aparecer en la cabecera **authorization** de la petición HTTP de la siguiente forma:
 
@@ -19,7 +19,7 @@ Los tokens JWT pueden generase con el comando:
 ```sh
 curl -X "POST" "http://<servidor>:<puerto>/login" -H "accept: */*" -H "Content-Type: application/x-www-form-urlencoded" -d "username=demo&password=secret"
 ```
-donde `http:<servidor>:<puerto>` es la URL base del servidor de Notificaciones (`http://localhost:4013`) en el despliegue local. Este comando envía una petición POST que incluye en el "body" un formulario post de OAuth 2.0 con el usuario y la contraseña del usuario demo, devolviendo en la respuesta:
+donde `http:<servidor>:<puerto>` es la URL base del servidor de Notificaciones (`http://localhost:4013` en el despliegue local). Este comando envía una petición POST que incluye en el "body" un formulario post de OAuth 2.0 con el usuario y la contraseña del usuario demo, devolviendo en la respuesta:
 - Un token JWT de acceso con una caducidad de 7 minutos
 - Un token JWT de refresco con una caducidad de 7 días
 
@@ -31,7 +31,7 @@ Este es un ejemplo del documento JSON incluido en la respuesta a esta petición:
   "token_type": "bearer"
 }
 ```
-Más detalles sobre el marco de autenticación OAuth 2.0 se pueden consultar [aquí][OAuth 2.0].
+Más detalles sobre el marco de autorización OAuth 2.0 se pueden consultar [aquí][OAuth 2.0].
 
 Para facilitar la integración con los otros equipos la autorización con tokens JWT es opcional, es decir, el servicio no rechaza peticiones que no lo incluyan. En un entorno real se debería requerir siempre esta autorización.
 
@@ -39,7 +39,7 @@ Las respuestas HTTP del servidor incluyen cabeceras `etag` que pueden ser usadas
 
 Finalmente, el servidor soporta CORS (Cross-Origin Resource Sharing), una recomendación del consorcio W3C que define un mecanismo de seguridad que pueden aplicar los clientes de una interfaz Web (típicamente navegadores) para bloquear el acceso a recursos incluidos en las respuestas que no han sido autorizados por el servidor. Esta política sólo aplica si el recurso está alojado en un origen distinto al de la petición, es decir, distinto protocolo, dominio o puerto.
 
-## Imagen
+## Imagen del servicio de notificaciones
 
 La imagen de la aplicación se encuentra disponible en el siguiente [enlace a DockerHub][imagen] y usa la etiqueta `v1`. Si se prefiere se puede descargar con el comando:
 ```sh
@@ -49,18 +49,18 @@ La imagen se ha generado con el comando:
 ```sh
 docker build -t acarrasco2000/aos2023-notificaciones:v1 -f <Dockerfile>
 ```
-donde <Dockerfile> es el fichero `Dockerfile` del proyecto que se puede consultar [aquí][docker].
+donde `<Dockerfile>` es el fichero `Dockerfile` del proyecto que se puede consultar [aquí][docker].
 
 La imagen incluye el código del servidor (directorio /app/server) y el fichero SQLite con la base de datos (fichero /app/server/sql_app.db) con los siguientes datos iniciales:
 - Notificaciones con identificadores "1234-1234-12" y "1234-1234-13"
-- Usuario con nombre "demo" y hash de su contraseña ('secret')
+- Usuario con nombre "demo" y hash de su contraseña ("secret")
 
-Para arrancar la aplicación podemos usar el comando:
+Para arrancar el servicio podemos usar el comando:
 ```sh
 docker run --name <nombre> -p 80:4010 acarrasco2000/aos2023-notificaciones:v1
 ```
 
-tras lo cual se puede acceder en la dirección `http://localhost:80` (en la opción -p se puede elegir un puerto en la máquina local distinto a 80). FastAPI genera automáticamente la documentación de la interfaz en OpenAI proporcionando una UI similar a la de Swagger y que puede accederse con la dirección `http://localhost:80/docs`.
+tras lo cual se puede acceder en la dirección `http://localhost:80` (en la opción -p se puede elegir un puerto en la máquina local distinto a 80). FastAPI genera automáticamente la documentación de la interfaz en OpenAI proporcionando una UI similar a la de Swagger y que puede accederse con la dirección [http://localhost:80/docs](http://localhost:80/docs).
 
 **NOTA**: Las direcciones base de los servicios del resto del Taller pueden cambiarse a través de las variables de entorno `URL_<Ifz>` donde `Ifz` es el nombre de la interfaz en mayúsculas. Por ejemplo, la dirección base del servicio de Trabajos se puede cambiar con:
 
@@ -68,9 +68,9 @@ tras lo cual se puede acceder en la dirección `http://localhost:80` (en la opci
 URL_TRABAJOS=http://localhost:9000
 ```
 
-## Despliegue de servicios mediante Docker Compose
+## Despliegue de los servicios con Docker Compose
 
-En el momento de preparación de esta memoria no se disponía de los desarrollos de los otros equipos por lo que se ha optado por integrar nuestro servidor con "mock-ups" del resto de interfaces, es decir:
+En el momento de preparación de esta memoria no se disponía de los desarrollos de los otros equipos por lo que se ha optado por integrar nuestro servicio con "mock-ups" del resto de los servicios, es decir:
 - Clientes
 - Facturas
 - Logs
@@ -82,12 +82,12 @@ Cada interfaz consta de dos tipos de contenedores que usan la especificación en
 - **Front-end**: UI de la interfaz del servicio implementada con SwaggerUI.
 - **Back-end**: Mock-up del servicio implementado con Spotlight.
 
-Para el servicio Notificaciones se han definido un contenedor:
+Para el servicio Notificaciones se ha definido un contenedor:
 - **Back-end**: Servidor de Notificaciones que usa la [imagen][imagen] publicada en DockerHub como se indicó previamente.
 
 Las definiciones de estos contenedores aparecen en el fichero `practica_2/docker-compose.yml` del proyecto y se pueden consultar [aquí][local].
 
-Para validar la integración del servidor de Notificaciones con el resto de servicios podemos ejecutar el siguiente comando `docker compose up -d`dentro de la carpeta `practica_2` del proyecto. Tras ejecutar este comando los servicios de cada contenedor están disponibles en las siguientes direcciones:
+Para validar la integración del servicio de Notificaciones con el resto los de servicios podemos ejecutar el siguiente comando `docker compose up -d`dentro de la carpeta `practica_2` del proyecto. Tras ejecutar este comando los servicios de cada contenedor están disponibles en las siguientes direcciones:
 
 | Servicio | Descripción | Dirección |
 |----------|----------|----------|
@@ -97,7 +97,7 @@ Para validar la integración del servidor de Notificaciones con el resto de serv
 | logs-mock-backend | Mock-up del servicio Logs   | [http://localhost:4011](http://localhost:4011/logs)|
 | facturas-frontend | UI de la interfaz Facturas   | [http://localhost:8002](http://localhost:8002)|
 | facturas-mock-backend | Mock-up del servicio Facturas   | [http://localhost:4012](http://localhost:4012/facturas)|
-| notificaciones-backend | Servicio Facturas   | [http://localhost:4013](http://localhost:4013/docs)|
+| notificaciones-backend | Servicio Notificaciones   | [http://localhost:4013](http://localhost:4013/docs)|
 | recambios-frontend | UI de la interfaz Recambios   | [http://localhost:8004](http://localhost:8004)|
 | recambios-backend | Mock-up del servicio Recambios   | [http://localhost:4014](http://localhost:4014/recambios)|
 | trabajos-frontend | UI de la interfaz Trabajos   | [http://localhost:8005](http://localhost:8005)|
@@ -105,11 +105,11 @@ Para validar la integración del servidor de Notificaciones con el resto de serv
 | vehiculos-frontend | UI de la interfaz Vehículos   | [http://localhost:8006](http://localhost:8006)|
 | vehiculos-backend | Mock-up del servicio Vehículos   | [http://localhost:4016](http://localhost:4016/vehiculos)|
 
-**NOTA**: FastAPI envía siempre en minúsculas todas las cabeceras de las respuestas HTTP y es posible que las UIs de las interfaces no muestre todas ellas. Se recomienda usar los comandos `curl`con la opción `-i, --include` para confirmar las cabeceras incluidas en la respuesta HTTP.
+**NOTA**: FastAPI envía siempre en minúsculas todas las cabeceras de las respuestas HTTP y es posible que las UIs de las interfaces no muestren todas ellas. Se recomienda usar los comandos `curl`con la opción `-i, --include` para confirmar las cabeceras incluidas en la respuesta HTTP.
 
-## Despliegue de servicios con Azure Kubernetes Services (AKS)
+## Despliegue de los servicios en Azure Kubernetes Services
 
-Para el despliegue de los servicios en AKS se ha usado la suscripción para estudiantes que ofrece a los estudiantes de la UPM.
+Para el despliegue de los servicios en Azure Kurbenetes Services (AKS) se ha usado la suscripción para estudiantes que ofrece a los estudiantes de la UPM.
 La implementación del servicio en AKS implica la realización de las siguientes tareas (para más detalles consultar [aquí][AKS])
 - **Creación de un registro de contenedors (ACR)**. El registro se crea con "tier" (o SKU) `Basic` aplicándose los límites de almacenamiento, tamaño de imágenes, ancho de banda, operaciones I/O, etc. que se definen en [Límites SKU][limites-SKU]. Los comandos de Azure Powershell usados han sido (el último comando nos proporciona la dirección para la publicación de imágenes):
 ```sh
@@ -135,23 +135,27 @@ Tras estos pasos previos el servicio puede ser desplegado ejecutando el comando 
 
 Estos los resultados tras ejecutar el comando `kubectl apply -f .` en la carpeta `kubernetes`:
 
-**Creación de los recursos**: comando `kubectl apply -f .`
+**Creación de los recursos**: comando `kubectl apply -f .
+
 <img src="../kubernetes/pantallas/Recursos-Creación.png"/>
 
 **Consulta de volúmenes**: comando `kubectl get pvc`
+
 <img src="../kubernetes/pantallas/Disco.png"/>
 
 **Consulta de PODs**: comando `kubectl get pod`
+
 <img src="../kubernetes/pantallas/POD.png"/>
 
 **Consulta de servicios**: comando `kubectl get svc`
+
 <img src="../kubernetes/pantallas/Servicios.png"/>
 
-Podemos observar que el servicio de Notificaciones está escuchando en la dirección `http://40.76.168.63:4013/` que usa dirección IP pública. El portal Azure nos muestra estas cargas de trabajo del cluster AKS:
+Podemos observar que el servicio de Notificaciones está escuchando en la dirección `http://40.76.168.63:4013/` que incluye dirección IP pública. El portal Azure nos muestra estas cargas de trabajo del cluster AKS:
 
 <img src="../kubernetes/pantallas/Cargas de Trabajo.png"/>
 
-Tras verificar el estado correcto de los recursos creados podemos acceder a la dirección pública de la UI de la interfaz de Notificaciones y cursar una petición GET como aparece en la pantalla:
+Tras verificar el estado correcto de los recursos creados podemos acceder a la UI de la interfaz de notificaciones (en esta caso [http://40.76.168.63:4013/docs/](http://40.76.168.63:4013/docs) y cursar una petición GET obteniendo el resultado que aparece en esta pantalla:
 
 <img src="../kubernetes/pantallas/UI GET.png"/>
 
