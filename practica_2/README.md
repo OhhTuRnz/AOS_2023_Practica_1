@@ -151,7 +151,7 @@ Estos los resultados tras ejecutar el comando `kubectl apply -f .` en la carpeta
 
 <img src="../kubernetes/pantallas/Servicios.png"/>
 
-Podemos observar que el servicio de Notificaciones está escuchando en la dirección `http://40.76.168.63:4013/` que incluye dirección IP pública.
+Podemos observar que el servicio de Notificaciones está escuchando en la dirección `http://40.76.168.63:4013/` que incluye una dirección IP pública.
 
 **NOTA**: *La suscripción de estudiantes de AKS nos proporciona direcciones IP públicas dinámicas por lo que esta dirección puede cambiar.*
 
