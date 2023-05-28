@@ -1,5 +1,12 @@
 # Entrega Práctica 2 - Equipo 5 - Subsistema de notificaciones - AOS 2023 
 
+# Contenido de la entrega
+Toda la información del proyecto está publicada en GitHub y se puede consultar [aquí][github].
+En el fichero ZIP de la entrega incluye los siguientes ficheros / directorios:
+- **README.md**: El presente fichero README.
+- **practica_2**: Directorio con el fichero de configuración para el despliegue local. El comando `docker compose up` debe ser ejecutado en este directorio.
+- **kubernetes**: Directorio con los ficheros kubernetes para el despliegue en la infraestructura de Azure Kurbenetes Services (AKS), El comando `kubectl apply -f .` debe ser ejecutado en este directorio.
+
 ## Consideraciones generales del servicio de notificaciones
 
 El servicio de Notificaciones es un servidor HTTP que implementa la interfaz especificada en OpenAPI en la parte 1 de la práctica y que se puede consultar [aquí][ifz]. Se ha implementado en Python 3.10 usando FastAPI, la libreria SQLAlchemy ORM (Object-Relational Mapper) y SQLite (se ha seguido el tutorial [SQL (Relational) Databases][tutorial]. En concreto:
@@ -175,6 +182,7 @@ Tamhién podemos aumentar a 2 el número de PODs para el servicio de notificacio
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
+   [github]: <https://github.com/OhhTuRnz/AOS_2023_Practica_1>
    [tutorial]: <https://fastapi.tiangolo.com/es/tutorial/sql-databases>
    [ifz]: <https://github.com/OhhTuRnz/AOS_2023_Practica_1/blob/main/openapi/openapi.yaml>
    [imagen]: <https://hub.docker.com/r/acarrasco2000/aos2023-notificaciones/tags>

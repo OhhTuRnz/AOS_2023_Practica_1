@@ -2,8 +2,9 @@ import os
 
 import uvicorn
 from fastapi import Depends, FastAPI, HTTPException, Request, Response, status
-from sqlalchemy.orm import Session
 from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
+from sqlalchemy.sql import text
 
 import requests
 import json
@@ -42,13 +43,21 @@ else:
     os.makedirs(os.path.dirname(dbFilename), exist_ok=True)
     shutil.copy("notificaciones.db", dbFilename)
 
+if not ("USA_COPIA" in os.environ):
+    SQLALCHEMY_DATABASE_URI = "sqlite:///./notificaciones.db"
+
 # Inicia sesión con la bse de datos
 engine = create_engine(SQLALCHEMY_DATABASE_URI)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 # Crea modelos
 models.Base.metadata.create_all(bind=engine)
 
-# Init FastAPI
+db = SessionLocal()
+if "JOURNAL_MODE" in os.environ:
+    print ("PRAGMA journal_mode = " + os.environ["JOURNAL_MODE"])
+    db.execute(text("PRAGMA journal_mode = " + os.environ["JOURNAL_MODE"]))
+
+    # Init FastAPI
 app = FastAPI()
 
 # Añade soporte para CORS
@@ -72,7 +81,7 @@ def get_db():
     db = SessionLocal()
     try:
         yield db
-        # Enable foreign key constraints
+#        # Enable foreign key constraints
 #        db.execute(text("PRAGMA foreign_keys = 1"))
     finally:
         db.close()
