@@ -51,9 +51,14 @@ docker build -t acarrasco2000/aos2023-notificaciones:v1 -f <Dockerfile>
 ```
 donde `<Dockerfile>` es el fichero `Dockerfile` del proyecto que se puede consultar [aquí][docker].
 
-La imagen incluye el código del servidor (directorio /app/server) y el fichero SQLite con la base de datos (fichero /app/server/sql_app.db) con los siguientes datos iniciales:
+La imagen incluye el código del servidor (directorio /app/server) y el fichero SQLite con la base de datos (fichero /app/server/notificaciones.db) con los siguientes datos iniciales:
 - Notificaciones con identificadores "1234-1234-12" y "1234-1234-13"
 - Usuario con nombre "demo" y hash de su contraseña ("secret")
+
+La ubicación del fichero SQLite con la base de datos se puede definiendo la variable de entorno `SQLALCHEMY_DATABASE_URI` la cadena de conexión a la base de datos. Por ejemplo:
+```sh
+SQLALCHEMY_DATABASE_URI="sqlite:////aos/server/notificaciones.db"
+```
 
 Para arrancar el servicio podemos usar el comando:
 ```sh
@@ -117,11 +122,12 @@ New-AzResourceGroup -Name aos2023notificaciones -Location eastus
 New-AzContainerRegistry -ResourceGroupName aos2023notificaciones -Name aos2023notificaciones -Sku Basic
 (Get-AzContainerRegistry -ResourceGroupName aos2023notificaciones -Name aos2023notificaciones).LoginServer
 ```
-- **Publicación de la imagen**: Desde la máquina local publicamos la imagen del servicio de Notificaciones en el registro ACR previamente creado. Los comandos usados:
+- **Publicación de la imagen**: Desde la máquina local publicamos la imagen del servicio de Notificaciones en el registro ACR previamente creado. Esta misma imagen también existe en Docker Hub para que pueda ser accedida públicamente. Los comandos usados:
 ```sh
 docker tag acarrasco2000/aos2023-notificaciones:v1 aos2023notificaciones.azurecr.io/azure-aos2023notificaciones:v1
 docker push aos2023notificaciones.azurecr.io/azure-aos2023notificaciones:v1
 ```
+
 - **Creación de un cluster AKS**. El cluster se crea con dos nodos y se asocia al registro ACR anteriormente creado. Se ha usado el comando:
 ```sh
 New-AzAksCluster -ResourceGroupName aos2023notificaciones -Name aos2023notificacionesCluster -NodeCount 2 -AcrNameToAttach aos2023notificaciones
@@ -129,7 +135,7 @@ New-AzAksCluster -ResourceGroupName aos2023notificaciones -Name aos2023notificac
 Tras estos pasos previos el servicio puede ser desplegado ejecutando el comando `kubectl apply -f .`en la carpeta `kubernetes`. Dicha carpeta contiene los siguientes ficheros kubernetes:
 - **Ficheros son el sufijo `-service.yaml`**: Definiciones de los balanceadores de carga que exponen los servicios ejecutados en uno o varios PODs. Existe un fichero por cada servicio y se usan balanceadores de tipo `LoadBalance`, que exponen una dirección IP pública del cluster, y `ClusterIP`, que exponen una dirección IP privada del cluster. Por limitaciones de la suscripción Azure para estudiantes sólo el servicio de Notificaciones usa balanceadores de tipo `LoadBalance` y el resto de servicios usan balanceadores de tipo `ClusterIP`.
 - **Ficheros con el sufijo `-deployment.yaml`**: Definiciones de los PODs de los servicios. El número inicial de réplicas es 1 aunque éste pueder ser escalado con los servicios AKS.
-- **disco-notificaciones.yaml**: Notificación PVC (Persistent Volume Claim) para un disco de 5GB con clase de almacenamiento `azurefile-csi` (Azure Files)` que es montado por los PODs del servicio de Notificaciones. Este disco se usa para compartir el fichero SQLite con la base de datos del servicio.
+- **disco-notificaciones.yaml**: Notificación PVC (Persistent Volume Claim) para un disco de 5GB con clase de almacenamiento `azurefile-csi` (Azure Files)` que es montado por los PODs del servicio de Notificaciones. Este disco se usa para compartir el fichero SQLite con la base de datos del servicio (fichero /aos/server/notificaciones.db).
 - **disco-mockup.yaml**: Notificación PVC (Persistent Volume Claim) para un disco de 1GB con clase de almacenamiento `azurefile-csi` (Azure Files)` que es montado por los mock-ups del resto de servicios. En este disco se guardan las especificaciones en OpenAPI de las interfaces.
 - **practica-2-default-networkpolicy.yaml**: Política de red para permitir que los PODs puedan recibir tráfico entrante desde cualquier origen.
 

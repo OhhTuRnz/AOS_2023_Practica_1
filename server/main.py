@@ -3,6 +3,7 @@ import os
 import uvicorn
 from fastapi import Depends, FastAPI, HTTPException, Request, Response, status
 from sqlalchemy.orm import Session
+from sqlalchemy import create_engine
 
 import requests
 import json
@@ -19,11 +20,24 @@ from utils import generate_jwt, verify_password, get_current_user, get_hashed_pa
 
 from fastapi.middleware.cors import CORSMiddleware
 
+from sqlalchemy.orm import sessionmaker
+
 # Load environment variable file
 load_dotenv()
 
-# Init FastAPI
+if "SQLALCHEMY_DATABASE_URI" in os.environ:
+    SQLALCHEMY_DATABASE_URI = os.environ["SQLALCHEMY_DATABASE_URI"]
+else:
+    SQLALCHEMY_DATABASE_URI = "sqlite:///./notificaciones.db"
+# Inicia sesión con la bse de datos
+engine = create_engine(SQLALCHEMY_DATABASE_URI)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+# Crea modelos
 models.Base.metadata.create_all(bind=engine)
+# Carga datos iniciales
+crud.load_db(SessionLocal())
+
+# Init FastAPI
 app = FastAPI()
 
 # Añade soporte para CORS
@@ -51,6 +65,7 @@ def get_db():
 #        db.execute(text("PRAGMA foreign_keys = 1"))
     finally:
         db.close()
+
 
 @app.post('/login', summary="Create access and refresh tokens for user", response_model=schemas.TokenSchema)
 def login(request: Request, db: Session = Depends(get_db), form_data: OAuth2PasswordRequestForm = Depends()):

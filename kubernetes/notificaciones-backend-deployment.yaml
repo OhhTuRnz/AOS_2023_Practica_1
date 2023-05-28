@@ -36,8 +36,8 @@ spec:
           env:
             - name: URL_TRABAJOS
               value: http://trabajos-mock-backend:4015
-            - name: SQLALCHEMY_DATABASE_URL
-              value: sqlite:////aos/server/sql_app.db
+            - name: SQLALCHEMY_DATABASE_URI
+              value: sqlite:////aos/server/notificaciones.db
           image: acarrasco2000/aos2023-notificaciones:v1
           name: aos2023-notificaciones
           ports:

@@ -8,6 +8,44 @@ from sqlalchemy import select
 from sqlalchemy.sql import text
 from fastapi import HTTPException
 
+# Carga datos iniciales en la base de datos si aún no han sido cargados
+def load_db(db: Session):
+    try:
+        sql = text('SELECT * FROM id_trabajo_seq')
+        result = db.execute(sql).all()
+        if len(result) > 0:
+            # Los datos ya están cargados
+            return
+    except Exception as e:
+        return
+
+    # Inicia base de datos
+    try:
+        # Insert numero de secuencia
+        sql = text('INSERT INTO id_trabajo_seq VALUES (1)')
+        db.execute(sql)
+
+        # Inserta usuario demo
+        sql = text('INSERT INTO usuarios VALUES ("demo", "$2b$12$23EsRw/O3CEx/tFYG.FLDu2Ln9C5rZJ5BxpA.jK8kEQf6NHiTfo7e")')
+        db.execute(sql)
+
+        # Inserta trabajos "1" y "1234-1234"
+        sql = text('INSERT INTO trabajos VALUES ("1")')
+        db.execute(sql)
+        sql = text('INSERT INTO trabajos VALUES ("1234-1234")')
+        db.execute(sql)
+
+        # Inserta notificaciones "1234-1234-12" y "1234-1234-13"
+        sql = text('INSERT INTO notificaciones VALUES ("1234-1234-12", "1234-1234", "Creado", "Solicitado por el cliente", "2023-04-05 12:00:58")')
+        db.execute(sql)
+        sql = text('INSERT INTO notificaciones VALUES ("1234-1234-13", "1234-1234", "Planificado", "Asignado mecánico", "2023-04-05 12:00:58")')
+        db.execute(sql)
+
+        db.commit()
+    except Exception as e:
+            print ("Error iniciando la base de datos")
+    return
+
 def get_usuario(db: Session, nombre: str):
     try:
         row = db.query(models.Usuario).filter(models.Usuario.nombre == nombre).one()
