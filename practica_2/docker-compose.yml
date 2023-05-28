@@ -67,7 +67,7 @@ services:
       container_name: aos2023-notificaciones
       command: uvicorn main:app --host 0.0.0.0 --port 4010
       ports:
-        - "4013:4010"
+        - "80:4010"
       environment:
         URL_TRABAJOS: http://localhost:4015
       volumes:
