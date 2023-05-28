@@ -2,7 +2,8 @@
 
 # Contenido de la entrega
 Toda la información del proyecto está publicada en GitHub y se puede consultar [aquí][github].
-En el fichero ZIP de la entrega incluye los siguientes ficheros / directorios:
+
+El fichero ZIP de la entrega incluye los siguientes ficheros / directorios:
 - **README.md**: El presente fichero README.
 - **practica_2**: Directorio con el fichero de configuración para el despliegue local. El comando `docker compose up` debe ser ejecutado en este directorio.
 - **kubernetes**: Directorio con los ficheros kubernetes para el despliegue en la infraestructura de Azure Kurbenetes Services (AKS), El comando `kubectl apply -f .` debe ser ejecutado en este directorio.
