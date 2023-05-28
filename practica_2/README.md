@@ -62,7 +62,7 @@ docker run --name <nombre> -p 80:4010 acarrasco2000/aos2023-notificaciones:v1
 
 tras lo cual se puede acceder en la dirección `http://localhost:80` (en la opción -p se puede elegir un puerto en la máquina local distinto a 80). FastAPI genera automáticamente la documentación de la interfaz en OpenAI proporcionando una UI similar a la de Swagger y que puede accederse con la dirección [http://localhost:80/docs](http://localhost:80/docs).
 
-**NOTA**: Las direcciones base de los servicios del resto del Taller pueden cambiarse a través de las variables de entorno `URL_<Ifz>` donde `Ifz` es el nombre de la interfaz en mayúsculas. Por ejemplo, la dirección base del servicio de Trabajos se puede cambiar con:
+**NOTA**: *Las direcciones base de los servicios del resto del Taller pueden cambiarse a través de las variables de entorno `URL_<Ifz>` donde `Ifz` es el nombre de la interfaz en mayúsculas. Por ejemplo, la dirección base del servicio de Trabajos se puede cambiar con:*
 
 ```sh
 URL_TRABAJOS=http://localhost:9000
@@ -105,7 +105,7 @@ Para validar la integración del servicio de Notificaciones con el resto los de 
 | vehiculos-frontend | UI de la interfaz Vehículos   | [http://localhost:8006](http://localhost:8006)|
 | vehiculos-backend | Mock-up del servicio Vehículos   | [http://localhost:4016](http://localhost:4016/vehiculos)|
 
-**NOTA**: FastAPI envía siempre en minúsculas todas las cabeceras de las respuestas HTTP y es posible que las UIs de las interfaces no muestren todas ellas. Se recomienda usar los comandos `curl`con la opción `-i, --include` para confirmar las cabeceras incluidas en la respuesta HTTP.
+**NOTA**: *FastAPI envía siempre en minúsculas todas las cabeceras de las respuestas HTTP y es posible que las UIs de las interfaces no muestren todas ellas. Se recomienda usar los comandos `curl`con la opción `-i, --include` para confirmar las cabeceras incluidas en la respuesta HTTP.*
 
 ## Despliegue de los servicios en Azure Kubernetes Services
 
@@ -151,7 +151,11 @@ Estos los resultados tras ejecutar el comando `kubectl apply -f .` en la carpeta
 
 <img src="../kubernetes/pantallas/Servicios.png"/>
 
-Podemos observar que el servicio de Notificaciones está escuchando en la dirección `http://40.76.168.63:4013/` que incluye dirección IP pública. El portal Azure nos muestra estas cargas de trabajo del cluster AKS:
+Podemos observar que el servicio de Notificaciones está escuchando en la dirección `http://40.76.168.63:4013/` que incluye dirección IP pública.
+
+**NOTA**: *La suscripción de estudiantes de AKS nos proporciona direcciones IP públicas dinámicas por lo que esta dirección puede cambiar.*
+
+El portal Azure nos muestra estas cargas de trabajo del cluster AKS:
 
 <img src="../kubernetes/pantallas/Cargas de Trabajo.png"/>
 
