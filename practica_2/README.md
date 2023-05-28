@@ -9,7 +9,7 @@ En el fichero ZIP de la entrega incluye los siguientes ficheros / directorios:
 
 ## Consideraciones generales del servicio de notificaciones
 
-El servicio de Notificaciones es un servidor HTTP que implementa la interfaz especificada en OpenAPI en la parte 1 de la práctica y que se puede consultar [aquí][ifz]. Se ha implementado en Python 3.10 usando FastAPI, la libreria SQLAlchemy ORM (Object-Relational Mapper) y SQLite (se ha seguido el tutorial [SQL (Relational) Databases][tutorial]. En concreto:
+El servicio de Notificaciones es un servidor HTTP que implementa la interfaz especificada en OpenAPI en la parte 1 de la práctica y que se puede consultar [aquí][ifz]. Se ha implementado en Python 3.9 usando FastAPI, la libreria SQLAlchemy ORM (Object-Relational Mapper) y SQLite (se ha seguido el tutorial [SQL (Relational) Databases][tutorial]. En concreto:
 
 - FastAPI es un marco para Python que permite la construcción rápida de APIs usando anotaciones de tipos estándar de Python. Es compatible con estándares como OpenAPI y JSON Schema.
 - SQLAlquemy ORM es una librería que implementa el patrón ORM (Object-Relational Mapper) con el que se consigue convertir (o mapear) automáticamente los objetos Python de la aplicación en estructuras de una base de datos relacional (SQL).
@@ -104,7 +104,7 @@ Las definiciones de estos contenedores aparecen en el fichero `practica_2/docker
 
 Para validar la integración del servicio de Notificaciones con el resto los de servicios podemos ejecutar el siguiente comando `docker compose up -d`dentro de la carpeta `practica_2` del proyecto. Tras ejecutar este comando los servicios de cada contenedor están disponibles en las siguientes direcciones:
 
-| Servicio | Descripción | Dirección |
+| Servicio | Descripción | Dirección base |
 |----------|----------|----------|
 | clientes-frontend | UI de la interfaz Clientes   | [http://localhost:8000](http://localhost:8000)|
 | clientes-mock-backend | Mock-up del servicio Clientes   | [http://localhost:4010](http://localhost:4010/clientes)|
