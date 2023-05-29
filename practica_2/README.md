@@ -63,7 +63,7 @@ La imagen incluye el código del servidor (directorio /app/server) y el fichero 
 - Notificaciones con identificadores "0000-0000-01" y "0000-0000-02", ambas asociadas al trabajo con identificador "1".
 - Usuario con nombre "demo" y hash de su contraseña ("secret")
 
-La ubicación del fichero SQLite con la base de datos se puede definiendo la variable de entorno `SQLALCHEMY_DATABASE_URI` la cadena de conexión a la base de datos. Por ejemplo:
+La ubicación del fichero SQLite con la base de datos se puede cambiar asignando a la variable de entorno `SQLALCHEMY_DATABASE_URI` la cadena de conexión a la base de datos. Por ejemplo:
 ```sh
 SQLALCHEMY_DATABASE_URI="sqlite:////aos/server/notificaciones.db"
 ```
