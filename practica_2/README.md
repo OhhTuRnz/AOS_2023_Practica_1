@@ -2,7 +2,7 @@
 
 ## Contenido de la entrega
 Toda la información del proyecto está publicada en GitHub y se puede consultar [aquí][github].
-En el fichero ZIP de la entrega incluye los siguientes ficheros / directorios:
+El fichero ZIP de la entrega incluye los siguientes ficheros / directorios:
 - **README.md**: El presente fichero README.
 - **practica_2**: Directorio con el fichero de configuración para el despliegue local. El comando `docker-compose up` debe ser ejecutado en este directorio.
 - **kubernetes**: Directorio con los ficheros kubernetes para el despliegue en la infraestructura de Azure Kurbenetes Services (AKS), El comando `kubectl apply -f .` debe ser ejecutado en este directorio.
@@ -26,7 +26,7 @@ Los tokens JWT pueden generase con el comando:
 ```sh
 curl -X "POST" "http://<servidor>:<puerto>/login" -H "accept: */*" -H "Content-Type: application/x-www-form-urlencoded" -d "username=demo&password=secret"
 ```
-donde `http:<servidor>:<puerto>` es la URL base del servidor de Notificaciones (`http://localhost:4013` en el despliegue local). Este comando envía una petición POST que incluye en el "body" un formulario post de OAuth 2.0 con el usuario y la contraseña del usuario demo, devolviendo en la respuesta:
+donde `http:<servidor>:<puerto>` es la URL base del servidor de Notificaciones. Este comando envía una petición POST que incluye en el "body" un formulario post de OAuth 2.0 con el usuario y la contraseña del usuario demo, devolviendo en la respuesta:
 - Un token JWT de acceso con una caducidad de 7 minutos
 - Un token JWT de refresco con una caducidad de 7 días
 
@@ -38,9 +38,7 @@ Este es un ejemplo del documento JSON incluido en la respuesta a esta petición:
   "token_type": "bearer"
 }
 ```
-Los tokens JWT también se pueden generar desde la UI del servicio de notificaciones en la sección "POST /login".
-
-Más detalles sobre el marco de autorización OAuth 2.0 se pueden consultar [aquí][OAuth 2.0].
+Los tokens JWT también se pueden generar desde la UI del servicio de notificaciones en la sección "POST /login". Más detalles sobre el marco de autorización OAuth 2.0 se pueden consultar [aquí][OAuth 2.0].
 
 
 Para facilitar la integración con los otros equipos la autorización con tokens JWT es opcional, es decir, el servicio no rechaza peticiones que no lo incluyan. En un entorno real se debería requerir siempre esta autorización.
@@ -62,7 +60,7 @@ docker build -t acarrasco2000/aos2023-notificaciones:v1 -f <Dockerfile>
 donde `<Dockerfile>` es el fichero `Dockerfile` del proyecto que se puede consultar [aquí][docker].
 
 La imagen incluye el código del servidor (directorio /app/server) y el fichero SQLite con la base de datos (fichero /app/server/notificaciones.db) con los siguientes datos iniciales:
-- Notificaciones con identificadores "0000-0000-01" y "0000-0000-02" ambas asociadas al trabajo con identificador "1".
+- Notificaciones con identificadores "0000-0000-01" y "0000-0000-02", ambas asociadas al trabajo con identificador "1".
 - Usuario con nombre "demo" y hash de su contraseña ("secret")
 
 La ubicación del fichero SQLite con la base de datos se puede definiendo la variable de entorno `SQLALCHEMY_DATABASE_URI` la cadena de conexión a la base de datos. Por ejemplo:
