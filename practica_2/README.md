@@ -1,6 +1,6 @@
 # Entrega Práctica 2 - Equipo 5 - Subsistema de notificaciones - AOS 2023 
 
-# Contenido de la entrega
+## Contenido de la entrega
 Toda la información del proyecto está publicada en GitHub y se puede consultar [aquí][github].
 En el fichero ZIP de la entrega incluye los siguientes ficheros / directorios:
 - **README.md**: El presente fichero README.
