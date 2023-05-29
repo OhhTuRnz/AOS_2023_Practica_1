@@ -69,7 +69,7 @@ services:
       ports:
         - "80:4010"
       environment:
-        URL_TRABAJOS: http://localhost:4015
+        URL_TRABAJOS: http://aos2023-trabajos-mock:4010
       volumes:
         - ./especificaciones/Notificaciones:/aos:ro
 

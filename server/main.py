@@ -1,4 +1,5 @@
 import os
+import traceback
 
 import uvicorn
 from fastapi import Depends, FastAPI, HTTPException, Request, Response, status
@@ -29,17 +30,22 @@ import os.path
 # Load environment variable file
 load_dotenv()
 
+if "DEBUG" in os.environ:
+    if os.environ["DEBUG"] != "0":
+        DEBUG = True
+else:
+    DEBUG = False
+
 if "SQLALCHEMY_DATABASE_URI" in os.environ:
     SQLALCHEMY_DATABASE_URI = os.environ["SQLALCHEMY_DATABASE_URI"]
 else:
     SQLALCHEMY_DATABASE_URI = "sqlite:///./notificaciones.db"
-print ("Cadena de conexión a la base de datos: " + SQLALCHEMY_DATABASE_URI)
+if DEBUG:
+    print ("Cadena de conexión a la base de datos: " + SQLALCHEMY_DATABASE_URI)
 
 # Inicia el fichero de base de datos si no existe
 dbFilename = SQLALCHEMY_DATABASE_URI.rsplit("sqlite:///", 1)[1]
-if (os.path.isfile(dbFilename)):
-    print ("Fichero existe")
-else:
+if not (os.path.isfile(dbFilename)):
     os.makedirs(os.path.dirname(dbFilename), exist_ok=True)
     shutil.copy("notificaciones.db", dbFilename)
 
@@ -54,10 +60,14 @@ models.Base.metadata.create_all(bind=engine)
 
 db = SessionLocal()
 if "JOURNAL_MODE" in os.environ:
-    print ("PRAGMA journal_mode = " + os.environ["JOURNAL_MODE"])
+    if DEBUG:
+        print ("PRAGMA journal_mode = " + os.environ["JOURNAL_MODE"])
     db.execute(text("PRAGMA journal_mode = " + os.environ["JOURNAL_MODE"]))
 
-    # Init FastAPI
+# Disabble foreign key constraints
+db.execute(text("PRAGMA foreign_keys = OFF"))
+
+# Init FastAPI
 app = FastAPI()
 
 # Añade soporte para CORS
@@ -74,15 +84,14 @@ if "URL_TRABAJOS" in os.environ:
     URL_TRABAJOS = os.environ["URL_TRABAJOS"]
 else:
     URL_TRABAJOS = "http://localhost:4010"
-print ("URL_TRABAJOS: " + URL_TRABAJOS)
+if DEBUG:
+    print ("URL_TRABAJOS: " + URL_TRABAJOS)
 
 # Dependency
 def get_db():
     db = SessionLocal()
     try:
         yield db
-#        # Enable foreign key constraints
-#        db.execute(text("PRAGMA foreign_keys = 1"))
     finally:
         db.close()
 
@@ -114,18 +123,31 @@ def login(request: Request, db: Session = Depends(get_db), form_data: OAuth2Pass
 
 def http_get_trabajo(id_trabajo):
     try:
+        valor = int(id_trabajo)
+    except:
+        if DEBUG:
+            print("El identificador de trabajo debe ser numérico " + id_trabajo)
+        raise HTTPException(status_code=422,
+                                detail="UNPROCESSABLE ENTITY: Falta alguno de los atributos obligatorios o son incorrectos")
+    try:
         URL = URL_TRABAJOS + "/trabajos/" + id_trabajo
-        print("Consulta trabajo con: " + URL)
+        if DEBUG:
+            print("Consulta trabajo con: " + URL)
 
         # Ignoramos el envío de token JWT de autorización a la interfaz de Trabajos
         # headers = {"authorization": "Bearer "}
         headers = {}
         result = requests.get(URL, headers=headers)
 
-        id_trabajo = str(json.loads(requests.get(URL).text)['idTrabajo'])
+        a = json.loads(requests.get(URL).text)
+        result = str(json.loads(requests.get(URL).text)['idTrabajo'])
+        return result
+
     except Exception as e:
-        print ("Exception en consulta: " + e)
-    return id_trabajo
+        if DEBUG:
+            print ("Error de consulta al servicio de trabajos")
+        raise HTTPException(status_code=500,
+                            detail="Error de consulta al servicio de Trabajos")
 
 def addParentSelf(notificacion, urlBase):
     parent = schemas.LinkPag(href=urlBase, rel="notificacion_post notificacion_cget")
@@ -199,13 +221,12 @@ def create_notificacion(request: Request, response: Response, notificacion: sche
     usuario = get_current_user(db, request)
 
     # Consulta el trabajo usando el API de trabajos
-    try:
-        result = http_get_trabajo(notificacion.id_trabajo)
-        if (result != notificacion.id_trabajo):
-            raise HTTPException(status_code=422,
-                                detail="UNPROCESSABLE ENTITY: Falta alguno de los atributos obligatorios o son incorrectos.'Error de integridad: identificador de trabajo no existe")
-    except Exception as exc:
-        print ("Error consultando el API de trabajos")
+    result = http_get_trabajo(notificacion.id_trabajo)
+    if (result != notificacion.id_trabajo):
+        if DEBUG:
+            print ("Error de consulta al servicio de trabajos: " + notificacion.id_trabajo)
+        raise HTTPException(status_code=422,
+                                detail="UNPROCESSABLE ENTITY: Identificador de trabajo no existe")
 
     urlBase = str(request.url).rsplit("/notificaciones", 1)[0] + "/notificaciones"
     response.status_code = 201

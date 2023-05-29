@@ -14,6 +14,7 @@ info:
     url: "https://opensource.org/licenses/MIT"
 
 servers:
+  - url: http://aos2023-trabajos-mock:4010
   - url: http://127.0.0.1:80/api/v1
 
 tags:

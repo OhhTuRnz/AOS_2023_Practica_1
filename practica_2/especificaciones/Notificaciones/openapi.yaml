@@ -15,7 +15,7 @@ info:
 
 servers:
   - url: '{schema}://{server}:{port}/{basePath}'
-#  - url: '{schema}://{server}:{port}/{basePath}'
+  - url: '{schema}://{server}:{port}'
     description: Servidor para peticiones locales
     variables:
       schema:

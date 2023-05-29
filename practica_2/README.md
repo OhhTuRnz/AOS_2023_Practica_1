@@ -62,7 +62,7 @@ docker build -t acarrasco2000/aos2023-notificaciones:v1 -f <Dockerfile>
 donde `<Dockerfile>` es el fichero `Dockerfile` del proyecto que se puede consultar [aquí][docker].
 
 La imagen incluye el código del servidor (directorio /app/server) y el fichero SQLite con la base de datos (fichero /app/server/notificaciones.db) con los siguientes datos iniciales:
-- Notificaciones con identificadores "1234-1234-12" y "1234-1234-13"
+- Notificaciones con identificadores "1234-1234-12" y "1234-1234-13" ambas asociadas al trabajo con identificador "1".
 - Usuario con nombre "demo" y hash de su contraseña ("secret")
 
 La ubicación del fichero SQLite con la base de datos se puede definiendo la variable de entorno `SQLALCHEMY_DATABASE_URI` la cadena de conexión a la base de datos. Por ejemplo:

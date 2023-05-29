@@ -13,8 +13,10 @@ info:
 servers:
   # Added by API Auto Mocking Plugin
   - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/RPELAEZE/nuevoLogs/1.0.0
+  - url: http://aos2023-logs-mock:4010
   - url: http://127.0.0.1:80/api/v1
+    url: https://virtserver.swaggerhub.com/RPELAEZE/nuevoLogs/1.0.0
+
 
 tags:
   - name: 'Log'
