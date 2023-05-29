@@ -4,8 +4,10 @@
 Toda la información del proyecto está publicada en GitHub y se puede consultar [aquí][github].
 El fichero ZIP de la entrega incluye los siguientes ficheros / directorios:
 - **README.md**: El presente fichero README.
-- **practica_2**: Directorio con el fichero de configuración para el despliegue local. El comando `docker-compose up` debe ser ejecutado en este directorio.
+- **practica_2**: Directorio con el fichero de configuración para el despliegue local y las especificaciones de las interfaces de todos los grupos en el subdirectorio `practica_2/especificaciones`. El comando `docker-compose up` debe ser ejecutado en este directorio.
 - **kubernetes**: Directorio con los ficheros kubernetes para el despliegue en la infraestructura de Azure Kurbenetes Services (AKS), El comando `kubectl apply -f .` debe ser ejecutado en este directorio.
+
+Para la ejecución de los comandos kubernetes se recomienda descomprimir la entrega en el directorio `/home/azureuser/AOS/Entrega` del host. 
 
 ## Consideraciones generales del servicio de notificaciones
 
@@ -140,14 +142,16 @@ docker push aos2023notificaciones.azurecr.io/azure-aos2023notificaciones:v1
 ```sh
 New-AzAksCluster -ResourceGroupName aos2023notificaciones -Name aos2023notificacionesCluster -NodeCount 2 -AcrNameToAttach aos2023notificaciones
 ```
-Tras estos pasos previos el servicio puede ser desplegado ejecutando el comando `kubectl apply -f .`en la carpeta `kubernetes`. Dicha carpeta contiene los siguientes ficheros kubernetes:
+Suponiendo que la entrega se ha descomprimido en la carpeta `/home/azureuser/AOS/Entrega` el despliegue completo de los servicios se puede realizar ejecutando el comando `kubectl apply -f .` en la carpeta `kubernetes`. En caso contrario es necesario sustituir las rutas de los directorios `hostpath` que aparecen en los ficheros de kubernetes antes de ejecutar el comando `kubectl apply -f .`. Para facilitar esta tarea el directorio `kubernetes`incluye el script `cambia_path_entrega.sh` que sustituye la ruta `/home/azureuser/AOS/Entrega` por el directorio elegido por el usuario para descomprimir el fichero ZIP de la entrrega.
+
+**NOTA**. Se usan dos directorios `hostpath`: uno para las especificaciones en OpenAPI de todas las interfaces (con valor de defecto `/home/azureuser/AOS/Entrega/especificaciones`) y otro para el fichero de la base de datos SQLite (con valor de defecto `/home/azureuser/AOS/Entrega/server`)
+
+La carpeta `kubernetes contiene los siguientes tipos de ficheros:
 - **Ficheros son el sufijo `-service.yaml`**: Definiciones de los balanceadores de carga que exponen los servicios ejecutados en uno o varios PODs. Existe un fichero por cada servicio y se usan balanceadores de tipo `LoadBalance`, que exponen una dirección IP pública del cluster, y `ClusterIP`, que exponen una dirección IP privada del cluster. Por limitaciones de la suscripción Azure para estudiantes sólo el servicio de Notificaciones usa balanceadores de tipo `LoadBalance` y el resto de servicios usan balanceadores de tipo `ClusterIP`.
 - **Ficheros con el sufijo `-deployment.yaml`**: Definiciones de los PODs de los servicios. El número inicial de réplicas es 1 aunque éste pueder ser escalado con los servicios AKS.
-- **disco-notificaciones.yaml**: Notificación PVC (Persistent Volume Claim) para un disco de 5GB con clase de almacenamiento `azurefile-csi` (Azure Files)` que es montado por los PODs del servicio de Notificaciones. Este disco se usa para compartir el fichero SQLite con la base de datos del servicio (fichero /aos/server/notificaciones.db).
-- **disco-mockup.yaml**: Notificación PVC (Persistent Volume Claim) para un disco de 1GB con clase de almacenamiento `azurefile-csi` (Azure Files)` que es montado por los mock-ups del resto de servicios. En este disco se guardan las especificaciones en OpenAPI de las interfaces.
 - **practica-2-default-networkpolicy.yaml**: Política de red para permitir que los PODs puedan recibir tráfico entrante desde cualquier origen.
 
-Estos los resultados tras ejecutar el comando `kubectl apply -f .` en la carpeta `kubernetes`:
+Estos son los resultados tras ejecutar el comando `kubectl apply -f .` en la carpeta `kubernetes`:
 
 **Creación de los recursos**: comando `kubectl apply -f .
 

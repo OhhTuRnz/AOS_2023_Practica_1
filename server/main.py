@@ -49,9 +49,6 @@ if not (os.path.isfile(dbFilename)):
     os.makedirs(os.path.dirname(dbFilename), exist_ok=True)
     shutil.copy("notificaciones.db", dbFilename)
 
-if not ("USA_COPIA" in os.environ):
-    SQLALCHEMY_DATABASE_URI = "sqlite:///./notificaciones.db"
-
 # Inicia sesión con la bse de datos
 engine = create_engine(SQLALCHEMY_DATABASE_URI)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

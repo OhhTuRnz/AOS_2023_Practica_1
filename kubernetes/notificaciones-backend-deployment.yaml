@@ -37,18 +37,21 @@ spec:
             - name: URL_TRABAJOS
               value: http://trabajos-mock-backend:4015
             - name: SQLALCHEMY_DATABASE_URI
-              value: sqlite:////app/server/notificaciones.db
+              value: sqlite:////aos/server/notificaciones.db
           image: acarrasco2000/aos2023-notificaciones:v1
           name: aos2023-notificaciones
           ports:
             - containerPort: 4013
           resources: {}
+          
           volumeMounts:
             - mountPath: /aos
-              name: volume
+              name: notificaciones-backend-hostpath0
+              readOnly: false
       restartPolicy: Always
       volumes:
-        - name: volume
-          persistentVolumeClaim:
-            claimName: disco-notificaciones    
+        - hostPath:
+            path: /home/azureuser/AOS/Entrega/server
+          name: notificaciones-backend-hostpath0
+
 status: {}

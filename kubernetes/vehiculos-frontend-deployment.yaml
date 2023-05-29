@@ -34,12 +34,15 @@ spec:
           ports:
             - containerPort: 8080
           resources: {}
+
           volumeMounts:
             - mountPath: /aos
-              name: volume
+              name: vehiculos-frontend-hostpath0
+              readOnly: true
       restartPolicy: Always
       volumes:
-        - name: volume
-          persistentVolumeClaim:
-            claimName: disco-mockup
+        - hostPath:
+            path: /home/azureuser/AOS/Entrega/especificaciones
+          name: vehiculos-frontend-hostpath0
+
 status: {}

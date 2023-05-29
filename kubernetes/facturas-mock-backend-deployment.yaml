@@ -37,12 +37,15 @@ spec:
           ports:
             - containerPort: 4010
           resources: {}
+
           volumeMounts:
             - mountPath: /aos
-              name: volume
+              name: facturas-mock-backend-hostpath0
+              readOnly: true
       restartPolicy: Always
       volumes:
-        - name: volume
-          persistentVolumeClaim:
-            claimName: disco-mockup    
+        - hostPath:
+            path: /home/azureuser/AOS/Entrega/especificaciones
+          name: facturas-mock-backend-hostpath0
+
 status: {}
