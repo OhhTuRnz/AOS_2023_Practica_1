@@ -12,8 +12,9 @@ info:
     url: 'https://opensource.org/licenses/MIT'
 
 servers:
+  - url: http://127.0.0.1:4016
   - url: http://vehiculos-mock-up:4010
-  - url: http://127.0.0.1:80/api/v1
+#  - url: http://127.0.0.1:80/api/v1
 
 tags:
   - name: '🚗Vehiculos'

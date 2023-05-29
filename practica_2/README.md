@@ -4,7 +4,7 @@
 Toda la información del proyecto está publicada en GitHub y se puede consultar [aquí][github].
 En el fichero ZIP de la entrega incluye los siguientes ficheros / directorios:
 - **README.md**: El presente fichero README.
-- **practica_2**: Directorio con el fichero de configuración para el despliegue local. El comando `docker compose up` debe ser ejecutado en este directorio.
+- **practica_2**: Directorio con el fichero de configuración para el despliegue local. El comando `docker-compose up` debe ser ejecutado en este directorio.
 - **kubernetes**: Directorio con los ficheros kubernetes para el despliegue en la infraestructura de Azure Kurbenetes Services (AKS), El comando `kubectl apply -f .` debe ser ejecutado en este directorio.
 
 ## Consideraciones generales del servicio de notificaciones
@@ -102,7 +102,7 @@ Para el servicio Notificaciones se ha definido un contenedor:
 
 Las definiciones de estos contenedores aparecen en el fichero `practica_2/docker-compose.yml` del proyecto y se pueden consultar [aquí][local].
 
-Para validar la integración del servicio de Notificaciones con el resto los de servicios podemos ejecutar el siguiente comando `docker compose up -d`dentro de la carpeta `practica_2` del proyecto. Tras ejecutar este comando los servicios de cada contenedor están disponibles en las siguientes direcciones:
+Para validar la integración del servicio de Notificaciones con el resto los de servicios podemos ejecutar el siguiente comando `docker-compose up` dentro de la carpeta `practica_2` del proyecto. Tras ejecutar este comando los servicios de cada contenedor están disponibles en las siguientes direcciones:
 
 | Servicio | Descripción | Dirección base |
 |----------|----------|----------|
@@ -112,7 +112,7 @@ Para validar la integración del servicio de Notificaciones con el resto los de 
 | logs-mock-backend | Mock-up del servicio Logs   | [http://localhost:4011](http://localhost:4011/logs)|
 | facturas-frontend | UI de la interfaz Facturas   | [http://localhost:8002](http://localhost:8002)|
 | facturas-mock-backend | Mock-up del servicio Facturas   | [http://localhost:4012](http://localhost:4012/facturas)|
-| notificaciones-backend | Servicio Notificaciones   | [http://localhost:4013](http://localhost:4013/docs)|
+| notificaciones-backend | Servicio Notificaciones   | [http://localhost:80](http://localhost:80/docs)|
 | recambios-frontend | UI de la interfaz Recambios   | [http://localhost:8004](http://localhost:8004)|
 | recambios-backend | Mock-up del servicio Recambios   | [http://localhost:4014](http://localhost:4014/recambios)|
 | trabajos-frontend | UI de la interfaz Trabajos   | [http://localhost:8005](http://localhost:8005)|
