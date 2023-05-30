@@ -14,4 +14,9 @@ spec:
   volumes:
     - name: volume
       hostPath:
+<<<<<<< HEAD
         path: /home/azureuser/AOS/Entrega
+=======
+        path: /home/azureuser/AOS/Entrega   
+
+>>>>>>> ff364f2a3fe91d2a5604ce2c25609d082fc4238c
