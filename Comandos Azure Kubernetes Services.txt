@@ -167,7 +167,10 @@ Install-Module Az.Aks
 Import-AzAksCredential -ResourceGroupName aos2023notificaciones -Name aos2023notificacionesCluster
 
 # Comprobar lista de nodos del cluster
-$ kubectl get nodes
+$ kubectl get nodes -o wide
+
+# Conectarse a un nodo del cluster (en este caso iniciando una sesión de shell)
+kubectl debug node/aks-nodepool1-12345678-vmss000000 -it --image=mcr.microsoft.com/dotnet/runtime-deps:6.0
 
 # Comprobar outbound type for AKS cluster (debe ser LoadBalancer)
 az aks show --name aos2023notificacionesCluster --resource-group aos2023notificaciones --query "networkProfile.outboundType" 
