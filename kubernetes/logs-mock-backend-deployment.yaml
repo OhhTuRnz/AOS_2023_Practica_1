@@ -31,7 +31,7 @@ spec:
             - --cors
             - -h
             - 0.0.0.0
-            - /aos/especificaciones/Logs/openapi.yml
+            - /aos/practica_2/especificaciones/Logs/openapi.yml
           image: stoplight/prism:4
           name: aos2023-logs-mock
           ports:
@@ -45,7 +45,7 @@ spec:
       restartPolicy: Always
       volumes:
         - hostPath:
-            path: /home/azureuser/AOS/Entrega/especificaciones
+            path: /home/azureuser/AOS/Entrega
           name: logs-mock-backend-hostpath0
 
 status: {}

@@ -28,7 +28,7 @@ spec:
       containers:
         - env:
             - name: SWAGGER_JSON
-              value: /aos/especificaciones/Trabajos/openapi.yaml
+              value: /aos/practica_2/especificaciones/Trabajos/openapi.yaml
           image: swaggerapi/swagger-ui:latest
           name: aos2023-trabajos-ui
           ports:
@@ -42,7 +42,7 @@ spec:
       restartPolicy: Always
       volumes:
         - hostPath:
-            path: /home/azureuser/AOS/Entrega/especificaciones
+            path: /home/azureuser/AOS/Entrega
           name: trabajos-frontend-hostpath0
 
 status: {}

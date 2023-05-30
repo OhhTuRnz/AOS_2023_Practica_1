@@ -51,7 +51,7 @@ spec:
       restartPolicy: Always
       volumes:
         - hostPath:
-            path: /home/azureuser/AOS/Entrega/server
+            path: /home/azureuser/AOS/Entrega
           name: notificaciones-backend-hostpath0
 
 status: {}

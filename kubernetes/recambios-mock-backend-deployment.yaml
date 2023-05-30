@@ -31,7 +31,7 @@ spec:
             - --cors
             - -h
             - 0.0.0.0
-            - /aos/especificaciones/Recambios/openapi.yaml
+            - /aos/practica_2/especificaciones/Recambios/openapi.yaml
           image: stoplight/prism:4
           name: aos2023-recambios-mock
           ports:
@@ -45,7 +45,7 @@ spec:
       restartPolicy: Always
       volumes:
         - hostPath:
-            path: /home/azureuser/AOS/Entrega/especificaciones
+            path: /home/azureuser/AOS/Entrega
           name: recambios-mock-backend-hostpath0
 
 status: {}

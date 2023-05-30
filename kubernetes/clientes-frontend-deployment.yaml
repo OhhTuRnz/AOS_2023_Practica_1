@@ -28,7 +28,7 @@ spec:
       containers:
         - env:
             - name: SWAGGER_JSON
-              value: /aos/especificaciones/Clientes/openapi.yml
+              value: /aos/practica_2/especificaciones/Clientes/openapi.yml
           image: swaggerapi/swagger-ui:latest
           name: aos2023-clientes-ui
           ports:
@@ -42,7 +42,7 @@ spec:
       restartPolicy: Always
       volumes:
         - hostPath:
-            path: /home/azureuser/AOS/Entrega/especificaciones
+            path: /home/azureuser/AOS/Entrega
           name: clientes-frontend-hostpath0
           
 status: {}

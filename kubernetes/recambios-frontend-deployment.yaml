@@ -28,7 +28,7 @@ spec:
       containers:
         - env:
             - name: SWAGGER_JSON
-              value: /aos/especificaciones/Recambios/openapi.yaml
+              value: /aos/practica_2/especificaciones/Recambios/openapi.yaml
           image: swaggerapi/swagger-ui:latest
           name: aos2023-recambios-ui
           ports:
@@ -42,7 +42,7 @@ spec:
       restartPolicy: Always
       volumes:
         - hostPath:
-            path: /home/azureuser/AOS/Entrega/especificaciones
+            path: /home/azureuser/AOS/Entrega
           name: recambios-frontend-hostpath0
 
 status: {}
