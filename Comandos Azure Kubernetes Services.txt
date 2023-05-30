@@ -389,3 +389,12 @@ kubectl cp <origen> <destino>
 # Microsoft.Network
 # Microsoft.Storage
 # Microsoft.Web
+
+#
+# PODS
+#
+# Consultar eventos de un pod
+kubectl describe pod trabajos-mock-backend-6b96899cc6-62jlj
+
+# Crear un pod
+kubectl create pod aos-entrega.yml
